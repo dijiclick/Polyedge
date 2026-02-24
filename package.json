@@ -1,0 +1,25 @@
+{
+  "name": "polyedge",
+  "version": "1.0.0",
+  "description": "Polymarket AI trading — oracle lag arb + AI-powered near-expiry predictor",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/runner.ts --monitor",
+    "dry": "tsx src/runner.ts",
+    "oracle": "tsx src/strategies/oracle-arb.ts",
+    "oracle:live": "ARMED=true tsx src/strategies/oracle-arb.ts --monitor",
+    "edge": "tsx src/strategies/edge-ai.ts",
+    "edge:live": "ARMED=true RISK_LEVEL=MEDIUM tsx src/strategies/edge-ai.ts --monitor",
+    "live": "ARMED=true tsx src/runner.ts --monitor",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@ethersproject/wallet": "^5.8.0",
+    "@polymarket/clob-client": "^4.22.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.33",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
