@@ -218,7 +218,7 @@ async function runCycle(): Promise<void> {
     if (ARMED) {
       try {
         const { orderId, shares: filled } = await placeBuy({
-          tokenId: c.tokenId, price: c.yesPrice, usdcAmount: bet,
+          tokenId: c.tokenId, conditionId: c.conditionId, price: c.yesPrice, usdcAmount: bet,
         });
         addPosition({
           id: c.conditionId, tokenId: c.tokenId, question: c.question,

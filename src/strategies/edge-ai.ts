@@ -364,7 +364,7 @@ async function runCycle(): Promise<void> {
 
       if (ARMED) {
         try {
-          const { orderId, shares: filled } = await placeBuy({ tokenId, price: entryPrice, usdcAmount: bet });
+          const { orderId, shares: filled } = await placeBuy({ tokenId, conditionId: market.conditionId, price: entryPrice, usdcAmount: bet });
           addPosition({
             id: market.conditionId, tokenId, question: market.question,
             side: buySide, strategy: 'edge-ai',
