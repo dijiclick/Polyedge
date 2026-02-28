@@ -14,6 +14,7 @@
 
 import { tg } from '../shared/telegram.js';
 import { kellyBet } from '../shared/kelly.js';
+import { logTrade, updateSelfImprove } from '../shared/self_improve.js';
 import { addPosition, getOpenPositions, updatePosition } from '../shared/positions.js';
 import { getUsdcBalance, placeBuy, placeSell, getClobMarket, getTokenPrice } from '../shared/clob.js';
 import {
@@ -74,7 +75,7 @@ interface AIPrediction {
 // passed through all expired markets and collected the 0-3h window.
 async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   const now    = Date.now();
-  const maxMs  = 3 * 3_600_000;   // 3 hours
+  const maxMs  = 72 * 3_600_000;  // 3 days max
   const results: MarketInfo[] = [];
   let   foundFutureMarkets = false;
   let   passedWindow       = false;
@@ -391,12 +392,28 @@ async function runCycle(): Promise<void> {
         });
         usdc -= bet;
       }
+      // Log trade for self-improvement tracking
+      logTrade({
+        date:        new Date().toISOString(),
+        question:    market.question,
+        eventType:   classifyEventType(market.question),
+        side:        prediction.outcome as 'YES' | 'NO',
+        confidence:  prediction.confidence,
+        entryPrice,
+        bet,
+        outcome:     'PENDING',
+        conditionId: market.conditionId,
+        dryRun:      !ARMED,
+      });
       bought++;
 
     } catch (e) {
       console.error(`[edge-ai] error analyzing ${market.conditionId}:`, (e as Error).message);
     }
   }
+
+  // Update self-improvement log after each cycle
+  updateSelfImprove();
 
   if (bought === 0 && fresh.length > 0) {
     console.log(`[edge-ai] Analyzed ${Math.min(fresh.length, 10)} markets — none met confidence threshold (${(threshold * 100).toFixed(0)}%)`);

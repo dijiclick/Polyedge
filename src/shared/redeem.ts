@@ -2,7 +2,7 @@
  * Auto-redeem won positions on Polymarket CLOB
  * Calls the CLOB redeem endpoint for any settled winning positions
  */
-import { getBalance } from './clob.js';
+
 
 const CLOB_API    = process.env.CLOB_API_URL  || 'https://clob.polymarket.com';
 const PROXY_WALLET = process.env.PROXY_WALLET_ADDRESS || '';
