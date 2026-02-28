@@ -1,5 +1,14 @@
 #!/bin/bash
 # Full watchdog: ensures polyedge + perplexity proxy are always running
+# If rate limit detected → waits 15min cooldown before restarting
+
+# Rate limit check first
+/home/ariad/.openclaw/workspace/polyedge/rate_limit_recovery.sh
+RL_EXIT=$?
+[ $RL_EXIT -eq 0 ] && [ -f /tmp/polyedge_rl_recovery.lock ] && {
+  echo "[$(date)] In rate-limit cooldown, skipping restart"
+  exit 0
+}
 
 # 1. Ensure Perplexity proxy is up
 if ! curl -sf http://localhost:8320/health > /dev/null 2>&1; then

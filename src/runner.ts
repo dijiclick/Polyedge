@@ -57,5 +57,14 @@ async function main() {
 
 main().catch(e => {
   console.error('[runner] fatal:', e);
-  process.exit(1);
+  const msg = String(e?.message ?? e).toLowerCase();
+  const isRateLimit = msg.includes('429') || msg.includes('rate limit') ||
+                      msg.includes('too many') || msg.includes('quota');
+  if (isRateLimit) {
+    console.error('[runner] Rate limit hit — watchdog will retry in 15 min');
+    // Write lock so watchdog waits 15 min
+    const { writeFileSync } = require('fs');
+    writeFileSync('/tmp/polyedge_rl_recovery.lock', String(Math.floor(Date.now()/1000)));
+  }
+  process.exit(isRateLimit ? 2 : 1);  // exit code 2 = rate limit
 });
