@@ -1786,3 +1786,21 @@
 [clob] USDC.e balance: $0.00
 [oracle-arb] USDC: $0.00 | candidates: 0
 [oracle-arb] No actionable opportunities this cycle
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-02-28T23:40:06.440Z] ═══ Oracle Arb Cycle ═══
+
+[2026-02-28T23:40:06.735Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 2
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 366 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)

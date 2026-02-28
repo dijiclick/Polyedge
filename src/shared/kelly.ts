@@ -13,7 +13,7 @@ export function kellyBet(opts: {
   minBet?:       number;
   maxBet?:       number;
 }): number {
-  const { probability: p, bankroll, minBet = 0.50, maxBet = 3.00 } = opts;
+  const { probability: p, bankroll, minBet = 0.50, maxBet = 1.00 } = opts;
   const marketPrice = opts.marketPrice ?? p;
   if (p <= 0 || p >= 1 || marketPrice <= 0 || marketPrice >= 1) return minBet;
   const b      = 1 / marketPrice - 1;               // net profit per $ at this price

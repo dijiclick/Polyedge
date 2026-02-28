@@ -181,15 +181,19 @@ async function analyzeMarket(market: MarketInfo): Promise<AIPrediction> {
   const accuracy    = getAccuracy(eventType);
 
   let searchResults = 'No search results available.';
+  const closeDate   = new Date(market.endDate).toUTCString();
   try {
-    const result = await search(`${market.question} result outcome today`);
-    const citationsText = result.citations
-      .slice(0, 4)
-      .map(c => `• ${c.title}: ${(c.content ?? '').slice(0, 200)}`)
-      .join('\n');
-    searchResults = result.answer
-      ? `${result.answer}\n\nSources:\n${citationsText}`
-      : citationsText || 'No results found.';
+    // Targeted prompt: ask for exact factual outcome, not similar events
+    const searchQuery = [
+      `Polymarket prediction market question: "${market.question}"`,
+      `This market closes: ${closeDate}`,
+      `Current YES price: ${(market.yesPrice * 100).toFixed(1)}%`,
+      `I need the EXACT current status/result for this specific question only.`,
+      `Do NOT discuss similar events or general trends.`,
+      `What is the factual current outcome or latest confirmed news directly answering: ${market.question}`,
+    ].join('\n');
+    const result = await search(searchQuery);
+    searchResults = result.answer || 'No results found.';
   } catch (e) {
     console.error('[edge-ai] search error:', (e as Error).message);
   }
@@ -336,7 +340,7 @@ async function runCycle(): Promise<void> {
       const entryPrice = buySide === 'YES' ? market.yesPrice : market.noPrice;
 
       // AI confidence = true probability estimate; entryPrice = what we actually pay
-      const bet    = kellyBet({ probability: prediction.confidence, marketPrice: entryPrice, bankroll: usdc, maxBet: 3.0 });
+      const bet    = kellyBet({ probability: prediction.confidence, marketPrice: entryPrice, bankroll: usdc, maxBet: 1.0 });
       const shares = bet / entryPrice;
       const minutesLeft = Math.round(market.hoursLeft * 60);
 

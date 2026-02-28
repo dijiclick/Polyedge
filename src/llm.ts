@@ -10,14 +10,19 @@ import { spawnSync } from 'child_process';
 const OPENROUTER_API_KEY   = process.env.OPENROUTER_API_KEY   || '';
 const PERPLEXITY_API_KEY   = process.env.PERPLEXITY_API_KEY   || '';
 
-// Session token pool (free accounts as fallback)
+// Session token pool — all 11 accounts
 const SESSION_TOKENS: string[] = [
-  process.env.PERPLEXITY_SESSION_TOKEN   || '',
-  process.env.PERPLEXITY_SESSION_TOKEN_1 || '',
-  process.env.PERPLEXITY_SESSION_TOKEN_2 || '',
-  process.env.PERPLEXITY_SESSION_TOKEN_3 || '',
-  process.env.PERPLEXITY_SESSION_TOKEN_4 || '',
-  process.env.PERPLEXITY_SESSION_TOKEN_5 || '',
+  process.env.PERPLEXITY_SESSION_TOKEN    || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_1  || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_6  || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_7  || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_8  || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_9  || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_10 || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_11 || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_12 || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_13 || '',
+  process.env.PERPLEXITY_SESSION_TOKEN_14 || '',
 ].filter(Boolean);
 
 let _sessionIdx = 0;
@@ -70,7 +75,7 @@ async function searchViaAPI(query: string): Promise<SearchResult> {
       'Content-Type':  'application/json',
     },
     body: JSON.stringify({
-      model:    'sonar-pro',
+      model:    'sonar',
       messages: [{ role: 'user', content: query }],
       max_tokens: 1024,
     }),
@@ -133,7 +138,7 @@ async function searchViaProxy(query: string): Promise<SearchResult> {
     method: 'POST',
     headers: { 'Authorization': 'Bearer local', 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'sonar-pro',
+      model: 'sonar',
       messages: [{ role: 'user', content: query }],
     }),
     signal: AbortSignal.timeout(90_000),
