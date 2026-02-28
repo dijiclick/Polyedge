@@ -1,0 +1,1788 @@
+[Fri Feb 27 00:59:06 +03 2026] Polyedge starting — ARMED=true RISK=MEDIUM
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+[clob] WARNING: PRIVATE_KEY or FUNDER_ADDRESS not set in env
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-02-26T21:59:09.870Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] scan error at offset 0: Unexpected token '<', "<html>
+<h"... is not valid JSON
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] balance error: invalid hexlify value (argument="value", value="", code=INVALID_ARGUMENT, version=bytes/5.8.0)
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-26T21:59:13.758Z] ═══ Edge AI Cycle ═══
+[edge-ai] fetch error at offset 0 : Unexpected token '<', "<html>
+<h"... is not valid JSON
+[edge-ai] 0 qualifying markets in 0-3h window → analyzing top 0 by liquidity
+[clob] balance error: invalid hexlify value (argument="value", value="", code=INVALID_ARGUMENT, version=bytes/5.8.0)
+[edge-ai] No markets expiring within 3h right now
+[Fri Feb 27 01:00:09 +03 2026] Elapsed: 63s | Remaining: 32337s
+[Fri Feb 27 01:00:09 +03 2026] No PID file. Starting fresh...
+[Fri Feb 27 01:00:09 +03 2026] Launched PID 1430104
+[Fri Feb 27 01:00:09 +03 2026] Starting polyedge (ARMED=true, RISK=MEDIUM)
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-02-26T22:00:43.650Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] scan error at offset 0: Unexpected token '<', "<html>
+<h"... is not valid JSON
+[oracle-arb] 0 actionable markets (from 0 candidates)
+
+[2026-02-26T22:00:44.097Z] ═══ Edge AI Cycle ═══
+[edge-ai] fetch error at offset 0 : Unexpected token '<', "<html>
+<h"... is not valid JSON
+[edge-ai] 0 qualifying markets in 0-3h window → analyzing top 0 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[clob] USDC.e balance: $0.00
+[edge-ai] No markets expiring within 3h right now
+[Fri Feb 27 01:05:04 +03 2026] Elapsed: 268s | Remaining: 32132s
+[Fri Feb 27 01:05:04 +03 2026] Process 1431616 alive. OK.
+[Fri Feb 27 01:10:09 +03 2026] Elapsed: 573s | Remaining: 31827s
+[Fri Feb 27 01:10:09 +03 2026] Process 1431616 alive. OK.
+
+[2026-02-26T22:11:52.497Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] 1 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 1
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 01:15:08 +03 2026] Elapsed: 872s | Remaining: 31528s
+[Fri Feb 27 01:15:08 +03 2026] Process 1431616 alive. OK.
+
+[2026-02-26T22:17:24.984Z] ═══ Edge AI Cycle ═══
+[edge-ai] 516 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 01:17:34 +03 2026] Polyedge restarting — using uv run --script bridge
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-02-26T22:17:36.876Z] ═══ Oracle Arb Cycle ═══
+
+[2026-02-26T22:17:37.051Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] 516 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 2
+[oracle-arb] No actionable opportunities this cycle
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 01:20:09 +03 2026] Elapsed: 1173s | Remaining: 31227s
+[Fri Feb 27 01:20:09 +03 2026] Process 1478774 alive. OK.
+[Fri Feb 27 01:25:08 +03 2026] Elapsed: 1472s | Remaining: 30928s
+[Fri Feb 27 01:25:08 +03 2026] Process 1478774 alive. OK.
+
+[2026-02-26T22:28:47.566Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.941
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 1
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 01:30:05 +03 2026] Elapsed: 1769s | Remaining: 30631s
+[Fri Feb 27 01:30:05 +03 2026] Process 1478774 alive. OK.
+
+[2026-02-26T22:34:20.035Z] ═══ Edge AI Cycle ═══
+[edge-ai] 530 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 01:35:08 +03 2026] Elapsed: 2072s | Remaining: 30328s
+[Fri Feb 27 01:35:08 +03 2026] Process 1478774 alive. OK.
+
+[2026-02-26T22:39:55.761Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.946
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 01:40:08 +03 2026] Elapsed: 2372s | Remaining: 30028s
+[Fri Feb 27 01:40:08 +03 2026] Process 1478774 alive. OK.
+[Fri Feb 27 01:45:05 +03 2026] Elapsed: 2669s | Remaining: 29731s
+[Fri Feb 27 01:45:05 +03 2026] Process 1478774 alive. OK.
+[Fri Feb 27 01:50:08 +03 2026] Elapsed: 2972s | Remaining: 29428s
+[Fri Feb 27 01:50:08 +03 2026] Process 1478774 alive. OK.
+[Fri Feb 27 01:55:09 +03 2026] Elapsed: 3273s | Remaining: 29127s
+[Fri Feb 27 01:55:09 +03 2026] Process 1478774 is dead. Restarting...
+[Fri Feb 27 01:55:09 +03 2026] Launched PID 1583671
+[Fri Feb 27 01:55:09 +03 2026] Starting polyedge (ARMED=true, RISK=MEDIUM)
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-02-26T22:55:11.323Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.945
+
+[2026-02-26T22:55:11.507Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 527 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 02:00:04 +03 2026] Elapsed: 3568s | Remaining: 28832s
+[Fri Feb 27 02:00:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 02:05:05 +03 2026] Elapsed: 3869s | Remaining: 28531s
+[Fri Feb 27 02:05:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:06:19.904Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.943
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 02:10:08 +03 2026] Elapsed: 4172s | Remaining: 28228s
+[Fri Feb 27 02:10:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:11:56.449Z] ═══ Edge AI Cycle ═══
+[edge-ai] 662 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 02:15:08 +03 2026] Elapsed: 4472s | Remaining: 27928s
+[Fri Feb 27 02:15:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:17:28.055Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.945
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 02:20:08 +03 2026] Elapsed: 4772s | Remaining: 27628s
+[Fri Feb 27 02:20:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 02:25:08 +03 2026] Elapsed: 5072s | Remaining: 27328s
+[Fri Feb 27 02:25:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:28:36.241Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.943
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+
+[2026-02-26T23:28:36.790Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 654 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 02:30:04 +03 2026] Elapsed: 5368s | Remaining: 27032s
+[Fri Feb 27 02:30:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 02:35:08 +03 2026] Elapsed: 5672s | Remaining: 26728s
+[Fri Feb 27 02:35:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:39:40.851Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 02:40:08 +03 2026] Elapsed: 5972s | Remaining: 26428s
+[Fri Feb 27 02:40:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 02:45:04 +03 2026] Elapsed: 6268s | Remaining: 26132s
+[Fri Feb 27 02:45:04 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:45:17.240Z] ═══ Edge AI Cycle ═══
+[edge-ai] 684 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 02:50:08 +03 2026] Elapsed: 6572s | Remaining: 25828s
+[Fri Feb 27 02:50:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-26T23:50:49.020Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.952
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 02:55:08 +03 2026] Elapsed: 6872s | Remaining: 25528s
+[Fri Feb 27 02:55:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 03:00:05 +03 2026] Elapsed: 7169s | Remaining: 25231s
+[Fri Feb 27 03:00:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:01:57.212Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.951
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+
+[2026-02-27T00:01:57.585Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 486 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 03:05:08 +03 2026] Elapsed: 7472s | Remaining: 24928s
+[Fri Feb 27 03:05:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 03:10:05 +03 2026] Elapsed: 7769s | Remaining: 24631s
+[Fri Feb 27 03:10:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:13:01.727Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.942
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 03:15:08 +03 2026] Elapsed: 8072s | Remaining: 24328s
+[Fri Feb 27 03:15:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:18:34.447Z] ═══ Edge AI Cycle ═══
+[edge-ai] 461 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 03:20:08 +03 2026] Elapsed: 8372s | Remaining: 24028s
+[Fri Feb 27 03:20:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:24:09.915Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.942
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 03:25:04 +03 2026] Elapsed: 8668s | Remaining: 23732s
+[Fri Feb 27 03:25:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 03:30:08 +03 2026] Elapsed: 8972s | Remaining: 23428s
+[Fri Feb 27 03:30:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 03:35:08 +03 2026] Elapsed: 9272s | Remaining: 23128s
+[Fri Feb 27 03:35:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:35:14.522Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.957
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+
+[2026-02-27T00:35:14.786Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 358 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 03:40:04 +03 2026] Elapsed: 9568s | Remaining: 22832s
+[Fri Feb 27 03:40:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 03:45:08 +03 2026] Elapsed: 9872s | Remaining: 22528s
+[Fri Feb 27 03:45:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:46:22.715Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.957
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 03:50:04 +03 2026] Elapsed: 10168s | Remaining: 22232s
+[Fri Feb 27 03:50:04 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:51:55.210Z] ═══ Edge AI Cycle ═══
+[edge-ai] 256 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 03:55:08 +03 2026] Elapsed: 10472s | Remaining: 21928s
+[Fri Feb 27 03:55:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T00:57:30.907Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.958
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 04:00:08 +03 2026] Elapsed: 10772s | Remaining: 21628s
+[Fri Feb 27 04:00:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 04:05:05 +03 2026] Elapsed: 11069s | Remaining: 21331s
+[Fri Feb 27 04:05:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:08:35.514Z] ═══ Oracle Arb Cycle ═══
+
+[2026-02-27T01:08:35.555Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.959
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 262 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 04:10:08 +03 2026] Elapsed: 11372s | Remaining: 21028s
+[Fri Feb 27 04:10:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 04:15:08 +03 2026] Elapsed: 11672s | Remaining: 20728s
+[Fri Feb 27 04:15:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:19:43.707Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 04:20:05 +03 2026] Elapsed: 11969s | Remaining: 20431s
+[Fri Feb 27 04:20:05 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 04:25:08 +03 2026] Elapsed: 12272s | Remaining: 20128s
+[Fri Feb 27 04:25:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:25:16.001Z] ═══ Edge AI Cycle ═══
+[edge-ai] 209 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 04:30:05 +03 2026] Elapsed: 12568s | Remaining: 19832s
+[Fri Feb 27 04:30:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:30:48.315Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 04:35:08 +03 2026] Elapsed: 12872s | Remaining: 19528s
+[Fri Feb 27 04:35:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 04:40:08 +03 2026] Elapsed: 13172s | Remaining: 19228s
+[Fri Feb 27 04:40:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:41:56.424Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T01:41:56.425Z] ═══ Oracle Arb Cycle ═══
+[edge-ai] 215 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 04:45:04 +03 2026] Elapsed: 13468s | Remaining: 18932s
+[Fri Feb 27 04:45:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 04:50:08 +03 2026] Elapsed: 13772s | Remaining: 18628s
+[Fri Feb 27 04:50:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:53:04.610Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 04:55:08 +03 2026] Elapsed: 14072s | Remaining: 18328s
+[Fri Feb 27 04:55:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T01:58:36.872Z] ═══ Edge AI Cycle ═══
+[edge-ai] 75 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 05:00:05 +03 2026] Elapsed: 14369s | Remaining: 18031s
+[Fri Feb 27 05:00:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:04:09.216Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.959
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 05:05:08 +03 2026] Elapsed: 14672s | Remaining: 17728s
+[Fri Feb 27 05:05:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 05:10:08 +03 2026] Elapsed: 14972s | Remaining: 17428s
+[Fri Feb 27 05:10:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 05:15:08 +03 2026] Elapsed: 15272s | Remaining: 17128s
+[Fri Feb 27 05:15:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:15:17.315Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T02:15:17.318Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] 83 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[CLOB Client] request error {"error":"read ECONNRESET"}
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 05:20:08 +03 2026] Elapsed: 15572s | Remaining: 16828s
+[Fri Feb 27 05:20:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 05:25:05 +03 2026] Elapsed: 15869s | Remaining: 16531s
+[Fri Feb 27 05:25:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:26:21.954Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 05:30:08 +03 2026] Elapsed: 16172s | Remaining: 16228s
+[Fri Feb 27 05:30:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:31:57.790Z] ═══ Edge AI Cycle ═══
+[edge-ai] 68 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 05:35:09 +03 2026] Elapsed: 16473s | Remaining: 15927s
+[Fri Feb 27 05:35:09 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:37:30.147Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.959
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 05:40:04 +03 2026] Elapsed: 16768s | Remaining: 15632s
+[Fri Feb 27 05:40:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 05:45:09 +03 2026] Elapsed: 17073s | Remaining: 15327s
+[Fri Feb 27 05:45:09 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:48:38.235Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T02:48:38.238Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.957
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 77 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 05:50:08 +03 2026] Elapsed: 17372s | Remaining: 15028s
+[Fri Feb 27 05:50:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 05:55:09 +03 2026] Elapsed: 17673s | Remaining: 14727s
+[Fri Feb 27 05:55:09 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T02:59:42.845Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.958
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 06:00:08 +03 2026] Elapsed: 17972s | Remaining: 14428s
+[Fri Feb 27 06:00:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 06:05:05 +03 2026] Elapsed: 18269s | Remaining: 14131s
+[Fri Feb 27 06:05:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:05:18.683Z] ═══ Edge AI Cycle ═══
+[edge-ai] 12 qualifying markets in 0-3h window → analyzing top 12 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 06:10:08 +03 2026] Elapsed: 18572s | Remaining: 13828s
+[Fri Feb 27 06:10:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:10:51.031Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 06:15:08 +03 2026] Elapsed: 18872s | Remaining: 13528s
+[Fri Feb 27 06:15:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 06:20:05 +03 2026] Elapsed: 19169s | Remaining: 13231s
+[Fri Feb 27 06:20:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:21:55.532Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T03:21:55.541Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[Fri Feb 27 06:25:08 +03 2026] Elapsed: 19472s | Remaining: 12928s
+[Fri Feb 27 06:25:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 06:30:09 +03 2026] Elapsed: 19773s | Remaining: 12627s
+[Fri Feb 27 06:30:09 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:33:03.728Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.955
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 06:35:04 +03 2026] Elapsed: 20068s | Remaining: 12332s
+[Fri Feb 27 06:35:04 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:38:35.977Z] ═══ Edge AI Cycle ═══
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[Fri Feb 27 06:40:09 +03 2026] Elapsed: 20373s | Remaining: 12027s
+[Fri Feb 27 06:40:09 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:44:11.920Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 06:45:04 +03 2026] Elapsed: 20668s | Remaining: 11732s
+[Fri Feb 27 06:45:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 06:50:09 +03 2026] Elapsed: 20973s | Remaining: 11427s
+[Fri Feb 27 06:50:09 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 06:55:08 +03 2026] Elapsed: 21272s | Remaining: 11128s
+[Fri Feb 27 06:55:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T03:55:16.424Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T03:55:16.427Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.952
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] 2 qualifying markets in 0-3h window → analyzing top 2 by liquidity
+[oracle-arb] No actionable opportunities this cycle
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 2 markets — none met confidence threshold (70%)
+[Fri Feb 27 07:00:05 +03 2026] Elapsed: 21569s | Remaining: 10831s
+[Fri Feb 27 07:00:05 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 07:05:08 +03 2026] Elapsed: 21872s | Remaining: 10528s
+[Fri Feb 27 07:05:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:06:24.620Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.950
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 07:10:08 +03 2026] Elapsed: 22172s | Remaining: 10228s
+[Fri Feb 27 07:10:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:11:56.869Z] ═══ Edge AI Cycle ═══
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[CLOB Client] request error {"error":"read ECONNRESET"}
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[Fri Feb 27 07:15:05 +03 2026] Elapsed: 22469s | Remaining: 9931s
+[Fri Feb 27 07:15:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:17:29.227Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.944
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 07:20:08 +03 2026] Elapsed: 22772s | Remaining: 9628s
+[Fri Feb 27 07:20:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 07:25:05 +03 2026] Elapsed: 23069s | Remaining: 9331s
+[Fri Feb 27 07:25:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:28:37.275Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T04:28:37.320Z] ═══ Oracle Arb Cycle ═══
+[edge-ai] 8 qualifying markets in 0-3h window → analyzing top 8 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 8 markets — none met confidence threshold (70%)
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 07:30:08 +03 2026] Elapsed: 23372s | Remaining: 9028s
+[Fri Feb 27 07:30:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 07:35:08 +03 2026] Elapsed: 23672s | Remaining: 8728s
+[Fri Feb 27 07:35:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:39:45.511Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 07:40:04 +03 2026] Elapsed: 23968s | Remaining: 8432s
+[Fri Feb 27 07:40:04 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 07:45:09 +03 2026] Elapsed: 24273s | Remaining: 8127s
+[Fri Feb 27 07:45:09 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:45:17.717Z] ═══ Edge AI Cycle ═══
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[Fri Feb 27 07:50:08 +03 2026] Elapsed: 24572s | Remaining: 7828s
+[Fri Feb 27 07:50:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T04:50:50.115Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 07:55:05 +03 2026] Elapsed: 24869s | Remaining: 7531s
+[Fri Feb 27 07:55:05 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 08:00:08 +03 2026] Elapsed: 25172s | Remaining: 7228s
+[Fri Feb 27 08:00:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:01:58.163Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T05:01:58.207Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.000
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 08:05:05 +03 2026] Elapsed: 25469s | Remaining: 6931s
+[Fri Feb 27 08:05:05 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 08:10:08 +03 2026] Elapsed: 25772s | Remaining: 6628s
+[Fri Feb 27 08:10:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:13:06.405Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.000
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 08:15:08 +03 2026] Elapsed: 26072s | Remaining: 6328s
+[Fri Feb 27 08:15:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:18:38.610Z] ═══ Edge AI Cycle ═══
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[Fri Feb 27 08:20:05 +03 2026] Elapsed: 26369s | Remaining: 6031s
+[Fri Feb 27 08:20:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:24:10.990Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.965
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 08:25:08 +03 2026] Elapsed: 26672s | Remaining: 5728s
+[Fri Feb 27 08:25:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 08:30:08 +03 2026] Elapsed: 26972s | Remaining: 5428s
+[Fri Feb 27 08:30:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 08:35:04 +03 2026] Elapsed: 27268s | Remaining: 5132s
+[Fri Feb 27 08:35:04 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:35:19.055Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T05:35:19.082Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[edge-ai] 15 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 08:40:08 +03 2026] Elapsed: 27572s | Remaining: 4828s
+[Fri Feb 27 08:40:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 08:45:08 +03 2026] Elapsed: 27872s | Remaining: 4528s
+[Fri Feb 27 08:45:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:46:23.687Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.970
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 08:50:08 +03 2026] Elapsed: 28172s | Remaining: 4228s
+[Fri Feb 27 08:50:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:51:59.442Z] ═══ Edge AI Cycle ═══
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 08:55:08 +03 2026] Elapsed: 28472s | Remaining: 3928s
+[Fri Feb 27 08:55:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T05:57:31.879Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 09:00:05 +03 2026] Elapsed: 28769s | Remaining: 3631s
+[Fri Feb 27 09:00:05 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 09:05:08 +03 2026] Elapsed: 29072s | Remaining: 3328s
+[Fri Feb 27 09:05:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:08:39.886Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T06:08:39.983Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.962
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 09:10:08 +03 2026] Elapsed: 29372s | Remaining: 3028s
+[Fri Feb 27 09:10:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 09:15:05 +03 2026] Elapsed: 29669s | Remaining: 2731s
+[Fri Feb 27 09:15:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:19:44.587Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.962
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 09:20:08 +03 2026] Elapsed: 29972s | Remaining: 2428s
+[Fri Feb 27 09:20:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 09:25:08 +03 2026] Elapsed: 30272s | Remaining: 2128s
+[Fri Feb 27 09:25:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:25:16.746Z] ═══ Edge AI Cycle ═══
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 09:30:05 +03 2026] Elapsed: 30569s | Remaining: 1831s
+[Fri Feb 27 09:30:05 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:30:52.780Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.962
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 09:35:08 +03 2026] Elapsed: 30872s | Remaining: 1528s
+[Fri Feb 27 09:35:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 09:40:04 +03 2026] Elapsed: 31168s | Remaining: 1232s
+[Fri Feb 27 09:40:04 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:41:57.193Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T06:41:57.289Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.964
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[clob] USDC.e balance: $0.00
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 09:45:08 +03 2026] Elapsed: 31472s | Remaining: 928s
+[Fri Feb 27 09:45:08 +03 2026] Process 1583671 alive. OK.
+[Fri Feb 27 09:50:08 +03 2026] Elapsed: 31772s | Remaining: 628s
+[Fri Feb 27 09:50:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:53:05.481Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.968
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 09:55:04 +03 2026] Elapsed: 32068s | Remaining: 332s
+[Fri Feb 27 09:55:04 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T06:58:37.639Z] ═══ Edge AI Cycle ═══
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[Fri Feb 27 10:00:08 +03 2026] Elapsed: 32372s | Remaining: 28s
+[Fri Feb 27 10:00:08 +03 2026] Process 1583671 alive. OK.
+
+[2026-02-27T07:04:13.671Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.969
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[Fri Feb 27 10:05:08 +03 2026] 9h session complete (32672s elapsed). Stopping.
+[Fri Feb 27 10:05:08 +03 2026] Cron removed. Session ended.
+
+[2026-02-27T07:15:18.086Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T07:15:18.182Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.965
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T07:26:26.373Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.962
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T07:31:58.530Z] ═══ Edge AI Cycle ═══
+[edge-ai] 0 qualifying markets in 0-3h window → analyzing top 0 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] No markets expiring within 3h right now
+
+[2026-02-27T07:37:30.981Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.963
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T07:48:38.979Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T07:48:39.075Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] fetch error at offset 0 : fetch failed
+[edge-ai] 0 qualifying markets in 0-3h window → analyzing top 0 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] No markets expiring within 3h right now
+
+[2026-02-27T07:59:47.265Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T08:05:19.422Z] ═══ Edge AI Cycle ═══
+[edge-ai] 13 qualifying markets in 0-3h window → analyzing top 13 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T08:10:51.872Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T08:21:59.868Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T08:21:59.965Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[edge-ai] 8 qualifying markets in 0-3h window → analyzing top 8 by liquidity
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] Analyzed 8 markets — none met confidence threshold (70%)
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T08:33:04.575Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.961
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T08:38:40.321Z] ═══ Edge AI Cycle ═══
+[edge-ai] 2 qualifying markets in 0-3h window → analyzing top 2 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 2 markets — none met confidence threshold (70%)
+
+[2026-02-27T08:44:12.766Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T08:55:20.769Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T08:55:20.859Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[edge-ai] 4 qualifying markets in 0-3h window → analyzing top 4 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 4 markets — none met confidence threshold (70%)
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.000
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T09:06:25.499Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.000
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T09:12:01.234Z] ═══ Edge AI Cycle ═══
+[edge-ai] 39 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T09:17:33.658Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T09:28:38.075Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T09:28:38.167Z] ═══ Oracle Arb Cycle ═══
+[edge-ai] 34 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T09:39:46.335Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T09:45:20.214Z] ═══ Edge AI Cycle ═══
+[edge-ai] 38 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T09:50:52.635Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.966
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T10:02:00.660Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T10:02:00.729Z] ═══ Oracle Arb Cycle ═══
+[edge-ai] 41 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T10:13:05.338Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T10:18:41.105Z] ═══ Edge AI Cycle ═══
+[edge-ai] 40 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T10:24:13.529Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T10:35:21.550Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T10:35:21.618Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.955
+[edge-ai] 39 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T10:46:26.244Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T10:52:01.997Z] ═══ Edge AI Cycle ═══
+[edge-ai] 38 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T10:57:34.434Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T11:08:38.865Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T11:08:38.937Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[edge-ai] 42 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T11:19:47.130Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T11:25:19.319Z] ═══ Edge AI Cycle ═══
+[edge-ai] 33 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T11:30:55.320Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T11:41:59.753Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T11:41:59.826Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[edge-ai] 33 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T11:53:07.944Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T11:58:40.214Z] ═══ Edge AI Cycle ═══
+[edge-ai] 7 qualifying markets in 0-3h window → analyzing top 7 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 7 markets — none met confidence threshold (70%)
+
+[2026-02-27T12:04:12.566Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T12:15:20.646Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T12:15:20.655Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[edge-ai] 12 qualifying markets in 0-3h window → analyzing top 12 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T12:26:28.887Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T12:32:01.154Z] ═══ Edge AI Cycle ═══
+[edge-ai] 9 qualifying markets in 0-3h window → analyzing top 9 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 9 markets — none met confidence threshold (70%)
+
+[2026-02-27T12:37:33.482Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T12:48:41.566Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T12:48:41.575Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[edge-ai] 10 qualifying markets in 0-3h window → analyzing top 10 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T12:59:49.777Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T13:05:22.059Z] ═══ Edge AI Cycle ═══
+[edge-ai] 13 qualifying markets in 0-3h window → analyzing top 13 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T13:10:54.373Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.920
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T13:22:02.459Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T13:22:02.461Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.953
+[edge-ai] 12 qualifying markets in 0-3h window → analyzing top 12 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T13:33:07.073Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.954
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T13:38:42.912Z] ═══ Edge AI Cycle ═══
+[edge-ai] 21 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T13:44:15.258Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.955
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T13:55:23.375Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T13:55:23.377Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.950
+[edge-ai] 26 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T14:06:29.648Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.951
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T14:12:01.908Z] ═══ Edge AI Cycle ═══
+[edge-ai] 67 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T14:17:34.263Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.951
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T14:28:42.359Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T14:28:42.361Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.952
+[edge-ai] 50 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T14:39:48.651Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.957
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T14:45:20.910Z] ═══ Edge AI Cycle ═══
+[edge-ai] 76 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[CLOB Client] request error {"error":"read ECONNRESET"}
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T14:50:56.848Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.957
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T15:02:01.343Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T15:02:01.347Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.974
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] 113 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[clob] USDC.e balance: $0.00
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T15:13:09.598Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.968
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T15:18:41.841Z] ═══ Edge AI Cycle ═══
+[edge-ai] 111 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T15:24:14.208Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T15:35:22.295Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T15:35:22.304Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[edge-ai] 125 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T15:46:30.505Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.960
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T15:52:02.745Z] ═══ Edge AI Cycle ═══
+[edge-ai] 132 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T15:57:35.109Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.958
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T16:08:43.175Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T16:08:43.195Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.948
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] 195 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[clob] USDC.e balance: $0.00
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T16:19:47.806Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.944
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T16:25:23.637Z] ═══ Edge AI Cycle ═══
+[edge-ai] 171 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T16:30:56.112Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.944
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T16:42:04.306Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T16:42:04.326Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.945
+[edge-ai] 200 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T16:53:09.077Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.943
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[CLOB Client] request error AggregateError [ETIMEDOUT]: 
+    at internalConnectMultiple (node:net:1134:18)
+    at internalConnectMultiple (node:net:1210:5)
+    at Timeout.internalConnectMultipleTimeout (node:net:1742:5)
+    at listOnTimeout (node:internal/timers:590:11)
+    at process.processTimers (node:internal/timers:523:7) {
+  code: 'ETIMEDOUT',
+  errors: [
+    Error: connect ETIMEDOUT 172.64.153.51:443
+        at createConnectionError (node:net:1678:14)
+        at Timeout.internalConnectMultipleTimeout (node:net:1737:38)
+        at listOnTimeout (node:internal/timers:590:11)
+        at process.processTimers (node:internal/timers:523:7) {
+      errno: -110,
+      code: 'ETIMEDOUT',
+      syscall: 'connect',
+      address: '172.64.153.51',
+      port: 443
+    },
+    Error: connect ENETUNREACH 2a06:98c1:3100::ac40:9933:443 - Local (:::0)
+        at internalConnectMultiple (node:net:1206:16)
+        at Timeout.internalConnectMultipleTimeout (node:net:1742:5)
+        at listOnTimeout (node:internal/timers:590:11)
+        at process.processTimers (node:internal/timers:523:7) {
+      errno: -101,
+      code: 'ENETUNREACH',
+      syscall: 'connect',
+      address: '2a06:98c1:3100::ac40:9933',
+      port: 443
+    },
+    Error: connect ETIMEDOUT 104.18.34.205:443
+        at createConnectionError (node:net:1678:14)
+        at Timeout.internalConnectMultipleTimeout (node:net:1737:38)
+        at listOnTimeout (node:internal/timers:590:11)
+        at process.processTimers (node:internal/timers:523:7) {
+      errno: -110,
+      code: 'ETIMEDOUT',
+      syscall: 'connect',
+      address: '104.18.34.205',
+      port: 443
+    },
+    Error: connect ENETUNREACH 2a06:98c1:3104::6812:22cd:443 - Local (:::0)
+        at internalConnectMultiple (node:net:1206:16)
+        at Timeout.internalConnectMultipleTimeout (node:net:1742:5)
+        at listOnTimeout (node:internal/timers:590:11)
+        at process.processTimers (node:internal/timers:523:7) {
+      errno: -101,
+      code: 'ENETUNREACH',
+      syscall: 'connect',
+      address: '2a06:98c1:3104::6812:22cd',
+      port: 443
+    }
+  ],
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [Function: httpAdapter],
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function] },
+    validateStatus: [Function: validateStatus],
+    headers: {
+      Accept: '*/*',
+      POLY_ADDRESS: '0xC29946bddEc848cee7aCB2eeD9125547F49B2867',
+      POLY_SIGNATURE: '0DmJFkjv7Ees5ciKNvrg-5BIcU-vPVQBt-s135OWMD8=',
+      POLY_TIMESTAMP: '1772211190',
+      POLY_API_KEY: '5f82d234-ef03-3fa5-cfb8-868be813bf54',
+      POLY_PASSPHRASE: '0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6',
+      'User-Agent': '@polymarket/clob-client',
+      Connection: 'keep-alive',
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip'
+    },
+    method: 'get',
+    url: 'https://clob.polymarket.com/balance-allowance',
+    params: {
+      asset_type: 'COLLATERAL',
+      signature_type: 2,
+      geo_block_token: undefined
+    },
+    data: undefined
+  },
+  request: <ref *1> Writable {
+    _events: {
+      close: undefined,
+      error: [Function: handleRequestError],
+      prefinish: undefined,
+      finish: undefined,
+      drain: undefined,
+      response: [Function: handleResponse],
+      socket: [Function: handleRequestSocket]
+    },
+    _writableState: WritableState {
+      highWaterMark: 65536,
+      length: 0,
+      corked: 0,
+      onwrite: [Function: bound onwrite],
+      writelen: 0,
+      bufferedIndex: 0,
+      pendingcb: 0,
+      [Symbol(kState)]: 17580812,
+      [Symbol(kBufferedValue)]: null
+    },
+    _maxListeners: undefined,
+    _options: {
+      maxRedirects: 21,
+      maxBodyLength: 10485760,
+      protocol: 'https:',
+      path: '/balance-allowance?asset_type=COLLATERAL&signature_type=2',
+      method: 'GET',
+      headers: [Object],
+      agent: undefined,
+      agents: [Object],
+      auth: undefined,
+      hostname: 'clob.polymarket.com',
+      port: null,
+      nativeProtocols: [Object],
+      pathname: '/balance-allowance',
+      search: '?asset_type=COLLATERAL&signature_type=2'
+    },
+    _ended: true,
+    _ending: true,
+    _redirectCount: 0,
+    _redirects: [],
+    _requestBodyLength: 0,
+    _requestBodyBuffers: [],
+    _eventsCount: 3,
+    _onNativeResponse: [Function (anonymous)],
+    _currentRequest: ClientRequest {
+      _events: [Object: null prototype],
+      _eventsCount: 7,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      destroyed: false,
+      _last: true,
+      chunkedEncoding: false,
+      shouldKeepAlive: true,
+      maxRequestsOnConnectionReached: false,
+      _defaultKeepAlive: true,
+      useChunkedEncodingByDefault: false,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      strictContentLength: false,
+      _contentLength: 0,
+      _hasBody: true,
+      _trailer: '',
+      finished: true,
+      _headerSent: true,
+      _closed: false,
+      _header: 'GET /balance-allowance?asset_type=COLLATERAL&signature_type=2 HTTP/1.1\r\n' +
+        'Accept: */*\r\n' +
+        'POLY_ADDRESS: 0xC29946bddEc848cee7aCB2eeD9125547F49B2867\r\n' +
+        'POLY_SIGNATURE: 0DmJFkjv7Ees5ciKNvrg-5BIcU-vPVQBt-s135OWMD8=\r\n' +
+        'POLY_TIMESTAMP: 1772211190\r\n' +
+        'POLY_API_KEY: 5f82d234-ef03-3fa5-cfb8-868be813bf54\r\n' +
+        'POLY_PASSPHRASE: 0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6\r\n' +
+        'User-Agent: @polymarket/clob-client\r\n' +
+        'Connection: keep-alive\r\n' +
+        'Content-Type: application/json\r\n' +
+        'Accept-Encoding: gzip\r\n' +
+        'Host: clob.polymarket.com\r\n' +
+        '\r\n',
+      _keepAliveTimeout: 0,
+      _onPendingData: [Function: nop],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'GET',
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      joinDuplicateHeaders: undefined,
+      path: '/balance-allowance?asset_type=COLLATERAL&signature_type=2',
+      _ended: false,
+      res: null,
+      aborted: false,
+      timeoutCb: [Function: emitRequestTimeout],
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      reusedSocket: false,
+      host: 'clob.polymarket.com',
+      protocol: 'https:',
+      _redirectable: [Circular *1],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(kNeedDrain)]: false,
+      [Symbol(corked)]: 0,
+      [Symbol(kChunkedBuffer)]: [],
+      [Symbol(kChunkedLength)]: 0,
+      [Symbol(kSocket)]: [TLSSocket],
+      [Symbol(kOutHeaders)]: [Object: null prototype],
+      [Symbol(errored)]: null,
+      [Symbol(kHighWaterMark)]: 65536,
+      [Symbol(kRejectNonStandardBodyWrites)]: false,
+      [Symbol(kUniqueHeaders)]: null
+    },
+    _currentUrl: 'https://clob.polymarket.com/balance-allowance?asset_type=COLLATERAL&signature_type=2',
+    [Symbol(shapeMode)]: true,
+    [Symbol(kCapture)]: false
+  }
+}
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T16:58:41.274Z] ═══ Edge AI Cycle ═══
+[edge-ai] 191 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T17:04:17.281Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.940
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T17:15:22.487Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T17:15:22.507Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.951
+[edge-ai] 224 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T17:26:18.188Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.951
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T17:31:44.569Z] ═══ Edge AI Cycle ═══
+[edge-ai] 205 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T17:37:11.097Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.000
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.955
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T17:48:06.746Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T17:48:06.766Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.955
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[edge-ai] 214 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[clob] USDC.e balance: $0.00
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T17:58:59.755Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.949
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T18:04:29.051Z] ═══ Edge AI Cycle ═══
+[edge-ai] 212 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T18:09:55.338Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.932
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T18:20:48.311Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T18:20:48.332Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.948
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[edge-ai] 186 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T18:31:44.143Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.000
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.946
+[oracle-arb] 2 actionable markets (from 3 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T18:37:10.523Z] ═══ Edge AI Cycle ═══
+[edge-ai] 179 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[CLOB Client] request error {"error":"read ECONNRESET"}
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+
+[2026-02-27T18:42:39.988Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.000
+[oracle-arb] 2 actionable markets (from 2 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
+
+[2026-02-27T18:53:32.711Z] ═══ Edge AI Cycle ═══
+
+[2026-02-27T18:53:32.733Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.930
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.949
+[edge-ai] 121 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00
+[edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+[oracle-arb] scan error at offset 0: fetch failed
+[oracle-arb] 0 actionable markets (from 0 candidates)
+[clob] USDC.e balance: $0.00
+[oracle-arb] USDC: $0.00 | candidates: 0
+[oracle-arb] No actionable opportunities this cycle
