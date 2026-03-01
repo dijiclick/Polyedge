@@ -34,9 +34,9 @@ loadEnv('/home/ariad/.openclaw/workspace/Polyedge/.env');
 loadEnv('/home/ariad/.openclaw/workspace/.env');
 
 const PRIVATE_KEY     = process.env.PRIVATE_KEY || process.env.POLYMARKET_PRIVATE_KEY || '';
-// EOA wallet address — use FUNDER_ADDRESS (EOA), NOT POLYMARKET_ADDRESS (Gnosis Safe)
-// signatureType=0 requires EOA address, not the Safe proxy address
-const FUNDER_ADDRESS  = process.env.FUNDER_ADDRESS || '';
+// PROXY wallet address (Gnosis Safe / Polymarket proxy) — signatureType=1
+// EOA signs, but funds come from the proxy wallet balance
+const FUNDER_ADDRESS  = process.env.POLYMARKET_ADDRESS || process.env.FUNDER_ADDRESS || '';
 const CLOB_API_KEY    = process.env.CLOB_API_KEY    || '';
 const CLOB_SECRET     = process.env.CLOB_SECRET     || '';
 const CLOB_PASSPHRASE = process.env.CLOB_PASSPHRASE || '';
@@ -62,9 +62,9 @@ export async function getClient(): Promise<ClobClient> {
     console.log('[clob] API key derived:', (creds as any).key?.slice(0, 8) + '...');
   }
 
-  // signatureType=2 = GnosisSafe proxy wallet (gasless)
-  // signatureType 0 = EOA signs directly (not gnosis safe/proxy)
-  _client = new ClobClient(CLOB_HOST, 137, wallet, creds, 0);
+  // signatureType=1 = POLY_PROXY: EOA signs, funds from proxy wallet (0xc92fe1...)
+  // This is the standard Polymarket method — uses the $20 balance in the proxy
+  _client = new ClobClient(CLOB_HOST, 137, wallet, creds, 1, FUNDER_ADDRESS);
   return _client;
 }
 
@@ -82,9 +82,9 @@ export async function getUsdcBalance(): Promise<number> {
     console.error('[clob] balance error:', e.message);
   }
 
-  // Fallback: check Polymarket data API (tracks internal USD including unsettled)
+  // Fallback: check Polymarket data API using proxy wallet address
   try {
-    const addr = process.env.FUNDER_ADDRESS || process.env.POLYMARKET_ADDRESS || '';
+    const addr = process.env.POLYMARKET_ADDRESS || process.env.FUNDER_ADDRESS || '';
     const res  = await fetch(
       `https://data-api.polymarket.com/value?user=${addr.toLowerCase()}`,
       { headers: { 'User-Agent': 'Mozilla/5.0' } }
@@ -102,7 +102,7 @@ export async function getUsdcBalance(): Promise<number> {
 
   // Second fallback: try the positions value endpoint
   try {
-    const addr = process.env.FUNDER_ADDRESS || process.env.POLYMARKET_ADDRESS || '';
+    const addr = process.env.POLYMARKET_ADDRESS || process.env.FUNDER_ADDRESS || '';
     const res  = await fetch(
       `https://data-api.polymarket.com/portfolio/summary?user=${addr.toLowerCase()}`,
       { headers: { 'User-Agent': 'Mozilla/5.0' } }
