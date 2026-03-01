@@ -27,9 +27,9 @@ import { ask, search } from '../llm.js';
 const ARMED           = process.env.ARMED === 'true';
 const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS  || '4');
 const RISK_LEVEL      = (process.env.RISK_LEVEL  || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH';
-const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '500');   // raised — filters noise
+const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '2000');  // min $2k liquidity — real markets only
 const MIN_MINUTES     = parseInt(process.env.MIN_MINUTES     || '10');    // need time to actually place order
-const MAX_AI_CALLS    = parseInt(process.env.MAX_AI_CALLS    || '15');    // max markets analyzed per cycle
+const MAX_AI_CALLS    = parseInt(process.env.MAX_AI_CALLS    || '25');    // more markets per cycle
 const SCAN_INTERVAL   = parseInt(process.env.EDGE_SCAN_MIN   || '15') * 60_000;
 const GAMMA_HOST      = 'https://gamma-api.polymarket.com';
 
@@ -42,13 +42,28 @@ const NOISE_PATTERNS = [
   /price below/i,
   /higher or lower/i,
   /\d+m candle/i,
+  /spread[:\s-]/i,                       // sports spread bets — pure noise
+  /\(-\d+\.?\d*\)/,                      // team (-1.5) handicap
+  /total.*over/i,                        // over/under totals
+  /over\/under/i,
+  /first.*goal.*scorer/i,                // very hard to predict
 ];
 
 // Minimum AI confidence required to place a trade
 const RISK_THRESHOLDS: Record<'LOW' | 'MEDIUM' | 'HIGH', number> = {
-  LOW:    0.85,
-  MEDIUM: 0.70,
-  HIGH:   0.55,
+  LOW:    0.75,
+  MEDIUM: 0.60,  // lowered: 70% was too restrictive, never fired
+  HIGH:   0.50,
+};
+
+// Per-event-type confidence overrides (some events are more predictable)
+const EVENT_THRESHOLDS: Partial<Record<string, number>> = {
+  crypto_price:      0.62,
+  election:          0.65,
+  sports_award:      0.60,
+  soccer_match:      0.63,  // live score available
+  basketball_game:   0.63,
+  general:           0.60,
 };
 
 interface MarketInfo {
@@ -76,7 +91,7 @@ interface AIPrediction {
 // passed through all expired markets and collected the 0-3h window.
 async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   const now    = Date.now();
-  const maxMs  = 72 * 3_600_000;  // 3 days max
+  const maxMs  = 6 * 3_600_000;   // 6h window — wider net, more opportunities
   const results: MarketInfo[] = [];
   let   foundFutureMarkets = false;
   let   passedWindow       = false;
@@ -99,7 +114,7 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           // Still in expired zone — skip but keep paginating
           if (msLeft <= 0) continue;
 
-          // Past the 3h window — stop entirely
+          // Past the 6h window — stop entirely
           if (msLeft > maxMs) {
             passedWindow = true;
             break;
@@ -156,7 +171,7 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   results.sort((a, b) => b.liquidity - a.liquidity);
   const top = results.slice(0, MAX_AI_CALLS);
 
-  console.log(`[edge-ai] ${results.length} qualifying markets in 0-3h window → analyzing top ${top.length} by liquidity`);
+  console.log(`[edge-ai] ${results.length} qualifying markets in 0-6h window → analyzing top ${top.length} by liquidity`);
 
   // Re-sort top candidates by urgency (most urgent first)
   top.sort((a, b) => a.hoursLeft - b.hoursLeft);
@@ -185,42 +200,41 @@ async function analyzeMarket(market: MarketInfo): Promise<AIPrediction> {
   let searchResults = 'No search results available.';
   const closeDate   = new Date(market.endDate).toUTCString();
   try {
-    // Targeted prompt: ask for exact factual outcome, not similar events
-    const searchQuery = [
-      `Polymarket prediction market question: "${market.question}"`,
-      `This market closes: ${closeDate}`,
-      `Current YES price: ${(market.yesPrice * 100).toFixed(1)}%`,
-      `I need the EXACT current status/result for this specific question only.`,
-      `Do NOT discuss similar events or general trends.`,
-      `What is the factual current outcome or latest confirmed news directly answering: ${market.question}`,
-    ].join('\n');
+    // Sharp, factual search — get live score or confirmed result
+    const isLiveGame = /vs\.|vs |at |\bvs\b/.test(market.question);
+    const searchQuery = isLiveGame
+      ? `Live score result: ${market.question} today ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}. Who is winning or who won? Final score?`
+      : `"${market.question}" result confirmed news ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}. Has this happened yet? What is the current status?`;
     const result = await search(searchQuery);
     searchResults = result.answer || 'No results found.';
   } catch (e) {
     console.error('[edge-ai] search error:', (e as Error).message);
   }
 
-  const prompt = `You are a prediction market analyst. Analyze this Polymarket question:
-"${market.question}"
+  const prompt = `You are a sharp prediction market trader analyzing a Polymarket question. Your goal is to find pricing errors.
 
-Market closes in: ${minutesLeft} minutes (${new Date(market.endDate).toUTCString()})
-Current YES price: ${(market.yesPrice * 100).toFixed(1)}%
-Current NO price:  ${(market.noPrice * 100).toFixed(1)}%
-${market.description ? `\nResolution criteria: ${market.description.slice(0, 300)}` : ''}
+QUESTION: "${market.question}"
+CLOSES IN: ${minutesLeft} minutes
+MARKET PRICE: YES=${( market.yesPrice * 100).toFixed(1)}¢  NO=${(market.noPrice * 100).toFixed(1)}¢
+${market.description ? `RESOLUTION: ${market.description.slice(0, 300)}` : ''}
 
-Web search results:
+RESEARCH:
 ${searchResults}
 
-Historical AI accuracy for ${eventType} markets: ${(accuracy * 100).toFixed(0)}%
+TASK:
+1. Find the ACTUAL current result or best evidence
+2. If the outcome is already known/confirmed → bet with 85-95% confidence
+3. If strong evidence exists → bet with 65-80% confidence  
+4. If truly uncertain → UNCERTAIN with <60% confidence
+5. Look for PRICING ERRORS: if market shows 30% but you know it's 80% likely → that's edge
 
-Based on the evidence, what is the most likely outcome?
-Respond ONLY with valid JSON (no markdown, no text outside the JSON object):
+Respond ONLY with this exact JSON (no markdown):
 {
   "outcome": "YES" or "NO" or "UNCERTAIN",
   "confidence": 0.0 to 1.0,
   "eventType": "soccer_match|basketball_game|american_football|election|crypto_price|sports_award|weather|general",
-  "reasoning": "1-2 sentence explanation of your reasoning",
-  "keyFact": "the single most important fact from the search results that drives your prediction"
+  "reasoning": "one sentence with the KEY fact",
+  "keyFact": "exact quote or data point from search that confirms your answer"
 }`;
 
   try {
@@ -387,8 +401,10 @@ async function runCycle(): Promise<void> {
       console.log(`[edge-ai] AI: ${prediction.outcome} @ ${(prediction.confidence * 100).toFixed(0)}% confidence`);
       console.log(`[edge-ai] Key fact: ${prediction.keyFact.slice(0, 100)}`);
 
-      if (prediction.outcome === 'UNCERTAIN' || prediction.confidence < threshold) {
-        console.log(`[edge-ai] Skip: confidence ${(prediction.confidence * 100).toFixed(0)}% < threshold ${(threshold * 100).toFixed(0)}%`);
+      // Use per-event-type threshold if available
+      const eventThreshold = EVENT_THRESHOLDS[prediction.eventType] ?? threshold;
+      if (prediction.outcome === 'UNCERTAIN' || prediction.confidence < eventThreshold) {
+        console.log(`[edge-ai] Skip: confidence ${(prediction.confidence * 100).toFixed(0)}% < threshold ${(eventThreshold * 100).toFixed(0)}% (${prediction.eventType})`);
         continue;
       }
 
@@ -401,6 +417,14 @@ async function runCycle(): Promise<void> {
       }
       const tokenId    = targetToken.token_id;
       const entryPrice = buySide === 'YES' ? market.yesPrice : market.noPrice;
+
+      // EDGE CHECK: only bet if market price is meaningfully wrong (≥8% edge)
+      // If AI says YES @ 70% but market already shows 68%, edge is only 2% — not worth it
+      const edge = prediction.confidence - entryPrice;
+      if (Math.abs(edge) < 0.08) {
+        console.log(`[edge-ai] Skip: insufficient edge ${(edge * 100).toFixed(1)}% (need ≥8%)`);
+        continue;
+      }
 
       // AI confidence = true probability estimate; entryPrice = what we actually pay
       const bet    = kellyBet({ probability: prediction.confidence, marketPrice: entryPrice, bankroll: usdc, maxBet: 1.0 });

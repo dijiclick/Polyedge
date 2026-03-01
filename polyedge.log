@@ -12,35 +12,10 @@ Risk: MEDIUM
 🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=2min
 [tg] 🧠 Edge AI started | 🔴 LIVE | Risk: MEDIUM
 
-[2026-03-01T17:22:08.063Z] ═══ Oracle Arb Cycle ═══
+[2026-03-01T17:25:48.717Z] ═══ Oracle Arb Cycle ═══
 
-[2026-03-01T17:22:08.103Z] ═══ Edge AI Cycle ═══
+[2026-03-01T17:25:48.755Z] ═══ Edge AI Cycle ═══
 [oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.930
-[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.920
-[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
-[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
-[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.922
-[oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.940
-[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.940
-[oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
-[oracle-arb] At max positions (8/8)
-[tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
-[edge-ai] 714 qualifying markets in 0-3h window → analyzing top 15 by liquidity
-[clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
-[clob] USDC.e balance (CLOB): $20.57
-[tg] 🧠 Edge AI Scan
-Markets 0–3h: 15 | Positions: 4/8
-Risk: MEDIUM (need 70%+ confidence)
-USDC: $20.57 | 🔴 LIVE
-
-[edge-ai] Analyzing: Golden Knights vs. Penguins
-[edge-ai] Closes in 38min | YES=57.5%
-[llm] Proxy failed (The operation was aborted due to timeout), trying API...
-[llm] Perplexity API failed (fetch failed), trying bridge pool...
-[edge-ai] search error: All Perplexity sources failed: Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria
-
-[2026-03-01T17:25:20.385Z] ═══ Oracle Arb Cycle ═══
-[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.000
 [oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
 [oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
 [oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
@@ -50,3 +25,17 @@ USDC: $20.57 | 🔴 LIVE
 [oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
 [oracle-arb] At max positions (8/8)
 [tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
+[edge-ai] 712 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
+[clob] USDC.e balance (CLOB): $20.57
+[tg] 🧠 Edge AI Scan
+Markets 0–3h: 15 | Positions: 4/8
+Risk: MEDIUM (need 70%+ confidence)
+USDC: $20.57 | 🔴 LIVE
+
+[edge-ai] Analyzing: Spread: Golden Knights (-1.5)
+[edge-ai] Closes in 34min | YES=36.5%
+[llm] Proxy failed (The operation was aborted due to timeout), trying API...
+[llm] Perplexity API failed (Perplexity API error 401: <html>
+<head><title>401 Authorization Required</title), trying bridge pool...
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria
