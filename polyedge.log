@@ -5962,3 +5962,174 @@ Historical accuracy: 50%
 [edge-ai] Closes in 596min | YES=25.5%
 [llm] ✅ Perplexity proxy hit
 [llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 61% confidence
+[edge-ai] Key fact: Current NO price at 60.5%, market favorite for Elche not to win.
+[edge-ai] Skip: confidence 61% < threshold 70%
+
+[edge-ai] Analyzing: Will Manchester United FC win on 2026-03-01?
+[edge-ai] Closes in 595min | YES=64.5%
+[edge-ai] AI: NO @ 70% confidence
+[edge-ai] Key fact: Bookmakers price Sassuolo around 3.70 and Atalanta near even money, implying roughly a 27% chance fo
+🧠 Edge AI Signal [LIVE]
+Market: Will US Sassuolo Calcio win on 2026-03-01?
+Closes in: 596min | YES: 25.5%
+
+AI says: NO (70% confident)
+Key fact: Bookmakers price Sassuolo around 3.70 and Atalanta near even money, implying roughly a 27% chance for a Sassuolo win, in line with the 25.5% YES price
+Reasoning: Pre‑match odds and most analyst previews make Atalanta a clear favorite, implying Sassuolo’s win probability is in the mid‑20% range, close to the cur
+
+Bet: $0.50 on NO @ 74.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0xb2bc595809148ebfe8b8f2a9599c8735e3fc66841ed848f8f0445cd6f776d74b"}}}
+[clob] BUY 0.6711 shares @ 0.745 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"HnCb0b4UdoGKupvTYmhTR2LKxslZylP6betdiI5YV6M=","POLY_TIMESTAMP":"1772337949","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":635},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":1060063052117,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"24585844458736164795732411521055224715797544586245891440771485656403248933682\",\"makerAmount\":\"502500\",\"takerAmount\":\"670000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":2,\"signature\":\"0xf3752e4d33dbe2c801b8068ea27777236d0ba016c16e461d4265fc175cb3aeb5101b7b4fae0c32edc2af28384ac7175db6fc13a680d20397b02c8a84ba9b0dfb1b\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+
+[edge-ai] Analyzing: Will Tottenham Hotspur FC win on 2026-03-01?
+[edge-ai] Closes in 596min | YES=26.5%
+[supabase] Trade logged → id=256
+[llm] ✅ Perplexity proxy hit
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: YES @ 63% confidence
+[edge-ai] Key fact: Sportsbooks and models price Manchester United around 58–67% to win (e.g., moneyline near -185 to -2
+[edge-ai] Skip: confidence 63% < threshold 70%
+
+[edge-ai] Analyzing: Will Fulham FC win on 2026-03-01?
+[edge-ai] Closes in 595min | YES=48.5%
+[edge-ai] AI: NO @ 74% confidence
+[edge-ai] Key fact: Betting odds list Fulham as favorites at around +102 to +110 moneyline, implying ~47-50% chance to w
+🧠 Edge AI Signal [LIVE]
+Market: Will Tottenham Hotspur FC win on 2026-03-01?
+Closes in: 596min | YES: 26.5%
+
+AI says: NO (74% confident)
+Key fact: Betting odds list Fulham as favorites at around +102 to +110 moneyline, implying ~47-50% chance to win, with Tottenham at +253-+260 (~28-30%) 
+Reasoning: Market prices and betting odds strongly favor Fulham at home (47-50% win probability for Fulham, 26-30% for Tottenham), reflecting Tottenham's poor re
+
+Bet: $0.50 on NO @ 73.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0xe9daad87ed60479a48a1d7597facfe15d255cff6ea7f7a5c07e2103255dc1b89"}}}
+[clob] BUY 0.6803 shares @ 0.735 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"I4oIHWSSWTMv_NKfsPVNrW6kfM8WJ2MZag3lH9EsMb8=","POLY_TIMESTAMP":"1772337989","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":634},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":753880719713,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"82139168251794081105933776819935135801181644744062790121829972586920262475969\",\"makerAmount\":\"503200\",\"takerAmount\":\"680000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":2,\"signature\":\"0xbcaa4291401f1aeaf654f66179619b0f6da4bfc335d5001cb36af74ec1b1b63e0d2f60c8f1b7a33ca7e6bd239f2a21a94b334b3f71f009c2a2c52429e8381c231c\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+
+[edge-ai] Analyzing: Will Atalanta BC win on 2026-03-01?
+[edge-ai] Closes in 596min | YES=46.5%
+[supabase] Trade logged → id=257
+[llm] ✅ Perplexity proxy hit
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: YES @ 55% confidence
+[edge-ai] Key fact: Major sportsbooks list Fulham as a small home favorite around +102 to +110 on the moneyline against 
+[edge-ai] Skip: confidence 55% < threshold 70%
+
+[edge-ai] Analyzing: Will US Sassuolo Calcio win on 2026-03-01?
+[edge-ai] Closes in 595min | YES=25.5%
+[edge-ai] AI: YES @ 63% confidence
+[edge-ai] Key fact: Pre-match odds from major bookmakers and betting previews price Atalanta around -103 to -110 on the 
+[edge-ai] Skip: confidence 63% < threshold 70%
+
+[edge-ai] Analyzing: Will Crystal Palace FC win on 2026-03-01?
+[edge-ai] Closes in 596min | YES=15.5%
+[llm] ✅ Perplexity proxy hit
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: NO @ 70% confidence
+[edge-ai] Key fact: Bookmaker odds for this match have Sassuolo around 3.70 (+265) and Atalanta near even money, implyin
+🧠 Edge AI Signal [LIVE]
+Market: Will US Sassuolo Calcio win on 2026-03-01?
+Closes in: 595min | YES: 25.5%
+
+AI says: NO (70% confident)
+Key fact: Bookmaker odds for this match have Sassuolo around 3.70 (+265) and Atalanta near even money, implying only about a 27% chance of a Sassuolo win compar
+Reasoning: Pre‑match betting markets and previews consistently price Sassuolo as a clear underdog at home, implying roughly a 25–30% win chance versus 50%+ for A
+
+Bet: $0.50 on NO @ 74.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0xb2bc595809148ebfe8b8f2a9599c8735e3fc66841ed848f8f0445cd6f776d74b"}}}
+[clob] BUY 0.6711 shares @ 0.745 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"UF-bwuP8uEgIErl_rkTW_qjZjPa6p9u1ET7KJIbYrkk=","POLY_TIMESTAMP":"1772338052","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":635},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":1004118373775,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"24585844458736164795732411521055224715797544586245891440771485656403248933682\",\"makerAmount\":\"502500\",\"takerAmount\":\"670000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":2,\"signature\":\"0x0791639b1df0b3b15a80c6bff799dd22bc77015ca0763e394bdaf3bd663a001a13739287a5ff1ca67f81a53c01add05239c6c6752e54bab1a68fc4b50bc6484b1b\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+
+[edge-ai] Analyzing: Will Tottenham Hotspur FC win on 2026-03-01?
+[edge-ai] Closes in 595min | YES=26.5%
+[supabase] logTradeSignal failed: Supabase POST edge_predictions failed: {"code":"23505","details":"Key (event_id,
+[edge-ai] AI: NO @ 72% confidence
+[edge-ai] Key fact: Pre-match models and betting lines give Crystal Palace only about a 17–21% chance to win this match 
+🧠 Edge AI Signal [LIVE]
+Market: Will Crystal Palace FC win on 2026-03-01?
+Closes in: 596min | YES: 15.5%
+
+AI says: NO (72% confident)
+Key fact: Pre-match models and betting lines give Crystal Palace only about a 17–21% chance to win this match at Old Trafford.
+Reasoning: Manchester United are strong home favorites with implied win probabilities around 58–67%, while Crystal Palace win probabilities cluster near 17–21%, 
+
+Bet: $0.50 on NO @ 84.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0x06907ebf9585d0c335ef4b9d4de0aad009bb390058bbcdca65aaece2a75c5043"}}}
+[clob] BUY 0.5917 shares @ 0.845 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"WK7idBXD4rxFF8g1Q_aiDfDsokvrMf5NVwLQxcd0XFs=","POLY_TIMESTAMP":"1772338059","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":634},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":787104777122,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"65734475284371300379226014959445651583673515531060998389646232532669114872091\",\"makerAmount\":\"501500\",\"takerAmount\":\"590000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":2,\"signature\":\"0x1cf3dd647e4df495dd742f692aa29f441d440bf2df26e495dd861581b5ef85a93b70b97c9a2da6c2e59e40afea86d6ff72ef3f2f19451bd7915eaecc58ecffd61b\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+[self-improve] Updated: 0W/0L, P&L $0.00
+[supabase] Trade logged → id=259
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: NO @ 70% confidence
+[edge-ai] Key fact: Predictive models and major sportsbooks price Fulham as clear favorites, with Fulham win probability
+🧠 Edge AI Signal [LIVE]
+Market: Will Tottenham Hotspur FC win on 2026-03-01?
+Closes in: 595min | YES: 26.5%
+
+AI says: NO (70% confident)
+Key fact: Predictive models and major sportsbooks price Fulham as clear favorites, with Fulham win probability around 43% and Tottenham around 33%, and moneylin
+Reasoning: Bookmaker and model odds imply roughly a 28–32% Tottenham win chance, which is below the 26.5% YES price and consistent with Fulham being a home favor
+
+Bet: $0.50 on NO @ 73.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0xe9daad87ed60479a48a1d7597facfe15d255cff6ea7f7a5c07e2103255dc1b89"}}}
+[clob] BUY 0.6803 shares @ 0.735 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"uiPN-ZIHnrPv_FAyUyBvn2EXMAmvxoWUIYCF0Y_FAu4=","POLY_TIMESTAMP":"1772338073","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":635},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":1158261409387,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"82139168251794081105933776819935135801181644744062790121829972586920262475969\",\"makerAmount\":\"503200\",\"takerAmount\":\"680000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":2,\"signature\":\"0xa33fa49fdffee543835ebe9e4efe630dfded1ab22e11fbd89abc15ae4b9fb21d2f10bcd68cc9d0a75400e5d51f2b57d2deca4c2519ee7799c31f2a2fef6e1e141c\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+
+[edge-ai] Analyzing: Will Atalanta BC win on 2026-03-01?
+[edge-ai] Closes in 595min | YES=46.5%
+[supabase] logTradeSignal failed: Supabase POST edge_predictions failed: {"code":"23505","details":"Key (event_id,
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: NO @ 100% confidence
+[edge-ai] Key fact: Final score: Sassuolo 3–1 Atalanta
+🧠 Edge AI Signal [LIVE]
+Market: Will Atalanta BC win on 2026-03-01?
+Closes in: 595min | YES: 46.5%
+
+AI says: NO (100% confident)
+Key fact: Final score: Sassuolo 3–1 Atalanta
+Reasoning: The game occurred on March 1, 2026, with Atalanta BC losing 1-3 to Sassuolo in Serie A. This directly matches the market's resolution criteria, confir
+
+Bet: $0.50 on NO @ 53.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0xba455bf3b4fd8a5e1b3bf2bbb231a6cd72ee68dd5e62efb9003f0abf968cbd07"}}}
+[clob] BUY 0.9346 shares @ 0.535 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"SRolT200FHuKsnRYnWOnCtfSqnacp1MQa5lxxKmc7Ww=","POLY_TIMESTAMP":"1772338095","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":634},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":582603435805,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"87861714878357042829194341721641281930771715630563501997563328564748941749577\",\"makerAmount\":\"502200\",\"takerAmount\":\"930000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":2,\"signature\":\"0xe8392d3a468db19f7b2ede9f08ac998db1c15303fb2fac848790269b964148611d62842bea34c80f04d4744ce05d0b57ce908cd6d4d7f95a7b6b6fe808f0ed101b\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+[self-improve] Updated: 0W/0L, P&L $0.00
+[supabase] Trade logged → id=261
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=3min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=2min
+
+[2026-03-01T04:14:09.451Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.890
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+
+[2026-03-01T04:14:09.816Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.971
+[oracle-arb] At max positions (4/4)
+[edge-ai] At max positions (7/4)

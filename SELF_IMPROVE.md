@@ -30,7 +30,7 @@
 
 | Date | Trades | Wins | Losses | P&L | Notes |
 |---|---|---|---|---|---|
-| (no trades yet — system just started) | | | | | |
+| 2026-03-01 | 0 | 0 | 0 | $0.00 | Win rate: N/A% |
 
 ---
 
