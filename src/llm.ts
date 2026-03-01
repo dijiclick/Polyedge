@@ -56,12 +56,12 @@ export async function ask(
       method:  'POST',
       headers: { 'Authorization': 'Bearer local', 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'sonar', messages: [{ role: 'user', content: prompt }] }),
-      signal: AbortSignal.timeout(120_000),
+      signal: AbortSignal.timeout(15_000),  // fast fail when tokens expired
     });
     if (res.ok) {
       const d: any = await res.json();
       const content = d.choices?.[0]?.message?.content ?? '';
-      if (content) return content;
+      if (content) { console.log('[llm] ✅ Perplexity proxy ask hit'); return content; }
     }
   } catch { /* fall through to OpenRouter */ }
 
@@ -158,7 +158,7 @@ async function searchViaProxy(query: string): Promise<SearchResult> {
       model: 'sonar',
       messages: [{ role: 'user', content: query }],
     }),
-    signal: AbortSignal.timeout(120_000),
+    signal: AbortSignal.timeout(20_000),
   });
   if (!res.ok) throw new Error(`Proxy error ${res.status}`);
   const d: any = await res.json();
@@ -168,8 +168,69 @@ async function searchViaProxy(query: string): Promise<SearchResult> {
   return { answer: content, citations: [] };
 }
 
+// ─── Sports data via ESPN scoreboard APIs (free, no auth) ─────────────────
+async function searchViaESPN(query: string): Promise<SearchResult | null> {
+  const q = query.toLowerCase();
+
+  // Detect sport from query
+  const endpoints: Array<{ url: string; label: string }> = [];
+  if (/soccer|football|epl|premier|serie a|bundesliga|la liga|ligue|champions|europa|mls|roma|juventus|barcelona|chelsea|arsenal|manchester|liverpool|milan|madrid|marseille|lyon|psg/i.test(q)) {
+    endpoints.push(
+      { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard', label: 'EPL' },
+      { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/scoreboard', label: 'Serie A' },
+      { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard', label: 'La Liga' },
+      { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/ger.1/scoreboard', label: 'Bundesliga' },
+      { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/fra.1/scoreboard', label: 'Ligue 1' },
+      { url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/usa.1/scoreboard', label: 'MLS' },
+    );
+  }
+  if (/nhl|hockey|knights|penguins|bruins|leafs|oilers|flames|avalanche|rangers/i.test(q)) {
+    endpoints.push({ url: 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard', label: 'NHL' });
+  }
+  if (/nba|basketball|lakers|celtics|warriors|heat|bucks|knicks|nets/i.test(q)) {
+    endpoints.push({ url: 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard', label: 'NBA' });
+  }
+
+  if (endpoints.length === 0) return null;
+
+  const lines: string[] = [];
+  for (const ep of endpoints) {
+    try {
+      const r = await fetch(ep.url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(8000) });
+      if (!r.ok) continue;
+      const data: any = await r.json();
+      for (const event of data.events ?? []) {
+        const comp = event.competitions?.[0];
+        if (!comp) continue;
+        const teams = comp.competitors ?? [];
+        const home = teams.find((t: any) => t.homeAway === 'home');
+        const away = teams.find((t: any) => t.homeAway === 'away');
+        if (!home || !away) continue;
+        const hn = home.team?.displayName ?? '';
+        const an = away.team?.displayName ?? '';
+        const hs = home.score ?? '?';
+        const as_ = away.score ?? '?';
+        const status = comp.status?.type?.shortDetail ?? comp.status?.type?.name ?? '';
+        const clock = comp.status?.displayClock ?? '';
+        lines.push(`${ep.label}: ${an} ${as_}-${hs} ${hn} [${status}${clock ? ' ' + clock : ''}]`);
+      }
+    } catch { /* network error, skip */ }
+  }
+
+  if (lines.length === 0) return null;
+  const answer = `Live/recent scores from ESPN:\n${lines.join('\n')}`;
+  console.log('[llm] ✅ ESPN scores hit');
+  return { answer, citations: [] };
+}
+
 export async function search(query: string): Promise<SearchResult> {
-  // 1. Try local proxy first (Scrapling-based, uses session tokens, no API key)
+  // 0. Sports queries → ESPN live scores first (fast, free, always fresh)
+  try {
+    const espn = await searchViaESPN(query);
+    if (espn) return espn;
+  } catch { /* fall through */ }
+
+  // 1. Try local proxy (Perplexity session tokens)
   try {
     const result = await searchViaProxy(query);
     console.log('[llm] ✅ Perplexity proxy hit');
@@ -197,5 +258,12 @@ export async function search(query: string): Promise<SearchResult> {
     }
   }
 
-  throw new Error(`All Perplexity sources failed: ${errors.join(' | ')}`);
+  // 4. Ultimate fallback: use ask() with OpenRouter — no web search but can reason
+  try {
+    console.warn('[llm] All search sources failed — falling back to OpenRouter reasoning');
+    const answer = await ask(`Based on your training data, answer this prediction market question as best you can (note: your data may not be fully current):\n\n${query}`);
+    return { answer, citations: [] };
+  } catch { /* nothing works */ }
+
+  throw new Error(`All search sources failed: ${errors.join(' | ')}`);
 }
