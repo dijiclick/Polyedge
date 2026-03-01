@@ -29,8 +29,6 @@ fi
 
 # Not running — start it
 echo "[$(date)] Restarting polyedge..."
-set -a && source /home/ariad/.openclaw/workspace/polyedge/.env && set +a
-cd /home/ariad/.openclaw/workspace/polyedge
-nohup npx tsx src/runner.ts --monitor >> /home/ariad/.openclaw/workspace/polyedge/polyedge.log 2>&1 &
+nohup /home/ariad/.openclaw/workspace/polyedge/start_live.sh >> /home/ariad/.openclaw/workspace/polyedge/polyedge.log 2>&1 &
 echo $! > "$PIDFILE"
 echo "[$(date)] Polyedge started (PID $!)"

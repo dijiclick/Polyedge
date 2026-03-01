@@ -1923,3 +1923,183 @@
 
 [edge-ai] Analyzing: Predators vs. Stars
 [edge-ai] Closes in 55min | YES=42.5%
+🚀 Polymarket Trading Runner
+   Mode: 🟡 DRY-RUN
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+[clob] WARNING: PRIVATE_KEY or FUNDER_ADDRESS not set in env
+🚀 Oracle Arb Monitor started | ARMED=false | interval=10min
+🚀 Edge AI Monitor started | ARMED=false | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:05:37.279Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T00:05:37.592Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 9 actionable markets (from 9 candidates)
+[oracle-arb] USDC: $10.65 | candidates: 9
+🟢 Oracle Arb Buy [DRY-RUN]
+Market: Will Sinners win Best Original Screenplay at the 98th Academy Awards?
+YES: 89.0¢ | Edge: 12.4%
+⏳ Expires in 336h
+Bet: $1.00 → 1.12 shares
+Expected: +$0.12 on settlement
+Liquidity: $18979
+🟢 Oracle Arb Buy [DRY-RUN]
+Market: Will One Battle After Another win Best Adapted Screenplay at the 98th Academy Aw
+YES: 90.5¢ | Edge: 10.5%
+⏳ Expires in 336h
+Bet: $1.00 → 1.10 shares
+Expected: +$0.10 on settlement
+Liquidity: $15151
+🟢 Oracle Arb Buy [DRY-RUN]
+Market: Will Frankenstein win Best Production Design at the 98th Academy Awards?
+YES: 90.5¢ | Edge: 10.5%
+⏳ Expires in 336h
+Bet: $1.00 → 1.10 shares
+Expected: +$0.10 on settlement
+Liquidity: $11579
+🟢 Oracle Arb Buy [DRY-RUN]
+Market: Will Trump deport 250,000-500,000 people?
+YES: 95.0¢ | Edge: 5.3%
+⏰ EXPIRED 1428h ago (oracle lag)
+Bet: $1.00 → 1.05 shares
+Expected: +$0.05 on settlement
+Liquidity: $7159
+[edge-ai] 458 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 54min | YES=42.5%
+[llm] ✅ Perplexity proxy hit
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:07:12.980Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.900
+
+[2026-03-01T00:07:13.255Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.956
+[oracle-arb] At max positions (4/4)
+[edge-ai] 472 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 53min | YES=42.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: By clicking "Accept All Cookies" or selecting "Necessary Cookies", you agree to our privacy policy
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Lakers vs. Warriors
+[edge-ai] Closes in 83min | YES=59.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: YES @ 0% confidence
+[edge-ai] Key fact: 5% YES priceHead-to-head history Lakers Warriors 2026
+
+Cookie PolicyWe use cookies to enhance your e
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Spread: Lakers (-4.5)
+[edge-ai] Closes in 83min | YES=47.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: By clicking "Accept All Cookies" or selecting "Necessary Cookies", you agree to our privacy policy
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Los Angeles FC win on 2026-02-28?
+[edge-ai] Closes in 83min | YES=50.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: By clicking "Accept All Cookies" or selecting "Necessary Cookies", you agree to our privacy policy
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Columbus Crew win on 2026-02-28?
+[edge-ai] Closes in 83min | YES=57.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: YES @ 0% confidence
+[edge-ai] Key fact: 5 percentColumbus Crew performance vs Sporting KC historyUpcoming fixtures for Columbus Crew after t
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Nashville SC win on 2026-02-28?
+[edge-ai] Closes in 83min | YES=42.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Sporting Kansas City win on 2026-02-28?
+[edge-ai] Closes in 83min | YES=20.5%
+[llm] Proxy failed (fetch failed), trying API...
+[llm] Perplexity API failed (Perplexity API error 401: <html>
+<head><title>401 Authorization Required</title), trying bridge pool...
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1: 
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will FC Dallas win on 2026-02-28?
+[edge-ai] Closes in 83min | YES=31.5%
+[llm] Proxy failed (fetch failed), trying API...
+[llm] Perplexity API failed (Perplexity API error 401: <html>
+<head><title>401 Authorization Required</title), trying bridge pool...
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:10:02.039Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.900
+
+[2026-03-01T00:10:02.310Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.956
+[oracle-arb] At max positions (4/4)
+[edge-ai] 456 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 50min | YES=42.5%
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:10:08.506Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.900
+
+[2026-03-01T00:10:08.808Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Trump deport 250,000-500,000 people? sell=0.956
+[oracle-arb] At max positions (4/4)
+[edge-ai] 456 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 50min | YES=42.5%
+[llm] Proxy failed (The operation was aborted due to timeout), trying API...
+[llm] Perplexity API failed (Perplexity API error 401: <html>
+<head><title>401 Authorization Required</title), trying bridge pool...
+[llm] Proxy failed (The operation was aborted due to timeout), trying API...
+[llm] Perplexity API failed (Perplexity API error 401: <html>
+<head><title>401 Authorization Required</title), trying bridge pool...
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 1:  | Bridge exit 1: 
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1:  | Bridge exit 1: 
