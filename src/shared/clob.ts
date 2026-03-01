@@ -65,6 +65,7 @@ export async function getClient(): Promise<ClobClient> {
   // signatureType=1 = POLY_PROXY: EOA signs, funds from proxy wallet (0xc92fe1...)
   // This is the standard Polymarket method — uses the $20 balance in the proxy
   _client = new ClobClient(CLOB_HOST, 137, wallet, creds, 1, FUNDER_ADDRESS);
+  console.log(`[clob] Client init: signatureType=1 funder=${FUNDER_ADDRESS}`);
   return _client;
 }
 
@@ -73,7 +74,9 @@ export async function getUsdcBalance(): Promise<number> {
   try {
     const c = await getClient();
     const b = await c.getBalanceAllowance({ asset_type: AssetType.COLLATERAL, token_id: '' } as any);
-    const balance = parseFloat((b as any).balance ?? '0');
+    // Balance is returned in micro-USDC (6 decimals) — divide by 1e6
+    const rawBalance = parseFloat((b as any).balance ?? '0');
+    const balance = rawBalance > 1000 ? rawBalance / 1_000_000 : rawBalance;
     if (balance > 0) {
       console.log(`[clob] USDC.e balance (CLOB): $${balance.toFixed(2)}`);
       return balance;
