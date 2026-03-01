@@ -48,11 +48,14 @@ async function main() {
     runners.push(runEdgeAI);
   }
 
-  // Run all strategies concurrently
+  // Run all strategies concurrently (they use setInterval internally)
   await Promise.all(runners.map(fn => fn().catch(e => {
     console.error('[runner] strategy error:', e);
     tg(`❌ Strategy error: ${e.message}`);
   })));
+
+  // Keep process alive — strategies run via setInterval
+  await new Promise(() => {});
 }
 
 main().catch(e => {
