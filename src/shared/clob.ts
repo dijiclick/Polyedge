@@ -148,7 +148,10 @@ export async function placeBuy(opts: {
   usdcAmount:   number;
 }): Promise<{ orderId: string; shares: number }> {
   const c      = await getClient();
-  const shares = parseFloat((opts.usdcAmount / opts.price).toFixed(4));
+  // Polymarket minimum order size is 5 shares; scale up spend if needed
+  const MIN_SHARES = 5;
+  const rawShares = opts.usdcAmount / opts.price;
+  const shares = parseFloat(Math.max(rawShares, MIN_SHARES).toFixed(4));
 
   // Look up correct tickSize and negRisk for this market
   const meta = opts.conditionId
