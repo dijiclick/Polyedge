@@ -166,15 +166,19 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
     }
   }
 
-  // Sort by liquidity descending (highest liquidity = most reliable market)
-  // then cap at MAX_AI_CALLS to limit expensive AI+search calls per cycle
-  results.sort((a, b) => b.liquidity - a.liquidity);
-  const top = results.slice(0, MAX_AI_CALLS);
+  // Split into urgent (≤45min, game likely in progress) and normal
+  const urgent = results.filter(m => m.hoursLeft <= 0.75);
+  const normal = results.filter(m => m.hoursLeft > 0.75);
 
-  console.log(`[edge-ai] ${results.length} qualifying markets in 0-6h window → analyzing top ${top.length} by liquidity`);
+  // Sort urgent by liquidity, normal by liquidity too
+  urgent.sort((a, b) => b.liquidity - a.liquidity);
+  normal.sort((a, b) => b.liquidity - a.liquidity);
 
-  // Re-sort top candidates by urgency (most urgent first)
-  top.sort((a, b) => a.hoursLeft - b.hoursLeft);
+  // Urgent markets first — they're live/finishing, highest edge potential
+  const top = [...urgent, ...normal].slice(0, MAX_AI_CALLS);
+
+  const liveCount = urgent.length;
+  console.log(`[edge-ai] ${results.length} qualifying markets in 0-6h window (${liveCount} live/ending ≤45min) → analyzing top ${top.length}`);
   return top;
 }
 
@@ -240,23 +244,40 @@ Respond ONLY with this exact JSON (no markdown):
   try {
     const raw = await ask(prompt, { temperature: 0.1 });
 
-    // 1. Try strict JSON parse first — extract the JSON block
+    // 1. Regex field extraction — avoids JSON.parse failures from LLM formatting
+    const outcomeM    = raw.match(/"outcome"\s*:\s*"(YES|NO|UNCERTAIN)"/i);
+    const confidenceM = raw.match(/"confidence"\s*:\s*([0-9.]+)/i);
+    const eventTypeM  = raw.match(/"eventType"\s*:\s*"([^"]+)"/i);
+    const reasoningM  = raw.match(/"reasoning"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+    const keyFactM    = raw.match(/"keyFact"\s*:\s*"((?:[^"\\]|\\.)*)"/i);
+
+    if (outcomeM && confidenceM) {
+      const conf = parseFloat(confidenceM[1]);
+      return {
+        outcome:    outcomeM[1] as 'YES' | 'NO' | 'UNCERTAIN',
+        confidence: Math.min(1, Math.max(0, conf > 1 ? conf / 100 : conf)),
+        eventType:  (eventTypeM?.[1] ?? eventType) as EventType,
+        reasoning:  reasoningM?.[1] ?? '',
+        keyFact:    keyFactM?.[1] ?? '',
+      };
+    }
+
+    // 2. Fallback: try JSON.parse with cleanup
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      let jsonStr = jsonMatch[0];
-      // Fix common LLM JSON mistakes: unescaped quotes in strings
-      // Replace smart quotes, sanitize newlines inside string values
-      jsonStr = jsonStr.replace(/[\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'");
-      // Try to fix: trailing commas before }
-      jsonStr = jsonStr.replace(/,\s*([}\]])/g, '$1');
-      const parsed = JSON.parse(jsonStr);
-      return {
-        outcome:    (parsed.outcome === 'YES' || parsed.outcome === 'NO') ? parsed.outcome : 'UNCERTAIN',
-        confidence: Math.min(1, Math.max(0, parseFloat(parsed.confidence ?? '0'))),
-        eventType:  parsed.eventType ?? eventType,
-        reasoning:  parsed.reasoning ?? '',
-        keyFact:    parsed.keyFact ?? '',
-      };
+      try {
+        let jsonStr = jsonMatch[0];
+        jsonStr = jsonStr.replace(/[\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'");
+        jsonStr = jsonStr.replace(/,\s*([}\]])/g, '$1');
+        const parsed = JSON.parse(jsonStr);
+        return {
+          outcome:    (parsed.outcome === 'YES' || parsed.outcome === 'NO') ? parsed.outcome : 'UNCERTAIN',
+          confidence: Math.min(1, Math.max(0, parseFloat(parsed.confidence ?? '0'))),
+          eventType:  parsed.eventType ?? eventType,
+          reasoning:  parsed.reasoning ?? '',
+          keyFact:    parsed.keyFact ?? '',
+        };
+      } catch { /* fall through to prose */ }
     }
 
     // 2. Fallback: extract YES/NO and confidence from prose response

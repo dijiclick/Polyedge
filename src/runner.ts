@@ -24,7 +24,7 @@ async function main() {
   const mode = ARMED ? '🔴 LIVE' : '🟡 DRY-RUN';
   const strategies = STRATEGY === 'oracle' ? 'Oracle Arb only'
     : STRATEGY === 'edge' ? 'Edge AI only'
-    : 'Oracle Arb + Edge AI';
+    : 'Oracle Arb + Edge AI + Crypto Oracle + Live Score';
 
   console.log(`🚀 Polymarket Trading Runner`);
   console.log(`   Mode: ${mode}`);
@@ -49,6 +49,16 @@ async function main() {
   if (STRATEGY === 'edge' || STRATEGY === 'both') {
     const { runEdgeAI } = await import('./strategies/edge-ai.js');
     runners.push(runEdgeAI);
+  }
+
+  if (STRATEGY === 'both' || STRATEGY === 'crypto') {
+    const { runCryptoOracle } = await import('./strategies/crypto-oracle.js');
+    runners.push(runCryptoOracle);
+  }
+
+  if (STRATEGY === 'both' || STRATEGY === 'live') {
+    const { runLiveScore } = await import('./strategies/live-score.js');
+    runners.push(runLiveScore);
   }
 
   // Run all strategies concurrently (they use setInterval + keep-alive internally)
