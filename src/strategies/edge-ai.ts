@@ -15,6 +15,7 @@
 import { tg } from '../shared/telegram.js';
 import { kellyBet } from '../shared/kelly.js';
 import { logTrade, updateSelfImprove } from '../shared/self_improve.js';
+import { logTradeSignal, resolveTradeSignal, getProfitabilityStats, getRecommendedThreshold } from '../shared/supabase.js';
 import { addPosition, getOpenPositions, updatePosition } from '../shared/positions.js';
 import { getUsdcBalance, placeBuy, placeSell, getClobMarket, getTokenPrice } from '../shared/clob.js';
 import {
@@ -283,8 +284,38 @@ async function runCycle(): Promise<void> {
   const heldIds  = currentOpen.map(p => p.id);
   const fresh    = markets.filter(m => !heldIds.includes(m.conditionId));
 
+  // Get CLOB balance — if $0, try activity estimate, else use configured OVERRIDE_BALANCE
   let usdc = ARMED ? await getUsdcBalance() : 10.65;
-  const threshold = RISK_THRESHOLDS[RISK_LEVEL];
+  const balanceOverride = parseFloat(process.env.BALANCE_OVERRIDE ?? '0');
+  if (ARMED && usdc < 0.50 && balanceOverride > 0) {
+    console.log(`[edge-ai] Using BALANCE_OVERRIDE=$${balanceOverride} (CLOB shows $0)`);
+    usdc = balanceOverride;
+  }
+  if (ARMED && usdc < 0.50) {
+    // Fallback: estimate from recent activity (sells - buys in last 7 days)
+    try {
+      const addr = process.env.FUNDER_ADDRESS || process.env.POLYMARKET_ADDRESS || '';
+      const res  = await fetch(`https://data-api.polymarket.com/activity?user=${addr.toLowerCase()}&limit=50`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+      if (res.ok) {
+        const acts: any[] = await res.json();
+        let net = 0;
+        const weekAgo = Date.now() / 1000 - 7 * 86400;
+        for (const a of acts) {
+          if (a.timestamp < weekAgo) break;
+          const amt = parseFloat(a.usdcAmount ?? a.amount ?? 0);
+          if (a.type === 'REDEEM' || (a.type === 'TRADE' && a.side?.startsWith('SELL'))) net += amt;
+          if (a.type === 'TRADE' && a.side?.startsWith('BUY')) net -= amt;
+        }
+        if (net > 0.50) {
+          console.log(`[edge-ai] Balance via activity estimate: $${net.toFixed(2)}`);
+          usdc = net;
+        }
+      }
+    } catch {}
+  }
+  // Self-improve: get recommended threshold from Supabase results
+  let threshold = RISK_THRESHOLDS[RISK_LEVEL];
+  threshold = await getRecommendedThreshold(threshold);
 
   await tg(
     `🧠 <b>Edge AI Scan</b>\n` +
@@ -392,7 +423,7 @@ async function runCycle(): Promise<void> {
         });
         usdc -= bet;
       }
-      // Log trade for self-improvement tracking
+      // Log to local file + Supabase for profitability tracking
       logTrade({
         date:        new Date().toISOString(),
         question:    market.question,
@@ -405,6 +436,19 @@ async function runCycle(): Promise<void> {
         conditionId: market.conditionId,
         dryRun:      !ARMED,
       });
+      // Supabase: non-blocking
+      logTradeSignal({
+        conditionId: market.conditionId,
+        question:    market.question,
+        eventType:   classifyEventType(market.question),
+        side:        prediction.outcome as 'YES' | 'NO',
+        confidence:  prediction.confidence,
+        entryPrice,
+        bet,
+        reasoning:   prediction.reasoning ?? '',
+        keyFact:     prediction.keyFact ?? '',
+        dryRun:      !ARMED,
+      }).catch(() => {});
       bought++;
 
     } catch (e) {

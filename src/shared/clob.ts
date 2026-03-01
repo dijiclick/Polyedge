@@ -48,16 +48,56 @@ export async function getClient(): Promise<ClobClient> {
 }
 
 export async function getUsdcBalance(): Promise<number> {
+  // Try CLOB allowance first
   try {
     const c = await getClient();
-    const b = await c.getBalanceAllowance({ asset_type: AssetType.COLLATERAL });
+    const b = await c.getBalanceAllowance({ asset_type: AssetType.COLLATERAL, token_id: '' } as any);
     const balance = parseFloat((b as any).balance ?? '0');
-    console.log(`[clob] USDC.e balance: $${balance.toFixed(2)}`);
-    return balance;
+    if (balance > 0) {
+      console.log(`[clob] USDC.e balance (CLOB): $${balance.toFixed(2)}`);
+      return balance;
+    }
   } catch (e: any) {
     console.error('[clob] balance error:', e.message);
-    return 0;
   }
+
+  // Fallback: check Polymarket data API (tracks internal USD including unsettled)
+  try {
+    const addr = process.env.FUNDER_ADDRESS || process.env.POLYMARKET_ADDRESS || '';
+    const res  = await fetch(
+      `https://data-api.polymarket.com/value?user=${addr.toLowerCase()}`,
+      { headers: { 'User-Agent': 'Mozilla/5.0' } }
+    );
+    if (res.ok) {
+      const d: any = await res.json();
+      // API returns { cashBalance, portfolioValue, totalValue }
+      const cash = parseFloat(d?.cashBalance ?? d?.balance ?? d?.cash ?? '0');
+      if (cash > 0) {
+        console.log(`[clob] USDC balance (data-api cashBalance): $${cash.toFixed(2)}`);
+        return cash;
+      }
+    }
+  } catch {}
+
+  // Second fallback: try the positions value endpoint
+  try {
+    const addr = process.env.FUNDER_ADDRESS || process.env.POLYMARKET_ADDRESS || '';
+    const res  = await fetch(
+      `https://data-api.polymarket.com/portfolio/summary?user=${addr.toLowerCase()}`,
+      { headers: { 'User-Agent': 'Mozilla/5.0' } }
+    );
+    if (res.ok) {
+      const d: any = await res.json();
+      const cash = parseFloat(d?.cashBalance ?? d?.availableBalance ?? d?.usdcBalance ?? '0');
+      if (cash > 0) {
+        console.log(`[clob] USDC balance (portfolio summary): $${cash.toFixed(2)}`);
+        return cash;
+      }
+    }
+  } catch {}
+
+  console.log('[clob] USDC.e balance: $0.00 (all sources returned 0)');
+  return 0;
 }
 
 // Cache tickSize + negRisk per conditionId to avoid repeated calls
