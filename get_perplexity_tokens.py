@@ -2,16 +2,33 @@
 """
 get_perplexity_tokens.py — Grab fresh Perplexity session tokens
 
-Usage:
-  python3 get_perplexity_tokens.py                    # uses built-in accounts
-  python3 get_perplexity_tokens.py --add email pass   # add a custom account
-  python3 get_perplexity_tokens.py --env /path/.env   # custom .env path
+HOW PERPLEXITY AUTH WORKS:
+  Perplexity has NO password login — only magic links sent to email.
+  This script supports two methods:
 
-Accounts can use:
-  - mail.tm emails (auto-fetches magic link via API)
-  - Gmail/other (prints magic link URL — you click it manually)
+METHOD 1 — Emailnator (fully automatic, recommended):
+  Uses emailnator.com to auto-generate Gmail addresses + grab magic links.
+  Requires: Emailnator cookies (one-time browser grab).
+
+  Steps:
+    1. Open emailnator.com in browser (logged in or fresh visit)
+    2. F12 → Application → Cookies → emailnator.com
+    3. Copy XSRF-TOKEN and laravel_session values
+    4. Run: python3 get_perplexity_tokens.py \
+               --emailnator-xsrf "YOUR_XSRF" \
+               --emailnator-session "YOUR_SESSION" \
+               --count 5
+
+METHOD 2 — Manual (your own email):
+  Script sends magic link to your email — you click it — token saved.
+
+  Steps:
+    1. Run: python3 get_perplexity_tokens.py --add you@gmail.com
+    2. Check email, click the link
+    3. Paste the full URL back into the terminal
 
 Saves tokens to .env as PERPLEXITY_SESSION_TOKEN_1 ... _N
+Pushes tokens to live proxy at http://localhost:8320 if running.
 """
 
 import argparse, json, os, re, subprocess, sys, time, urllib.request, urllib.parse, http.cookiejar
@@ -210,28 +227,96 @@ def process_account(email: str, password: str, mode: str) -> str | None:
         print("  ❌ Failed to extract session token", flush=True)
         return None
 
+# ─── Emailnator method (fully automatic) ─────────────────────────────────
+def get_tokens_via_emailnator(xsrf: str, session: str, count: int, env_path: str):
+    """Auto-create N Perplexity accounts using Emailnator Gmail generator."""
+    sys.path.insert(0, '/tmp/perplexity-ai-lib')
+    import perplexity as perp_lib
+
+    emailnator_cookies = {
+        "XSRF-TOKEN":      xsrf,
+        "laravel_session": session,
+    }
+
+    tokens = []
+    print(f"\n🔮 Emailnator mode — creating {count} fresh accounts...")
+
+    for i in range(count):
+        print(f"\n  [{i+1}/{count}] Creating account...", flush=True)
+        try:
+            client = perp_lib.Client()
+            client.create_account(emailnator_cookies)
+            # Extract session token from client's session cookies
+            tok = None
+            for name, val in client.session.cookies.items():
+                if "session-token" in name:
+                    tok = val
+                    break
+            if tok:
+                print(f"  ✅ Token: {tok[:40]}... ({len(tok)} chars)", flush=True)
+                tokens.append(tok)
+            else:
+                print(f"  ❌ No session token in cookies after account creation", flush=True)
+                print(f"     Cookies: {dict(client.session.cookies)}", flush=True)
+        except Exception as e:
+            print(f"  ❌ Failed: {e}", flush=True)
+
+    if tokens:
+        save_tokens_to_env(tokens, env_path)
+    return tokens
+
 # ─── Main ─────────────────────────────────────────────────────────────────
 def main():
-    parser = argparse.ArgumentParser(description="Grab Perplexity session tokens")
-    parser.add_argument("--env",  default=ENV_PATH,  help=f"Path to .env file (default: {ENV_PATH})")
-    parser.add_argument("--add",  nargs=2, metavar=("EMAIL", "PASSWORD"), help="Add a custom account (auto-detects mail.tm)")
-    parser.add_argument("--mode", default="auto",    help="Email mode: mailtm | manual | auto")
+    parser = argparse.ArgumentParser(description="Grab Perplexity session tokens",
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--env",   default=ENV_PATH, help=f"Path to .env (default: {ENV_PATH})")
+    parser.add_argument("--add",   metavar="EMAIL",  help="Send magic link to this email (manual mode)")
+    parser.add_argument("--count", type=int, default=5, help="Number of accounts to create via Emailnator")
+    parser.add_argument("--emailnator-xsrf",    metavar="TOKEN",  help="Emailnator XSRF-TOKEN cookie")
+    parser.add_argument("--emailnator-session", metavar="SESSION",help="Emailnator laravel_session cookie")
     args = parser.parse_args()
 
-    accounts = list(DEFAULT_ACCOUNTS)
-
-    if args.add:
-        email, password = args.add
-        mode = args.mode if args.mode != "auto" else (
-            "mailtm" if any(d in email for d in ["mail.tm", "dollicons.com", "tempmail"])
-            else "manual"
-        )
-        accounts = [(email, password, mode)]
-        print(f"Custom account: {email} [{mode}]")
-
     print(f"\n🔮 Perplexity Token Fetcher")
-    print(f"   Accounts: {len(accounts)}")
     print(f"   .env: {args.env}")
+
+    # ── Method 1: Emailnator (fully automatic) ──
+    if args.emailnator_xsrf and args.emailnator_session:
+        tokens = get_tokens_via_emailnator(
+            args.emailnator_xsrf, args.emailnator_session, args.count, args.env)
+        if tokens:
+            print(f"\n🎉 {len(tokens)} tokens saved!")
+        else:
+            print("\n❌ No tokens obtained")
+            sys.exit(1)
+        return
+
+    # ── Method 2: Manual single email ──
+    if args.add:
+        accounts = [(args.add, "", "manual")]
+    else:
+        accounts = list(DEFAULT_ACCOUNTS)
+
+    if not accounts:
+        print("""
+No accounts configured. Use one of:
+
+  # Automatic (recommended) — needs Emailnator cookies:
+  python3 get_perplexity_tokens.py \\
+    --emailnator-xsrf "your-xsrf-token" \\
+    --emailnator-session "your-laravel-session" \\
+    --count 5
+
+  # Manual — sends magic link to your email:
+  python3 get_perplexity_tokens.py --add you@gmail.com
+
+Get Emailnator cookies:
+  1. Visit emailnator.com in browser
+  2. F12 → Application → Cookies → emailnator.com
+  3. Copy XSRF-TOKEN and laravel_session
+""")
+        return
+
+    print(f"   Mode: manual | Accounts: {len(accounts)}")
 
     # Step 1: connect all mail.tm inboxes and request all magic links simultaneously
     print("\n📨 Step 1: Sending all magic links simultaneously...")
