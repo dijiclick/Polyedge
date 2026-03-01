@@ -235,12 +235,74 @@ function classifyEventType(question: string): EventType {
 }
 
 // ─── Call AI to analyze a market ────────────────────────────────────────────
+// Parse ESPN score data and return direct prediction (no LLM needed)
+function parseESPNScore(espnData: string, question: string): AIPrediction | null {
+  if (!espnData.includes('ESPN scores hit') && !espnData.includes('Live/recent scores')) return null;
+
+  const lines = espnData.split('\n').filter(l => l.includes('-') && l.includes(':'));
+  const q = question.toLowerCase();
+
+  // Extract team being asked about from question
+  // "Will Bucks win" → looking for "Bucks" in score lines
+  const teamMatch = question.match(/Will\s+(.+?)\s+(win|lose|score|beat)/i);
+  const targetTeam = teamMatch?.[1]?.toLowerCase() ?? '';
+
+  for (const line of lines) {
+    // Format: "NBA: Bulls 82-95 Bucks [Q4 3:42]" or "EPL: Arsenal 2-0 Chelsea [FT]"
+    const m = line.match(/:\s*(.+?)\s+(\d+)-(\d+)\s+(.+?)\s+\[(.+)\]/);
+    if (!m) continue;
+
+    const [, awayTeam, awayScore, homeScore, homeTeam, status] = m;
+    const away = parseInt(awayScore), home = parseInt(homeScore);
+    const isFinal = /FT|Final|Full Time/i.test(status);
+    const isLate  = /Q4|3rd|OT|90\+|\d{2}:\d{2}/.test(status) && !isFinal;
+
+    // Find if target team is in this game
+    const awayNorm = awayTeam.toLowerCase();
+    const homeNorm = homeTeam.toLowerCase();
+    let teamIsHome: boolean | null = null;
+
+    if (targetTeam && homeNorm.includes(targetTeam.split(' ')[0])) teamIsHome = true;
+    else if (targetTeam && awayNorm.includes(targetTeam.split(' ')[0])) teamIsHome = false;
+    else if (targetTeam && q.includes(homeNorm.split(' ')[0])) teamIsHome = true;
+    else if (targetTeam && q.includes(awayNorm.split(' ')[0])) teamIsHome = false;
+
+    if (teamIsHome === null) continue;
+
+    const teamScore   = teamIsHome ? home : away;
+    const oppScore    = teamIsHome ? away : home;
+    const teamName    = teamIsHome ? homeTeam : awayTeam;
+    const diff = teamScore - oppScore;
+
+    if (isFinal) {
+      // Confirmed result
+      const outcome: 'YES' | 'NO' = diff > 0 ? 'YES' : 'NO';
+      return {
+        outcome, confidence: 0.95, eventType: 'soccer_match',
+        reasoning: `Final score confirmed: ${awayTeam} ${away}-${home} ${homeTeam}. ${teamName} ${diff > 0 ? 'WON' : 'LOST'}.`,
+        keyFact: line,
+      };
+    } else if (isLate && Math.abs(diff) >= 2) {
+      // Strong lead late in game
+      const outcome: 'YES' | 'NO' = diff > 0 ? 'YES' : 'NO';
+      const conf = Math.min(0.92, 0.75 + Math.abs(diff) * 0.04);
+      return {
+        outcome, confidence: conf, eventType: 'soccer_match',
+        reasoning: `${teamName} leads ${teamScore}-${oppScore} in ${status}. Very likely to win.`,
+        keyFact: line,
+      };
+    }
+  }
+  return null;
+}
+
 async function analyzeMarket(market: MarketInfo): Promise<AIPrediction> {
   const minutesLeft = Math.round(market.hoursLeft * 60);
   const eventType   = classifyEventType(market.question);
   const accuracy    = getAccuracy(eventType);
 
   let searchResults = 'No search results available.';
+  let espnRaw = '';
   const closeDate   = new Date(market.endDate).toUTCString();
   try {
     // Sharp, factual search — get live score or confirmed result
@@ -250,8 +312,16 @@ async function analyzeMarket(market: MarketInfo): Promise<AIPrediction> {
       : `"${market.question}" result confirmed news ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}. Has this happened yet? What is the current status?`;
     const result = await search(searchQuery);
     searchResults = result.answer || 'No results found.';
+    espnRaw = searchResults;
   } catch (e) {
     console.error('[edge-ai] search error:', (e as Error).message);
+  }
+
+  // Fast path: if ESPN gave us a score, parse it directly — no LLM needed
+  const espnPred = parseESPNScore(espnRaw, market.question);
+  if (espnPred) {
+    console.log(`[edge-ai] ✅ ESPN direct parse: ${espnPred.outcome} @ ${(espnPred.confidence * 100).toFixed(0)}%`);
+    return { ...espnPred, eventType };
   }
 
   const prompt = `You are a sharp prediction market trader analyzing a Polymarket question. Your goal is to find pricing errors.
