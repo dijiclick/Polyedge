@@ -56,7 +56,7 @@ export async function ask(
       method:  'POST',
       headers: { 'Authorization': 'Bearer local', 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'sonar', messages: [{ role: 'user', content: prompt }] }),
-      signal: AbortSignal.timeout(90_000),
+      signal: AbortSignal.timeout(120_000),
     });
     if (res.ok) {
       const d: any = await res.json();
@@ -158,7 +158,7 @@ async function searchViaProxy(query: string): Promise<SearchResult> {
       model: 'sonar',
       messages: [{ role: 'user', content: query }],
     }),
-    signal: AbortSignal.timeout(90_000),
+    signal: AbortSignal.timeout(120_000),
   });
   if (!res.ok) throw new Error(`Proxy error ${res.status}`);
   const d: any = await res.json();
