@@ -1,12 +1,24 @@
-const TOKEN = process.env.TELEGRAM_TOKEN || '8368586173:AAGcL1dNnR06Go5AsrIy26Ud9NtOcUPS4GbU';
-const CHAT  = process.env.TELEGRAM_CHAT  || '63129119';
+/**
+ * Telegram notification stub.
+ * Logs to console. Replace with real bot token to get live alerts.
+ */
 
-export async function tg(text: string): Promise<void> {
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
+const CHAT_ID   = process.env.TELEGRAM_CHAT_ID   || '';
+
+export async function tg(message: string): Promise<void> {
+  const text = message.replace(/<[^>]+>/g, ''); // strip HTML tags for console
+  console.log(`[tg] ${text.slice(0, 120)}`);
+
+  if (!BOT_TOKEN || !CHAT_ID) return;
+
   try {
-    await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
-      method:  'POST',
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ chat_id: CHAT, text, parse_mode: 'HTML' }),
+      body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'HTML' }),
     });
-  } catch {}
+  } catch (e) {
+    // non-fatal — never crash the bot over a notification
+  }
 }

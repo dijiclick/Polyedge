@@ -3,7 +3,7 @@
 # If rate limit detected → waits 15min cooldown before restarting
 
 # Rate limit check first
-/home/ariad/.openclaw/workspace/polyedge/rate_limit_recovery.sh
+/home/ariad/.openclaw/workspace/Polyedge/rate_limit_recovery.sh
 RL_EXIT=$?
 [ $RL_EXIT -eq 0 ] && [ -f /tmp/polyedge_rl_recovery.lock ] && {
   echo "[$(date)] In rate-limit cooldown, skipping restart"
@@ -29,6 +29,6 @@ fi
 
 # Not running — start it
 echo "[$(date)] Restarting polyedge..."
-nohup /home/ariad/.openclaw/workspace/polyedge/start_live.sh >> /home/ariad/.openclaw/workspace/polyedge/polyedge.log 2>&1 &
+nohup /home/ariad/.openclaw/workspace/Polyedge/start_live.sh >> /home/ariad/.openclaw/workspace/Polyedge/polyedge.log 2>&1 &
 echo $! > "$PIDFILE"
 echo "[$(date)] Polyedge started (PID $!)"
