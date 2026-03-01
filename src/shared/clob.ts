@@ -16,7 +16,9 @@ import { ClobClient, Side, OrderType, AssetType } from '@polymarket/clob-client'
 import { Wallet } from '@ethersproject/wallet';
 
 const PRIVATE_KEY     = process.env.PRIVATE_KEY     || '';
-const FUNDER_ADDRESS  = process.env.FUNDER_ADDRESS  || '';
+// FUNDER = proxy wallet (gnosis safe) — the Polymarket account address
+// PRIVATE_KEY belongs to the EOA which signs on behalf of the proxy
+const FUNDER_ADDRESS  = process.env.POLYMARKET_ADDRESS || process.env.FUNDER_ADDRESS || '';
 const CLOB_API_KEY    = process.env.CLOB_API_KEY    || '';
 const CLOB_SECRET     = process.env.CLOB_SECRET     || '';
 const CLOB_PASSPHRASE = process.env.CLOB_PASSPHRASE || '';
@@ -43,7 +45,8 @@ export async function getClient(): Promise<ClobClient> {
   }
 
   // signatureType=2 = GnosisSafe proxy wallet (gasless)
-  _client = new ClobClient(CLOB_HOST, 137, wallet, creds, 2, FUNDER_ADDRESS);
+  // signatureType 0 = EOA signs directly (not gnosis safe/proxy)
+  _client = new ClobClient(CLOB_HOST, 137, wallet, creds, 0);
   return _client;
 }
 
