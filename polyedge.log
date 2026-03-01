@@ -1804,3 +1804,122 @@
 [edge-ai] 366 qualifying markets in 0-3h window → analyzing top 15 by liquidity
 [clob] USDC.e balance: $0.00
 [edge-ai] Analyzed 10 markets — none met confidence threshold (70%)
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:00:05.641Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T00:00:06.013Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 9 actionable markets (from 9 candidates)
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[oracle-arb] USDC: $0.00 | candidates: 9
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 440 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 60min | YES=42.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Club León FC vs. Club Necaxa: O/U 1.5
+[edge-ai] Closes in 60min | YES=77.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: CF Monterrey vs. CF Cruz Azul: O/U 3.5
+[edge-ai] Closes in 60min | YES=32.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Lakers vs. Warriors
+[edge-ai] Closes in 90min | YES=59.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Spread: Lakers (-3.5)
+[edge-ai] Closes in 90min | YES=51.5%
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:03:13.900Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T00:03:14.266Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 9 actionable markets (from 9 candidates)
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[oracle-arb] USDC: $0.00 | candidates: 9
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 457 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 57min | YES=42.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: No JSON found in response
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Spread: Stars (-1.5)
+[edge-ai] Closes in 57min | YES=36.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: No JSON found in response
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Spread: Lakers (-4.5)
+[edge-ai] Closes in 87min | YES=47.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: No JSON found in response
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Los Angeles FC win on 2026-02-28?
+[edge-ai] Closes in 87min | YES=50.5%
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+🚀 Oracle Arb Monitor started | ARMED=true | interval=10min
+🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=15min
+
+[2026-03-01T00:05:13.918Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T00:05:14.249Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 9 actionable markets (from 9 candidates)
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[oracle-arb] USDC: $0.00 | candidates: 9
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 456 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+
+[edge-ai] Analyzing: Predators vs. Stars
+[edge-ai] Closes in 55min | YES=42.5%

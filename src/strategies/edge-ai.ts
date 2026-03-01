@@ -226,18 +226,49 @@ Respond ONLY with valid JSON (no markdown, no text outside the JSON object):
   try {
     const raw = await ask(prompt, { temperature: 0.1 });
 
-    // Parse JSON — handle code block wrapping
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('No JSON found in response');
-    const parsed = JSON.parse(jsonMatch[0]);
+    // 1. Try strict JSON parse first
+    const jsonMatch = raw.match(/\{[\s\S]*?\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      return {
+        outcome:    (parsed.outcome === 'YES' || parsed.outcome === 'NO') ? parsed.outcome : 'UNCERTAIN',
+        confidence: Math.min(1, Math.max(0, parseFloat(parsed.confidence ?? '0'))),
+        eventType:  parsed.eventType ?? eventType,
+        reasoning:  parsed.reasoning ?? '',
+        keyFact:    parsed.keyFact ?? '',
+      };
+    }
 
-    return {
-      outcome:    (parsed.outcome === 'YES' || parsed.outcome === 'NO') ? parsed.outcome : 'UNCERTAIN',
-      confidence: Math.min(1, Math.max(0, parseFloat(parsed.confidence ?? '0'))),
-      eventType:  parsed.eventType ?? eventType,
-      reasoning:  parsed.reasoning ?? '',
-      keyFact:    parsed.keyFact ?? '',
-    };
+    // 2. Fallback: extract YES/NO and confidence from prose response
+    const upper = raw.toUpperCase();
+    let outcome: 'YES' | 'NO' | 'UNCERTAIN' = 'UNCERTAIN';
+    let confidence = 0;
+
+    // Look for explicit YES/NO verdict
+    if (/\b(OUTCOME|VERDICT|PREDICTION|RESULT)\s*[:\-=]\s*YES\b/.test(upper) || /\bWILL\s+(?:WIN|HAPPEN|OCCUR|SCORE)\b/.test(upper)) outcome = 'YES';
+    else if (/\b(OUTCOME|VERDICT|PREDICTION|RESULT)\s*[:\-=]\s*NO\b/.test(upper) || /\bWILL\s+NOT\b/.test(upper)) outcome = 'NO';
+    else if (upper.includes('"YES"') || (upper.indexOf('YES') > upper.indexOf('NO') && !upper.includes('NOT YES'))) outcome = 'YES';
+    else if (upper.includes('"NO"')) outcome = 'NO';
+
+    // Extract confidence number (e.g., "confidence: 0.78" or "78%" or "high confidence")
+    const confMatch = raw.match(/confidence[:\s]+([0-9.]+)/i) ?? raw.match(/([0-9]+)%\s*(?:confident|probability|chance)/i);
+    if (confMatch) {
+      const v = parseFloat(confMatch[1]);
+      confidence = v > 1 ? v / 100 : v;
+    } else if (/high\s+confidence|very\s+likely|almost\s+certain/i.test(raw)) confidence = 0.82;
+    else if (/moderate|fairly\s+likely|probably/i.test(raw)) confidence = 0.70;
+    else if (/uncertain|unclear|could\s+go\s+either/i.test(raw)) confidence = 0.52;
+
+    // Extract reasoning (first sentence that's not too short)
+    const sentences = raw.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 30);
+    const reasoning = sentences[0] ?? '';
+    const keyFact   = sentences[1] ?? '';
+
+    if (outcome !== 'UNCERTAIN' && confidence >= 0.60) {
+      console.log(`[edge-ai] Prose parse → ${outcome} @ ${(confidence*100).toFixed(0)}%`);
+    }
+
+    return { outcome, confidence, eventType, reasoning, keyFact };
   } catch (e) {
     console.error('[edge-ai] AI parse error:', (e as Error).message);
     return { outcome: 'UNCERTAIN', confidence: 0, eventType, reasoning: 'Parse failed', keyFact: '' };

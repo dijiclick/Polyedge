@@ -32,7 +32,7 @@ function nextSessionToken(): string {
   return t;
 }
 
-const DEFAULT_MODEL = 'deepseek/deepseek-chat';
+const DEFAULT_MODEL = process.env.LLM_ASK_MODEL || 'deepseek/deepseek-chat';
 const BRIDGE_PATH   = process.env.PERPLEXITY_BRIDGE_PATH
   || '/home/ariad/.openclaw/workspace/polyedge/perplexity_bridge.py';
 const UV_CMD        = process.env.UV_CMD || '/home/ariad/.local/bin/uv';
@@ -48,22 +48,39 @@ export async function ask(
   opts: { model?: string; temperature?: number } = {}
 ): Promise<string> {
   const { model = DEFAULT_MODEL, temperature = 0.1 } = opts;
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method:  'POST',
-    headers: {
-      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-      'Content-Type':  'application/json',
-    },
-    body: JSON.stringify({
-      model,
-      messages:   [{ role: 'user', content: prompt }],
-      temperature,
-      max_tokens: 1024,
-    }),
-  });
-  if (!res.ok) throw new Error(`LLM error ${res.status}: ${await res.text()}`);
-  const d: any = await res.json();
-  return d.choices?.[0]?.message?.content ?? '';
+
+  // Try local Perplexity proxy first (sonar — free, no API key needed)
+  try {
+    const proxyUrl = process.env.PERPLEXITY_PROXY_URL || 'http://localhost:8320';
+    const res = await fetch(`${proxyUrl}/v1/chat/completions`, {
+      method:  'POST',
+      headers: { 'Authorization': 'Bearer local', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'sonar', messages: [{ role: 'user', content: prompt }] }),
+      signal: AbortSignal.timeout(90_000),
+    });
+    if (res.ok) {
+      const d: any = await res.json();
+      const content = d.choices?.[0]?.message?.content ?? '';
+      if (content) return content;
+    }
+  } catch { /* fall through to OpenRouter */ }
+
+  // Fallback: OpenRouter (if key is valid)
+  if (OPENROUTER_API_KEY) {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${OPENROUTER_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature, max_tokens: 1024 }),
+    });
+    if (res.ok) {
+      const d: any = await res.json();
+      return d.choices?.[0]?.message?.content ?? '';
+    }
+    const err = await res.text();
+    throw new Error(`LLM error ${res.status}: ${err}`);
+  }
+
+  throw new Error('No LLM available — proxy unreachable and no OpenRouter key');
 }
 
 // ─── Search via Perplexity sonar-pro API ──────────────────────────────────
