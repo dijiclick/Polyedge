@@ -28,18 +28,45 @@ const COIN_IDS: Record<string, string[]> = {
 interface LivePrices { [coin: string]: number }
 
 async function fetchLivePrices(): Promise<LivePrices> {
-  const ids = Object.keys(COIN_IDS).join(',');
-  const r = await fetch(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`,
-    { headers: { 'User-Agent': 'Mozilla/5.0' } }
-  );
-  if (!r.ok) throw new Error(`CoinGecko ${r.status}`);
-  const data = await r.json() as Record<string, { usd: number }>;
-  const prices: LivePrices = {};
-  for (const [id, aliases] of Object.entries(COIN_IDS)) {
-    const price = data[id]?.usd;
-    if (price) for (const alias of aliases) prices[alias] = price;
+  const ENDPOINTS = [
+    // CoinGecko free tier
+    `https://api.coingecko.com/api/v3/simple/price?ids=${Object.keys(COIN_IDS).join(',')}&vs_currencies=usd`,
+    // Binance spot (BTC, ETH, SOL, BNB only — direct USDT pair)
+    null,
+  ];
+
+  for (const url of ENDPOINTS) {
+    if (!url) break;
+    try {
+      const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(8000) });
+      if (!r.ok) continue;
+      const data = await r.json() as Record<string, { usd: number }>;
+      const prices: LivePrices = {};
+      for (const [id, aliases] of Object.entries(COIN_IDS)) {
+        const price = data[id]?.usd;
+        if (price) for (const alias of aliases) prices[alias] = price;
+      }
+      if (Object.keys(prices).length > 0) return prices;
+    } catch { continue; }
   }
+
+  // Fallback: Binance individual tickers
+  const pairs: Record<string, string[]> = {
+    BTCUSDT: ['bitcoin', 'btc'],
+    ETHUSDT: ['ethereum', 'eth'],
+    SOLUSDT: ['solana', 'sol'],
+    BNBUSDT: ['binancecoin', 'bnb'],
+    XRPUSDT: ['ripple', 'xrp'],
+  };
+  const prices: LivePrices = {};
+  await Promise.allSettled(Object.entries(pairs).map(async ([sym, aliases]) => {
+    const r = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${sym}`, { signal: AbortSignal.timeout(6000) });
+    if (!r.ok) return;
+    const d = await r.json() as { price: string };
+    const p = parseFloat(d.price);
+    if (p > 0) for (const a of aliases) prices[a] = p;
+  }));
+  if (Object.keys(prices).length === 0) throw new Error('All price sources failed');
   return prices;
 }
 
