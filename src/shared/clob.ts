@@ -14,8 +14,26 @@
 
 import { ClobClient, Side, OrderType, AssetType } from '@polymarket/clob-client';
 import { Wallet } from '@ethersproject/wallet';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
-const PRIVATE_KEY     = process.env.PRIVATE_KEY     || '';
+// Load .env files directly (in case shell didn't source them)
+function loadEnv(p: string) {
+  try {
+    for (const line of readFileSync(p, 'utf8').split('\n')) {
+      const l = line.trim();
+      if (!l || l.startsWith('#') || !l.includes('=')) continue;
+      const [k, ...rest] = l.split('=');
+      if (!process.env[k.trim()]) process.env[k.trim()] = rest.join('=').trim();
+    }
+  } catch {}
+}
+loadEnv(resolve(process.cwd(), '.env'));
+loadEnv(resolve(process.cwd(), '../.env'));
+loadEnv('/home/ariad/.openclaw/workspace/Polyedge/.env');
+loadEnv('/home/ariad/.openclaw/workspace/.env');
+
+const PRIVATE_KEY     = process.env.PRIVATE_KEY || process.env.POLYMARKET_PRIVATE_KEY || '';
 // EOA wallet address — use FUNDER_ADDRESS (EOA), NOT POLYMARKET_ADDRESS (Gnosis Safe)
 // signatureType=0 requires EOA address, not the Safe proxy address
 const FUNDER_ADDRESS  = process.env.FUNDER_ADDRESS || '';
