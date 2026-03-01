@@ -1,4 +1,4 @@
-[watchdog] Starting bot at Sun Mar  1 21:52:29 +03 2026
+[watchdog] Starting bot at Sun Mar  1 21:53:12 +03 2026
 🚀 Polymarket Trading Runner
    Mode: 🔴 LIVE
    Strategies: Oracle Arb + Edge AI + Crypto Oracle + Live Score
@@ -17,25 +17,29 @@ Risk: MEDIUM
 🚀 Live Score started | ARMED=true
 [tg] ⚽ Live Score started | 🔴 LIVE
 
-[2026-03-01T18:52:30.925Z] ═══ Oracle Arb Cycle ═══
+[2026-03-01T18:53:13.197Z] ═══ Oracle Arb Cycle ═══
 
-[2026-03-01T18:52:30.965Z] ═══ Edge AI Cycle ═══
+[2026-03-01T18:53:13.234Z] ═══ Edge AI Cycle ═══
 
-[2026-03-01T18:52:30.967Z] ═══ Crypto Oracle Cycle ═══
+[2026-03-01T18:53:13.236Z] ═══ Crypto Oracle Cycle ═══
 
-[2026-03-01T18:52:30.970Z] ═══ Live Score Cycle ═══
+[2026-03-01T18:53:13.239Z] ═══ Live Score Cycle ═══
 [oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.940
 [oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[crypto] Live prices: BITCOIN=$66,370 | BTC=$66,370 | ETHEREUM=$1,981.49 | ETH=$1,981.49 | SOLANA=$84.25 | SOL=$84.25 | XRP=$1.37 | RIPPLE=$1.37 | BNB=$623.39 | BINANCE=$623.39
+[clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
 [oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
 [oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
 [oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.922
+[clob] USDC.e balance (CLOB): $17.67
 [oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.940
 [oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.940
 [oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
 [oracle-arb] At max positions (8/8)
 [tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
-[edge-ai] 286 qualifying markets in 0-6h window (29 live/ending ≤45min) → analyzing top 25
-[clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
+[crypto] 0 crypto markets closing in <24h
+[crypto] No crypto oracle edges this cycle
+[edge-ai] 275 qualifying markets in 0-6h window (29 live/ending ≤45min) → analyzing top 25
 [clob] USDC.e balance (CLOB): $17.67
 [tg] 🧠 Edge AI Scan
 Markets 0–3h: 25 | Positions: 1/8
@@ -46,4 +50,176 @@ USDC: $17.67 | 🔴 LIVE
 [edge-ai] Closes in 37min | YES=21.0%
 [live] 0 live games (soccer + NHL)
 [live] No live games right now
-[crypto] Price fetch failed: fetch failed
+[llm] Proxy failed (The operation was aborted due to timeout), trying API...
+[llm] Perplexity API failed (fetch failed), trying bridge pool...
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria
+
+[2026-03-01T18:56:27.819Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.940
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.922
+[oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.940
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
+[oracle-arb] At max positions (8/8)
+[tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
+
+[2026-03-01T18:56:40.020Z] ═══ Live Score Cycle ═══
+[edge-ai] AI: UNCERTAIN @ 21% confidence
+[edge-ai] Key fact: Current Date: Sunday, March 01, 2026, 1:56 PM EST; CLOSES IN: 37 minutes; No search results availabl
+[edge-ai] Skip: confidence 21% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Pyramids FC win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=46.5%
+[llm] ✅ Perplexity proxy hit
+[live] 0 live games (soccer + NHL)
+[live] No live games right now
+[edge-ai] AI: UNCERTAIN @ 54% confidence
+[edge-ai] Key fact: No confirmed result or live‑score update for Pyramids FC on March 1, 2026, is available as of 1:56 P
+[edge-ai] Skip: confidence 54% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Modern SC vs. Petrojet SC: O/U 2.5
+[edge-ai] Closes in 37min | YES=36.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 36% confidence
+[edge-ai] Key fact: As of now, there are **no verified real-time or final results** publicly available for the **Modern 
+[edge-ai] Skip: confidence 36% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Smouha SC win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=22.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: Live score and fixture pages for Smouha SC could not be fetched successfully, so no trustworthy conf
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Pyramids FC vs. Zamalek SC: Both Teams to Score
+[edge-ai] Closes in 37min | YES=46.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: I wasn’t able to find any verified live or final result yet for the Pyramids FC vs. Zamalek SC match
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Modern SC vs. Petrojet SC end in a draw?
+[edge-ai] Closes in 37min | YES=33.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: No verified live or final score is visible for Modern SC vs. Petrojet SC on major sports‑results sit
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will National Bank of Egypt Club vs. Smouha SC end in a draw?
+[edge-ai] Closes in 37min | YES=34.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 35% confidence
+[edge-ai] Key fact: Failed to fetch url content from Flashscore and Sofascore; no relevant memories or prior confirmed r
+[edge-ai] Skip: confidence 35% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: National Bank of Egypt Club vs. Smouha SC: O/U 1.5
+[edge-ai] Closes in 37min | YES=55.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 56% confidence
+[edge-ai] Key fact: No confirmed result or live‑score update for National Bank of Egypt Club vs Smouha SC on March 1, 20
+[edge-ai] Skip: confidence 56% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Modern SC vs. Petrojet SC: O/U 3.5
+[edge-ai] Closes in 37min | YES=17.0%
+[llm] ✅ Perplexity proxy hit
+
+[2026-03-01T18:58:32.784Z] ═══ Crypto Oracle Cycle ═══
+[crypto] Live prices: BITCOIN=$66,306 | BTC=$66,306 | ETHEREUM=$1,976.72 | ETH=$1,976.72 | SOLANA=$84.1 | SOL=$84.1 | XRP=$1.37 | RIPPLE=$1.37 | BNB=$623.37 | BINANCE=$623.37
+[clob] USDC.e balance (CLOB): $17.67
+[edge-ai] AI: UNCERTAIN @ 50% confidence
+[edge-ai] Key fact: RESEARCH: As of right now, there are no verified live or final score updates available for the Moder
+[edge-ai] Skip: confidence 50% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Pyramids FC vs. Zamalek SC: O/U 1.5
+[edge-ai] Closes in 37min | YES=65.5%
+[llm] ✅ Perplexity proxy hit
+[crypto] Market fetch failed: fetch failed
+[edge-ai] AI: UNCERTAIN @ 50% confidence
+[edge-ai] Key fact: Error message when attempting to load match pages: \"Failed to fetch url content\".
+[edge-ai] Skip: confidence 50% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Pyramids FC vs. Zamalek SC end in a draw?
+[edge-ai] Closes in 37min | YES=32.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 50% confidence
+[edge-ai] Key fact: Attempted match pages and live score sources for the March 1, 2026 Pyramids FC vs. Zamalek SC game f
+[edge-ai] Skip: confidence 50% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Austin FC win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=51.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 51% confidence
+[edge-ai] Key fact: RESEARCH: As of Sunday, March 1, 2026, at 1:59 PM EST, the match you’re referring to — Austin FC’s g
+[edge-ai] Skip: confidence 51% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Modern SC win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=41.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 42% confidence
+[edge-ai] Key fact: No confirmed news exists yet on whether Modern SC won on March 1, 2026. The match against Petrojet S
+[edge-ai] Skip: confidence 42% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: National Bank of Egypt Club vs. Smouha SC: O/U 2.5
+[edge-ai] Closes in 37min | YES=27.5%
+
+[2026-03-01T18:59:36.481Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.940
+[llm] ✅ Perplexity proxy hit
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.922
+[oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.940
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
+[oracle-arb] At max positions (8/8)
+[tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
+
+[2026-03-01T18:59:45.800Z] ═══ Live Score Cycle ═══
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: No confirmed result or live‑score update for National Bank of Egypt Club vs Smouha SC on March 1, 20
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will D.C. United SC win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=22.0%
+[llm] ✅ Perplexity proxy hit
+[live] 0 live games (soccer + NHL)
+[live] No live games right now
+[edge-ai] AI: UNCERTAIN @ 22% confidence
+[edge-ai] Key fact: MLS matches in the U.S. usually occur in the late afternoon or evening local time, so no confirmed r
+[edge-ai] Skip: confidence 22% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Petrojet SC win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=25.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: A general live score site loaded without any Petrojet SC match detail or result information for 2026
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Modern SC vs. Petrojet SC: O/U 1.5
+[edge-ai] Closes in 37min | YES=63.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: As of now, there are no verified live or final score updates available yet for the Modern SC vs. Pet
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will National Bank of Egypt Club win on 2026-03-01?
+[edge-ai] Closes in 37min | YES=42.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 43% confidence
+[edge-ai] Key fact: No, there is no confirmed result for a National Bank of Egypt Club (NBE SC) match on March 1, 2026, 
+[edge-ai] Skip: confidence 43% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Pyramids FC vs. Zamalek SC: O/U 2.5
+[edge-ai] Closes in 37min | YES=37.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: CLOSES IN: 37 minutes; scheduled for March 1 at 2:30 PM ET
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: National Bank of Egypt Club vs. Smouha SC: Both Teams to Score
+[edge-ai] Closes in 37min | YES=39.0%
+[llm] ✅ Perplexity proxy hit

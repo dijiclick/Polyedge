@@ -46,8 +46,42 @@ const NOISE_PATTERNS = [
   /\(-\d+\.?\d*\)/,                      // team (-1.5) handicap
   /total.*over/i,                        // over/under totals
   /over\/under/i,
+  /o\/u\s+\d/i,                          // O/U 2.5 etc
   /first.*goal.*scorer/i,                // very hard to predict
+  /anytime goalscorer/i,
 ];
+
+// Major leagues Perplexity actually has data on — skip obscure ones
+const KNOWN_LEAGUES = [
+  // Soccer
+  /premier league|epl/i,
+  /la liga|laliga/i,
+  /bundesliga/i,
+  /serie a/i,
+  /ligue 1/i,
+  /champions league|ucl/i,
+  /europa league|uel/i,
+  /mls|major league soccer/i,
+  /copa del rey/i,
+  /fa cup/i,
+  // US Sports
+  /\bnhl\b|\bice hockey\b/i,
+  /\bnba\b|\bbasketball\b/i,
+  /\bnfl\b/i,
+  // Teams that indicate major leagues
+  /manchester|arsenal|chelsea|liverpool|tottenham|barcelona|real madrid|atletico|juventus|inter milan|ac milan|psg|bayern|dortmund|ajax/i,
+  /lakers|celtics|warriors|heat|bucks|nets|knicks|spurs|mavericks|suns/i,
+  /golden knights|maple leafs|bruins|rangers|penguins|avalanche|oilers|flames/i,
+  // Non-soccer (always worth checking)
+  /bitcoin|ethereum|btc|eth|crypto/i,
+  /election|vote|president|senate|congress/i,
+  /oscar|grammy|emmy|golden globe|award/i,
+  /will.*win.*championship|will.*win.*title|will.*win.*cup/i,
+];
+
+function isKnownLeagueOrType(question: string): boolean {
+  return KNOWN_LEAGUES.some(p => p.test(question));
+}
 
 // Minimum AI confidence required to place a trade
 const RISK_THRESHOLDS: Record<'LOW' | 'MEDIUM' | 'HIGH', number> = {
@@ -130,6 +164,11 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           // Skip automated noise markets (5-min price direction slots)
           const q = m.question ?? '';
           if (NOISE_PATTERNS.some(p => p.test(q))) continue;
+
+          // Skip obscure leagues Perplexity has no data on — wastes API calls
+          // Only skip sports games (contain "win on" pattern) if not a known league
+          const isSportsGame = /win on \d{4}|vs\.|at \w+ (fc|sc|united|city|club)/i.test(q);
+          if (isSportsGame && !isKnownLeagueOrType(q)) continue;
 
           const prices = JSON.parse(m.outcomePrices ?? '[]');
           if (prices.length < 2) continue;
