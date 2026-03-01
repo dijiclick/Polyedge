@@ -18,6 +18,9 @@ const ARMED    = process.env.ARMED === 'true';
 const STRATEGY = process.env.STRATEGY || 'both';  // 'oracle' | 'edge' | 'both'
 
 async function main() {
+  // Inject --monitor so strategies run in continuous loop mode
+  if (!process.argv.includes('--monitor')) process.argv.push('--monitor');
+
   const mode = ARMED ? '🔴 LIVE' : '🟡 DRY-RUN';
   const strategies = STRATEGY === 'oracle' ? 'Oracle Arb only'
     : STRATEGY === 'edge' ? 'Edge AI only'
@@ -54,8 +57,6 @@ async function main() {
     tg(`❌ Strategy error: ${e.message}`);
   })));
 
-  // Keep process alive — strategies run via setInterval
-  await new Promise(() => {});
 }
 
 main().catch(e => {

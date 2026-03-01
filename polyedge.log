@@ -74,3 +74,176 @@ USDC: $20.57 | 🔴 LIVE
 
 [edge-ai] Analyzing: Will Arsenal FC vs. Chelsea FC end in a draw?
 [edge-ai] Closes in 36min | YES=21.5%
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+[tg] 🤖 Trading Runner Started
+Mode: 🔴 LIVE
+Strategies: Oracle Arb + Edge AI
+Risk: MEDIUM
+
+[2026-03-01T16:05:04.325Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T16:05:04.362Z] ═══ Edge AI Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.000
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.930
+[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.922
+[oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.940
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
+[oracle-arb] At max positions (8/8)
+[tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
+[edge-ai] 746 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
+[clob] USDC.e balance (CLOB): $20.57
+[tg] 🧠 Edge AI Scan
+Markets 0–3h: 15 | Positions: 2/8
+Risk: MEDIUM (need 70%+ confidence)
+USDC: $20.57 | 🔴 LIVE
+
+[edge-ai] Analyzing: Will Chelsea FC win on 2026-03-01?
+[edge-ai] Closes in 25min | YES=14.5%
+[llm] Proxy failed (The operation was aborted due to timeout), trying API...
+[llm] Perplexity API failed (fetch failed), trying bridge pool...
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria
+[edge-ai] AI: NO @ 86% confidence
+[edge-ai] Key fact: Current NO price: 85.5%
+🧠 Edge AI Signal [LIVE]
+Market: Will Chelsea FC win on 2026-03-01?
+Closes in: 25min | YES: 14.5%
+
+AI says: NO (86% confident)
+Key fact: Current NO price: 85.5%
+Reasoning: The market prices indicate an 85.5% probability for NO, reflecting collective bettor assessment of Chelsea FC's low likelihood to win the upcoming gam
+
+Bet: $0.50 on NO @ 85.5¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[tg] 🧠 Edge AI Signal [LIVE]
+Market: Will Chelsea FC win on 2026-03-01?
+Closes in: 25min | YES: 14.5%
+
+AI says: NO (86% conf
+[CLOB Client] request error {"status":404,"statusText":"Not Found","data":{"error":"market not found"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","User-Agent":"axios/0.27.2"},"method":"get","url":"https://clob.polymarket.com/tick-size","params":{"token_id":"0xd2f24335e6d602d940ddf87ab1650bae3834dd07d70318914bb206c0f6839390"}}}
+[clob] BUY 0.5848 shares @ 0.855 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"pXaMCcqvqXYbp_9gqpA3mw9XhkUvExckBsNwtU-biis=","POLY_TIMESTAMP":"1772381287","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":635},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":1193923557227,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"99253643394952420666557610990360119855941106911479167947276395608827856924720\",\"makerAmount\":\"498800\",\"takerAmount\":\"580000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":1,\"signature\":\"0x0f256aac1a4f66c23967d9e3c3b0ab276a62eb546ffe73c25c11f2cd64eb5475036742e219b557ba88e9b035f9d19cdeb1c7333ba6de20f030d5a470499667051b\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+[tg] ✅ Edge AI order placed: unknown
+
+[edge-ai] Analyzing: Will Arsenal FC vs. Chelsea FC end in a draw?
+[edge-ai] Closes in 25min | YES=21.5%
+[supabase] Trade logged → id=264
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: The Arsenal FC vs. Chelsea FC match has not occurred yet.
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Sevilla FC win on 2026-03-01?
+[edge-ai] Closes in 85min | YES=19.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: NO @ 81% confidence
+[edge-ai] Key fact: Current NO price: 81.0%
+🧠 Edge AI Signal [LIVE]
+Market: Will Sevilla FC win on 2026-03-01?
+Closes in: 85min | YES: 19.0%
+
+AI says: NO (81% confident)
+Key fact: Current NO price: 81.0%
+Reasoning: The market prices reflect an 81% probability for NO, indicating the collective bettor assessment that Sevilla FC is unlikely to win the upcoming match
+
+Bet: $0.50 on NO @ 81.0¢
+Risk level: MEDIUM | Event type: soccer_match
+Historical accuracy: 50%
+[tg] 🧠 Edge AI Signal [LIVE]
+Market: Will Sevilla FC win on 2026-03-01?
+Closes in: 85min | YES: 19.0%
+
+AI says: NO (81% conf
+[CLOB Client] request error {"error":"read ECONNRESET"}
+[clob] BUY 0.6173 shares @ 0.81 | tickSize=0.01 negRisk=false | spend=$0.50
+[CLOB Client] request error {"status":400,"statusText":"Bad Request","data":{"error":"invalid signature"},"config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"*/*","Content-Type":"application/json","POLY_ADDRESS":"0xC29946bddEc848cee7aCB2eeD9125547F49B2867","POLY_SIGNATURE":"B6H8-ZFDMVqqZjAPs1tjOTYO9yutm-RpDOAznqUAV4c=","POLY_TIMESTAMP":"1772381441","POLY_API_KEY":"5f82d234-ef03-3fa5-cfb8-868be813bf54","POLY_PASSPHRASE":"0f0457a4a35a228b82224f0910c66fd56d63c59ac53bde0b2e296966006997f6","User-Agent":"@polymarket/clob-client","Connection":"keep-alive","Content-Length":632},"method":"post","url":"https://clob.polymarket.com/order","data":"{\"deferExec\":false,\"order\":{\"salt\":892543294514,\"maker\":\"0xc92fe1c5f324c58d0be12b8728be18a92375361f\",\"signer\":\"0xC29946bddEc848cee7aCB2eeD9125547F49B2867\",\"taker\":\"0x0000000000000000000000000000000000000000\",\"tokenId\":\"203203965346933342999857797517718530121506311973519999191565943745146209769\",\"makerAmount\":\"494100\",\"takerAmount\":\"610000\",\"side\":\"BUY\",\"expiration\":\"0\",\"nonce\":\"0\",\"feeRateBps\":\"0\",\"signatureType\":1,\"signature\":\"0x4119eed34ec78683476b34e86bf8effa29a8cd311c65d407cda9677fe2d002437454a6238b1d1719480ad9e9833caaf977c2543847416d5e601cf8fe0b1174fb1b\"},\"owner\":\"5f82d234-ef03-3fa5-cfb8-868be813bf54\",\"orderType\":\"GTC\"}","params":{}}}
+[clob] Order placed: unknown | status: 400
+[tg] ✅ Edge AI order placed: unknown
+
+[edge-ai] Analyzing: Golden Knights vs. Penguins
+[edge-ai] Closes in 115min | YES=57.5%
+[llm] ✅ Perplexity proxy hit
+[supabase] logTradeSignal failed: fetch failed
+[edge-ai] AI: YES @ 62% confidence
+[edge-ai] Key fact: The market shows the Golden Knights side favored at 57% versus 43% for the Penguins and has not reso
+[edge-ai] Skip: confidence 62% < threshold 70%
+
+[edge-ai] Analyzing: Will AS Roma win on 2026-03-01?
+[edge-ai] Closes in 220min | YES=35.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: LLM error 401: {"error":{"message":"User not found.","code":401}}
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Will Juventus FC win on 2026-03-01?
+[edge-ai] Closes in 220min | YES=31.5%
+[llm] Proxy failed (The operation was aborted due to timeout), trying API...
+[llm] Perplexity API failed (fetch failed), trying bridge pool...
+[edge-ai] search error: All Perplexity sources failed: Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: The current YES price of 31.5% reflects the crowd-implied probability that Juventus will win this ma
+[edge-ai] Skip: confidence 55% < threshold 70%
+
+[edge-ai] Analyzing: Will AS Roma vs. Juventus FC end in a draw?
+[edge-ai] Closes in 220min | YES=31.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: There is no accessible reliable live data for the AS Roma vs. Juventus match or this specific market
+[edge-ai] Skip: confidence 55% < threshold 70%
+
+[edge-ai] Analyzing: Will Olympique de Marseille win on 2026-03-01?
+[edge-ai] Closes in 220min | YES=48.5%
+[edge-ai] error analyzing 0x0217ba6471e618f15f0c5dcf1da15e12f8dfa233815fdf26daf7c3e952a1e004: fetch failed
+
+[edge-ai] Analyzing: Jets vs. Sharks
+[edge-ai] Closes in 295min | YES=52.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: Expected ',' or '}' after property value in JSON at position 473 (line 6 column 40)
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Blackhawks vs. Utah
+[edge-ai] Closes in 295min | YES=26.0%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: YES @ 26% confidence
+[edge-ai] Key fact: The Polymarket YES price for Blackhawks vs. Utah is 26.0%, with NO at 74.0%, indicating a strong imp
+[edge-ai] Skip: confidence 26% < threshold 70%
+
+[edge-ai] Analyzing: Blues vs. Wild
+[edge-ai] Closes in 355min | YES=31.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: Expected ',' or '}' after property value in JSON at position 442 (line 6 column 40)
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 70%
+
+[edge-ai] Analyzing: Panthers vs. Islanders
+[edge-ai] Closes in 445min | YES=56.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: YES @ 56% confidence
+[edge-ai] Key fact: No confirmed outcome or result exists yet for the Polymarket "Panthers vs. Islanders" market.
+[edge-ai] Skip: confidence 56% < threshold 70%
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+[tg] 🤖 Trading Runner Started
+Mode: 🔴 LIVE
+Strategies: Oracle Arb + Edge AI
+Risk: MEDIUM
+
+[2026-03-01T17:01:39.999Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T17:01:40.036Z] ═══ Edge AI Cycle ═══
