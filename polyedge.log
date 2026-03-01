@@ -6227,3 +6227,34 @@ Historical accuracy: 50%
 [2026-03-01T15:07:11.080Z] ═══ Oracle Arb Cycle ═══
 
 [2026-03-01T15:07:11.527Z] ═══ Edge AI Cycle ═══
+🚀 Polymarket Trading Runner
+   Mode: 🔴 LIVE
+   Strategies: Oracle Arb + Edge AI
+   Risk level: MEDIUM
+
+[tg] 🤖 Trading Runner Started
+Mode: 🔴 LIVE
+Strategies: Oracle Arb + Edge AI
+Risk: MEDIUM
+
+[2026-03-01T15:16:44.891Z] ═══ Oracle Arb Cycle ═══
+
+[2026-03-01T15:16:44.928Z] ═══ Edge AI Cycle ═══
+[oracle-arb] 8 actionable markets (from 8 candidates)
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[oracle-arb] USDC: $0.00 | candidates: 8
+[tg] 🔍 Oracle Arb Scan
+Actionable: 8 | Fresh: 8
+Positions: 0/8 | USDC: $0.00
+Mode: 🔴 LIVE
+[oracle-arb] No actionable opportunities this cycle
+[edge-ai] 867 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[clob] USDC.e balance: $0.00 (all sources returned 0)
+[edge-ai] Using BALANCE_OVERRIDE=$20 (CLOB shows $0)
+[tg] 🧠 Edge AI Scan
+Markets 0–3h: 15 | Positions: 0/8
+Risk: MEDIUM (need 70%+ confidence)
+USDC: $20.00 | 🔴 LIVE
+
+[edge-ai] Analyzing: Will FC Lorient win on 2026-03-01?
+[edge-ai] Closes in 58min | YES=43.5%
