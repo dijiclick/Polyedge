@@ -240,10 +240,16 @@ Respond ONLY with this exact JSON (no markdown):
   try {
     const raw = await ask(prompt, { temperature: 0.1 });
 
-    // 1. Try strict JSON parse first
-    const jsonMatch = raw.match(/\{[\s\S]*?\}/);
+    // 1. Try strict JSON parse first — extract the JSON block
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0]);
+      let jsonStr = jsonMatch[0];
+      // Fix common LLM JSON mistakes: unescaped quotes in strings
+      // Replace smart quotes, sanitize newlines inside string values
+      jsonStr = jsonStr.replace(/[\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'");
+      // Try to fix: trailing commas before }
+      jsonStr = jsonStr.replace(/,\s*([}\]])/g, '$1');
+      const parsed = JSON.parse(jsonStr);
       return {
         outcome:    (parsed.outcome === 'YES' || parsed.outcome === 'NO') ? parsed.outcome : 'UNCERTAIN',
         confidence: Math.min(1, Math.max(0, parseFloat(parsed.confidence ?? '0'))),

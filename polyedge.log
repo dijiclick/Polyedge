@@ -1,3 +1,4 @@
+[watchdog] Starting bot at Sun Mar  1 20:33:01 +03 2026
 🚀 Polymarket Trading Runner
    Mode: 🔴 LIVE
    Strategies: Oracle Arb + Edge AI
@@ -12,9 +13,9 @@ Risk: MEDIUM
 🚀 Edge AI Monitor started | ARMED=true | risk=MEDIUM | interval=2min
 [tg] 🧠 Edge AI started | 🔴 LIVE | Risk: MEDIUM
 
-[2026-03-01T17:25:48.717Z] ═══ Oracle Arb Cycle ═══
+[2026-03-01T17:33:01.909Z] ═══ Oracle Arb Cycle ═══
 
-[2026-03-01T17:25:48.755Z] ═══ Edge AI Cycle ═══
+[2026-03-01T17:33:01.945Z] ═══ Edge AI Cycle ═══
 [oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.930
 [oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.910
 [oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
@@ -25,17 +26,69 @@ Risk: MEDIUM
 [oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
 [oracle-arb] At max positions (8/8)
 [tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
-[edge-ai] 712 qualifying markets in 0-3h window → analyzing top 15 by liquidity
+[edge-ai] 270 qualifying markets in 0-6h window → analyzing top 25 by liquidity
 [clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
 [clob] USDC.e balance (CLOB): $20.57
 [tg] 🧠 Edge AI Scan
-Markets 0–3h: 15 | Positions: 4/8
-Risk: MEDIUM (need 70%+ confidence)
+Markets 0–3h: 25 | Positions: 4/8
+Risk: MEDIUM (need 60%+ confidence)
 USDC: $20.57 | 🔴 LIVE
 
-[edge-ai] Analyzing: Spread: Golden Knights (-1.5)
-[edge-ai] Closes in 34min | YES=36.5%
-[llm] Proxy failed (The operation was aborted due to timeout), trying API...
-[llm] Perplexity API failed (Perplexity API error 401: <html>
-<head><title>401 Authorization Required</title), trying bridge pool...
-[edge-ai] search error: All Perplexity sources failed: Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria | Bridge exit 2: /usr/bin/python3: can't open file '/home/aria
+[edge-ai] Analyzing: Golden Knights vs. Penguins
+[edge-ai] Closes in 27min | YES=57.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: The Polymarket market "Golden Knights vs. Penguins" remains open with YES at 57.5% and no confirmed 
+[edge-ai] Skip: confidence 55% < threshold 60% (american_football)
+
+[edge-ai] Analyzing: Will RB Leipzig win on 2026-03-01?
+[edge-ai] Closes in 57min | YES=50.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 51% confidence
+[edge-ai] Key fact: As of Sunday, March 1, 2026, at 12:34 PM EST (which is 7:34 PM in Istanbul), the game against Hambur
+[edge-ai] Skip: confidence 51% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Hamburger SV vs. RB Leipzig end in a draw?
+[edge-ai] Closes in 57min | YES=24.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 25% confidence
+[edge-ai] Key fact: The match between Hamburger SV and RB Leipzig on March 1, 2026, has not concluded yet, as it is ongo
+[edge-ai] Skip: confidence 25% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will Hamburger SV win on 2026-03-01?
+[edge-ai] Closes in 57min | YES=24.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: Attempts to access FlashScore, SofaScore, HSV’s official site, and other live result pages for Hambu
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: SBV Excelsior vs. Go Ahead Eagles: O/U 2.5
+[edge-ai] Closes in 87min | YES=54.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI: UNCERTAIN @ 55% confidence
+[edge-ai] Key fact: Error message when attempting to access a live-score page: "Failed to fetch url content"
+[edge-ai] Skip: confidence 55% < threshold 63% (soccer_match)
+
+[edge-ai] Analyzing: Will AS Roma vs. Juventus FC end in a draw?
+[edge-ai] Closes in 132min | YES=32.5%
+[llm] ✅ Perplexity proxy hit
+[edge-ai] AI parse error: Expected ',' or '}' after property value in JSON at position 438 (line 6 column 184)
+[edge-ai] AI: UNCERTAIN @ 0% confidence
+[edge-ai] Key fact: 
+[edge-ai] Skip: confidence 0% < threshold 60% (general)
+
+[edge-ai] Analyzing: Will Juventus FC win on 2026-03-01?
+[edge-ai] Closes in 132min | YES=32.0%
+[llm] ✅ Perplexity proxy hit
+
+[2026-03-01T17:36:17.889Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.930
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.920
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.910
+[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.922
+[oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.940
+[oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.940
+[oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
+[oracle-arb] At max positions (8/8)
+[tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
