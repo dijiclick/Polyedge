@@ -51,12 +51,14 @@ async function main() {
     runners.push(runEdgeAI);
   }
 
-  // Run all strategies concurrently (they use setInterval internally)
-  await Promise.all(runners.map(fn => fn().catch(e => {
-    console.error('[runner] strategy error:', e);
-    tg(`❌ Strategy error: ${e.message}`);
-  })));
-
+  // Run all strategies concurrently (they use setInterval + keep-alive internally)
+  await Promise.all([
+    ...runners.map(fn => fn().catch(e => {
+      console.error('[runner] strategy error:', e);
+      tg(`❌ Strategy error: ${e.message}`);
+    })),
+    new Promise(() => {}), // belt-and-suspenders: never resolves
+  ]);
 }
 
 main().catch(e => {
