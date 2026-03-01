@@ -34,7 +34,7 @@ function nextSessionToken(): string {
 
 const DEFAULT_MODEL = process.env.LLM_ASK_MODEL || 'deepseek/deepseek-chat';
 const BRIDGE_PATH   = process.env.PERPLEXITY_BRIDGE_PATH
-  || '/home/ariad/.openclaw/workspace/polyedge/perplexity_bridge.py';
+  || '/home/ariad/.openclaw/workspace/Polyedge/perplexity_bridge.py';
 const UV_CMD        = process.env.UV_CMD || '/home/ariad/.local/bin/uv';
 
 export interface SearchResult {
