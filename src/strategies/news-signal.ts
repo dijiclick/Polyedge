@@ -169,6 +169,91 @@ const SIGNAL_RULES: SignalRule[] = [
     side:       'YES', confidence: 0.88,
     tag:        'FDA drug approval',
   },
+  // === HIGH-VALUE NEW RULES (2026-03-03) ===
+  // Starmer resigns / no-confidence vote
+  {
+    headline:   /starmer.{0,80}(resigns?|resigned|fired|no.confidence|steps? down|ousted|removed|leadership challenge)/i,
+    market:     /starmer.{0,50}(out|resign|leave|step down|removed)/i,
+    side:       'YES', confidence: 0.91,
+    tag:        'Starmer out',
+  },
+  // Macron resigns / snap election called
+  {
+    headline:   /macron.{0,80}(resigns?|resigned|snap election|dissolution|no.confidence|steps? down|steps down)/i,
+    market:     /macron.{0,50}(out|resign|leave|step down|election)/i,
+    side:       'YES', confidence: 0.91,
+    tag:        'Macron out / France election',
+  },
+  // Ukraine ceasefire / peace deal signed
+  {
+    headline:   /(ukraine|russia|zelensky|putin).{0,80}(ceasefire|cease.fire|peace deal|peace agreement|signed|truce|armistice)/i,
+    market:     /(russia|ukraine).{0,60}(ceasefire|cease.fire|peace|truce)/i,
+    side:       'YES', confidence: 0.88,
+    tag:        'Ukraine ceasefire / peace deal',
+  },
+  // Ukraine territory cession
+  {
+    headline:   /ukraine.{0,80}(cedes?|ceded|agrees? to cede|gives? up|concedes?|surrender|transfers?).{0,60}(territory|land|region|oblast)/i,
+    market:     /ukraine.{0,60}(cede|territory|russian sovereignty)/i,
+    side:       'YES', confidence: 0.87,
+    tag:        'Ukraine territory cession',
+  },
+  // Russia invades NATO country
+  {
+    headline:   /russia.{0,60}(invades?|invaded|attacks?|troops|military).{0,60}(nato|poland|estonia|latvia|lithuania|finland)/i,
+    market:     /russia.{0,60}(invade|nato|poland|baltic)/i,
+    side:       'YES', confidence: 0.92,
+    tag:        'Russia NATO invasion',
+  },
+  // Fed rate cut decision
+  {
+    headline:   /federal reserve.{0,60}(cuts?|cut|reduced?|lowered?|rate cut).{0,40}interest rate/i,
+    market:     /fed.{0,50}(rate cut|cut rate|lower rate|reduce rate)/i,
+    side:       'YES', confidence: 0.87,
+    tag:        'Fed rate cut',
+  },
+  // Fed rate hold
+  {
+    headline:   /federal reserve.{0,60}(holds?|held|pauses?|paused|keeps?|keeps? rates?).{0,40}(rate|rates?)/i,
+    market:     /fed.{0,50}(hold|pause|no cut|unchanged)/i,
+    side:       'YES', confidence: 0.85,
+    tag:        'Fed rate hold',
+  },
+  // Trump tariffs on China increase
+  {
+    headline:   /trump.{0,60}(raises?|raised|increases?|increased|hikes?|hiked).{0,40}(tariff|tariffs).{0,40}china/i,
+    market:     /tariff.{0,50}china/i,
+    side:       'YES', confidence: 0.85,
+    tag:        'Trump tariff increase on China',
+  },
+  // IPO launches (Kraken, Discord, Fannie Mae)
+  {
+    headline:   /(kraken|discord|fannie mae|stripe).{0,80}(ipo|initial public offering|goes public|listed on)/i,
+    market:     /(kraken|discord|fannie mae|stripe).{0,50}ipo/i,
+    side:       'YES', confidence: 0.90,
+    tag:        'Major IPO launches',
+  },
+  // MicroStrategy sells Bitcoin
+  {
+    headline:   /microstrategy.{0,80}(sells?|sold|offloads?|offloaded|liquidates?|reduces?).{0,60}bitcoin/i,
+    market:     /microstrategy.{0,50}(sell|sells|sold).{0,50}bitcoin/i,
+    side:       'YES', confidence: 0.93,
+    tag:        'MicroStrategy sells Bitcoin',
+  },
+  // Measles outbreak / CDC warning  
+  {
+    headline:   /(measles|bird flu|mpox|h5n1).{0,80}(outbreak|epidemic|cases|cdc|who|declared|emergency|spreading)/i,
+    market:     /(measles|bird flu|mpox|pandemic|cdc.{0,20}level).{0,60}(cases|warning|level|emergency)/i,
+    side:       'YES', confidence: 0.85,
+    tag:        'Disease outbreak / CDC warning',
+  },
+  // Elon no longer trillionaire (Tesla crashes)
+  {
+    headline:   /elon musk.{0,60}(no longer|not a|loses? billionaire|drops? out of trillionaire)/i,
+    market:     /elon musk.{0,50}trillionaire/i,
+    side:       'NO', confidence: 0.85,
+    tag:        'Elon loses trillionaire status',
+  },
 ];
 
 // ─── Seen headlines cache (prevent duplicate bets) ────────────────────────────
