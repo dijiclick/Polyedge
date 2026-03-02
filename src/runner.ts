@@ -13,6 +13,7 @@
  */
 
 import { tg } from './shared/telegram.js';
+import { startSweeper } from './shared/sweeper.js';
 
 const ARMED    = process.env.ARMED === 'true';
 const STRATEGY = process.env.STRATEGY || 'both';  // 'oracle' | 'edge' | 'both'
@@ -65,6 +66,9 @@ async function main() {
     const { runOddsArb } = await import('./strategies/odds-arb.js');
     runners.push(runOddsArb);
   }
+
+  // Start position sweeper (auto-closes resolved positions)
+  startSweeper();
 
   // Run all strategies concurrently (they use setInterval + keep-alive internally)
   await Promise.all([

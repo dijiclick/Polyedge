@@ -150,18 +150,19 @@ async function runCycle(): Promise<void> {
   const usdc = ARMED ? await getUsdcBalance() : 20;
   if (ARMED && usdc < 1) { console.log('[odds-arb] Insufficient balance'); return; }
 
-  // Fetch Polymarket markets closing in <24h
+  // Fetch Polymarket markets closing in <48h (use winCurl to bypass WSL TLS)
   let allMarkets: any[] = [];
   try {
     const now = Date.now();
-    const r = await fetch(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-    const all = await r.json() as any[];
+    const raw = winCurl(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`);
+    if (!raw) { console.log('[odds-arb] Gamma API unreachable'); return; }
+    const all = JSON.parse(raw) as any[];
     allMarkets = all.filter(m => {
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
       return hoursLeft > 0 && hoursLeft < 48;
     });
-    console.log(`[odds-arb] ${allMarkets.length} Polymarket markets closing <24h`);
+    console.log(`[odds-arb] ${allMarkets.length} Polymarket markets closing <48h`);
   } catch (e: any) {
     console.log('[odds-arb] Market fetch error:', e.message);
     return;

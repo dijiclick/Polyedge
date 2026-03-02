@@ -223,11 +223,73 @@ async function searchViaESPN(query: string): Promise<SearchResult | null> {
   return { answer, citations: [] };
 }
 
+// ─── Sports odds via The Odds API (bookmaker consensus — no auth issues) ──
+async function searchViaOddsAPI(query: string): Promise<SearchResult | null> {
+  const q = query.toLowerCase();
+  const ODDS_KEY = process.env.THE_ODDS_API_KEY || '1a82db670eedcd02dbe925e19b695123';
+
+  const sportMap: Array<{ pattern: RegExp; key: string; label: string }> = [
+    { pattern: /nba|basketball|lakers|celtics|warriors|heat|bucks|knicks|bulls|clippers|spurs|mavericks|thunder|nuggets|rockets|suns/i, key: 'basketball_nba', label: 'NBA' },
+    { pattern: /nhl|hockey|leafs|bruins|rangers|penguins|oilers|flames|avalanche|knights|canadiens/i, key: 'icehockey_nhl', label: 'NHL' },
+    { pattern: /premier|epl|chelsea|arsenal|manchester|liverpool|tottenham|newcastle|aston villa/i, key: 'soccer_epl', label: 'EPL' },
+    { pattern: /la liga|real madrid|barcelona|atletico|sevilla|valencia/i, key: 'soccer_spain_la_liga', label: 'La Liga' },
+    { pattern: /serie a|juventus|inter|milan|napoli|roma|lazio/i, key: 'soccer_italy_serie_a', label: 'Serie A' },
+    { pattern: /bundesliga|bayern|dortmund|leverkusen/i, key: 'soccer_germany_bundesliga', label: 'Bundesliga' },
+    { pattern: /ligue|psg|paris|marseille|lyon|monaco/i, key: 'soccer_france_ligue_one', label: 'Ligue 1' },
+  ];
+
+  const matched = sportMap.find(s => s.pattern.test(q));
+  if (!matched) return null;
+
+  try {
+    const url = `https://api.the-odds-api.com/v4/sports/${matched.key}/odds/?apiKey=${ODDS_KEY}&regions=us&markets=h2h&oddsFormat=decimal&dateFormat=iso`;
+    const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) return null;
+    const games: any[] = await r.json();
+
+    const lines: string[] = [];
+    const now = Date.now();
+    for (const g of games) {
+      const startMs = new Date(g.commence_time).getTime();
+      const hoursAway = (startMs - now) / 3_600_000;
+      if (hoursAway > 48 || hoursAway < -3) continue;
+
+      // Best odds across bookmakers
+      const oddsMap: Record<string, number[]> = {};
+      for (const bm of g.bookmakers ?? []) {
+        for (const market of bm.markets ?? []) {
+          if (market.key !== 'h2h') continue;
+          for (const o of market.outcomes ?? []) {
+            if (!oddsMap[o.name]) oddsMap[o.name] = [];
+            oddsMap[o.name].push(o.price);
+          }
+        }
+      }
+      const teamLines = Object.entries(oddsMap).map(([team, odds]) => {
+        const best = Math.max(...odds);
+        const impliedPct = Math.round(100 / best);
+        return `${team}: ${impliedPct}% implied (best odds ${best})`;
+      }).join(' | ');
+      lines.push(`${matched.label}: ${g.away_team} @ ${g.home_team} [${hoursAway > 0 ? `in ${hoursAway.toFixed(1)}h` : 'LIVE/RECENT'}] — ${teamLines}`);
+    }
+
+    if (lines.length === 0) return null;
+    console.log('[llm] ✅ The Odds API hit');
+    return { answer: `Bookmaker odds (implied win probability):\n${lines.join('\n')}`, citations: [] };
+  } catch { return null; }
+}
+
 export async function search(query: string): Promise<SearchResult> {
   // 0. Sports queries → ESPN live scores first (fast, free, always fresh)
   try {
     const espn = await searchViaESPN(query);
     if (espn) return espn;
+  } catch { /* fall through */ }
+
+  // 0b. Sports odds via The Odds API (bookmaker consensus, very reliable)
+  try {
+    const odds = await searchViaOddsAPI(query);
+    if (odds) return odds;
   } catch { /* fall through */ }
 
   // 1. Try local proxy (Perplexity session tokens)

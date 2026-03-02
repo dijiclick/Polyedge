@@ -43,6 +43,11 @@ export function updatePosition(id: string, updates: Partial<Position>): void {
   }
 }
 
+export function removePosition(id: string): void {
+  const positions = loadPositions().filter(p => p.id !== id);
+  savePositions(positions);
+}
+
 export function getOpenPositions(): Position[] {
   return loadPositions().filter(p => p.status === 'open');
 }
