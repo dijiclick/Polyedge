@@ -25,7 +25,7 @@ async function main() {
   const mode = ARMED ? '🔴 LIVE' : '🟡 DRY-RUN';
   const strategies = STRATEGY === 'oracle' ? 'Oracle Arb only'
     : STRATEGY === 'edge' ? 'Edge AI only'
-    : 'Oracle Arb + Edge AI + Crypto Oracle + Live Score + Odds Arb + Kambi Soccer + News Signal + Golf Oracle';
+    : 'Oracle Arb + Edge AI + Crypto Oracle + Live Score + Odds Arb + Kambi Soccer + News Signal + Golf Oracle + Tennis Arb + Esports Oracle';
 
   console.log(`🚀 Polymarket Trading Runner`);
   console.log(`   Mode: ${mode}`);
@@ -80,6 +80,16 @@ async function main() {
   if (STRATEGY === 'both' || STRATEGY === 'golf') {
     const { runGolfOracle } = await import('./strategies/golf-oracle.js');
     runners.push(runGolfOracle);
+  }
+
+  if (STRATEGY === 'both' || STRATEGY === 'tennis') {
+    const { runTennisArb } = await import('./strategies/tennis-arb.js');
+    runners.push(runTennisArb);
+  }
+
+  if (STRATEGY === 'both' || STRATEGY === 'esports') {
+    const { runEsportsOracle } = await import('./strategies/esports-oracle.js');
+    runners.push(runEsportsOracle);
   }
 
   // Start position sweeper (auto-closes resolved positions)
