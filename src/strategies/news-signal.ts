@@ -1,0 +1,350 @@
+/**
+ * News Signal Strategy
+ *
+ * Monitors free RSS feeds (Reuters, AP, Guardian) for breaking news.
+ * When a headline matches a Polymarket question, fires a YES/NO bet
+ * within minutes — before the crowd reprices the market.
+ *
+ * Signal types:
+ *  - "Trump signs X" / "Congress passes X" → YES on related market
+ *  - "X fails", "vetoed", "rejected" → NO signal
+ *  - Score/result confirmations → YES on match markets
+ *
+ * Run: ARMED=true npx tsx src/strategies/news-signal.ts --monitor
+ */
+
+import { tg } from '../shared/telegram.js';
+import { getUsdcBalance, placeBuy, getClobMarket } from '../shared/clob.js';
+import { addPosition, getOpenPositions } from '../shared/positions.js';
+import { spawnSync } from 'child_process';
+
+const ARMED         = process.env.ARMED === 'true';
+const MAX_POSITIONS = parseInt(process.env.MAX_POSITIONS || '8');
+const SCAN_INTERVAL = 5 * 60_000;  // 5 min
+const GAMMA_HOST    = 'https://gamma-api.polymarket.com';
+const BET_SIZE_USD  = 1;
+
+// ─── RSS Feeds ────────────────────────────────────────────────────────────────
+
+const FEEDS = [
+  // Reuters via rss.app proxy (avoids WSL TLS issues)
+  { name: 'Reuters Politics', url: 'https://www.theguardian.com/us-news/rss' },
+  { name: 'Reuters Business', url: 'https://www.theguardian.com/business/rss' },
+  { name: 'Guardian World',   url: 'https://www.theguardian.com/world/rss' },
+  { name: 'Guardian Tech',    url: 'https://www.theguardian.com/us-news/trump-administration/rss' },
+  { name: 'Politico',         url: 'https://rss.politico.com/politics-news.xml' },
+  { name: 'BBC News',         url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+];
+
+// ─── Signal Rules ─────────────────────────────────────────────────────────────
+
+interface SignalRule {
+  headline:  RegExp;   // matches news headline
+  market:    RegExp;   // matches Polymarket question
+  side:      'YES' | 'NO';
+  confidence: number;
+  tag:       string;   // human-readable label
+}
+
+const SIGNAL_RULES: SignalRule[] = [
+  // Trump executive actions
+  {
+    headline:   /trump.{0,40}(signs?|signed|executive order|enacted|approved)/i,
+    market:     /will trump (sign|issue|enact|approve)/i,
+    side:       'YES', confidence: 0.90,
+    tag:        'Trump signs EO',
+  },
+  {
+    headline:   /trump.{0,40}(vetoes?|vetoed|rejects?|rejected|refused)/i,
+    market:     /will trump (sign|approve|pass)/i,
+    side:       'NO', confidence: 0.88,
+    tag:        'Trump vetoes/rejects',
+  },
+  // Congress / legislation
+  {
+    headline:   /(congress|senate|house).{0,50}(passes?|passed|approves?|approved)/i,
+    market:     /will (congress|senate|house).{0,50}(pass|approve)/i,
+    side:       'YES', confidence: 0.88,
+    tag:        'Congress passes bill',
+  },
+  {
+    headline:   /(congress|senate|house).{0,50}(fails?|failed|blocks?|blocked|rejected)/i,
+    market:     /will (congress|senate|house).{0,50}(pass|approve)/i,
+    side:       'NO', confidence: 0.85,
+    tag:        'Congress fails/blocks bill',
+  },
+  // Fed / interest rates
+  {
+    headline:   /fed(eral reserve)?.{0,40}(raises?|raised|hikes?|hiked) (rates?|interest)/i,
+    market:     /will (the )?fed.{0,40}(raise|hike|increase).{0,20}rate/i,
+    side:       'YES', confidence: 0.92,
+    tag:        'Fed raises rates',
+  },
+  {
+    headline:   /fed(eral reserve)?.{0,40}(cuts?|cut|lowers?|lowered) (rates?|interest)/i,
+    market:     /will (the )?fed.{0,40}(cut|lower|reduce).{0,20}rate/i,
+    side:       'YES', confidence: 0.92,
+    tag:        'Fed cuts rates',
+  },
+  // Tariffs / trade
+  {
+    headline:   /trump.{0,60}(tariff|tariffs).{0,40}(imposes?|imposed|announces?|announced)/i,
+    market:     /will trump.{0,60}tariff/i,
+    side:       'YES', confidence: 0.87,
+    tag:        'Trump imposes tariffs',
+  },
+  // Ukraine / Russia / ceasefire
+  {
+    headline:   /(ceasefire|cease.fire).{0,60}(ukraine|russia)/i,
+    market:     /will.{0,40}(ceasefire|cease.fire).{0,40}(ukraine|russia)/i,
+    side:       'YES', confidence: 0.85,
+    tag:        'Ceasefire Ukraine',
+  },
+  // Elections
+  {
+    headline:   /(\w[\w\s]{3,30}) (wins?|won|elected|declared winner).{0,40}(election|vote|race|primary)/i,
+    market:     /will \w+.{0,40}win.{0,40}(election|primary|race)/i,
+    side:       'YES', confidence: 0.88,
+    tag:        'Election winner declared',
+  },
+  // Crypto ETF
+  {
+    headline:   /sec.{0,40}(approves?|approved).{0,40}(bitcoin|ethereum|crypto).{0,40}etf/i,
+    market:     /will (sec|u\.?s\.?).{0,40}(approve|launch).{0,40}(bitcoin|ethereum|crypto).{0,40}etf/i,
+    side:       'YES', confidence: 0.90,
+    tag:        'SEC approves crypto ETF',
+  },
+  // AI / tech regulation
+  {
+    headline:   /openai|anthropic|google.{0,40}(releases?|released|launches?|launched).{0,40}(model|ai|gpt)/i,
+    market:     /will (openai|anthropic|google).{0,40}(release|launch).{0,40}(model|ai|gpt)/i,
+    side:       'YES', confidence: 0.85,
+    tag:        'AI model release',
+  },
+];
+
+// ─── Seen headlines cache (prevent duplicate bets) ────────────────────────────
+
+const seenHeadlines = new Set<string>();
+
+// ─── Fetch RSS ────────────────────────────────────────────────────────────────
+
+interface NewsItem {
+  title:   string;
+  link:    string;
+  pubDate: Date;
+  source:  string;
+}
+
+function winCurl(url: string, timeoutSec = 20): string | null {
+  const r = spawnSync(
+    '/mnt/c/Windows/System32/curl.exe',
+    ['-s', '--max-time', String(timeoutSec), '-L', url],
+    { encoding: 'utf8', timeout: (timeoutSec + 5) * 1000, maxBuffer: 10 * 1024 * 1024 }
+  );
+  if (r.error) { console.log('[news] curl error:', r.error.message); return null; }
+  if (r.status !== 0) { console.log('[news] curl non-zero:', r.status, r.stderr?.slice(0,80)); return null; }
+  return r.stdout?.length > 50 ? r.stdout : null;
+}
+
+function parseRSS(xml: string, source: string): NewsItem[] {
+  const items: NewsItem[] = [];
+  const itemBlocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) ?? [];
+  for (const block of itemBlocks) {
+    const titleM = block.match(/<title[^>]*><!\[CDATA\[(.*?)\]\]><\/title>|<title[^>]*>(.*?)<\/title>/i);
+    const linkM  = block.match(/<link[^>]*>(.*?)<\/link>/i);
+    const dateM  = block.match(/<pubDate[^>]*>(.*?)<\/pubDate>/i);
+    const title  = (titleM?.[1] ?? titleM?.[2] ?? '').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').trim();
+    const link   = (linkM?.[1] ?? '').trim();
+    const pub    = dateM?.[1] ? new Date(dateM[1]) : new Date();
+    if (!title) continue;
+    // Only items from last 30 min
+    if (Date.now() - pub.getTime() > 30 * 60 * 1000) continue;
+    items.push({ title, link, pubDate: pub, source });
+  }
+  return items;
+}
+
+async function fetchAllNews(): Promise<NewsItem[]> {
+  const all: NewsItem[] = [];
+  for (const feed of FEEDS) {
+    const xml = winCurl(feed.url);
+    if (!xml) { console.log(`[news] Feed failed: ${feed.name}`); continue; }
+    const items = parseRSS(xml, feed.name);
+    all.push(...items);
+  }
+  // Deduplicate by title
+  const seen = new Set<string>();
+  return all.filter(i => {
+    if (seen.has(i.title)) return false;
+    seen.add(i.title);
+    return true;
+  });
+}
+
+// ─── Match news to Polymarket questions ──────────────────────────────────────
+
+interface NewsSignal {
+  item:        NewsItem;
+  market:      any;
+  side:        'YES' | 'NO';
+  confidence:  number;
+  yesPrice:    number;
+  tokenId:     string;
+  tag:         string;
+  edge:        number;
+}
+
+async function findSignals(news: NewsItem[]): Promise<NewsSignal[]> {
+  if (news.length === 0) return [];
+
+  // Fetch active Polymarket markets via winCurl (avoids WSL TLS)
+  let markets: any[] = [];
+  try {
+    const raw = winCurl(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`);
+    if (!raw) throw new Error('empty response');
+    markets = JSON.parse(raw);
+  } catch (e: any) {
+    console.log('[news] Market fetch error:', e.message);
+    return [];
+  }
+
+  const signals: NewsSignal[] = [];
+
+  for (const item of news) {
+    if (seenHeadlines.has(item.title)) continue;
+
+    for (const rule of SIGNAL_RULES) {
+      if (!rule.headline.test(item.title)) continue;
+
+      // Find matching Polymarket market
+      for (const m of markets) {
+        const q = m.question ?? '';
+        if (!rule.market.test(q)) continue;
+
+        const prices   = JSON.parse(m.outcomePrices ?? '[]');
+        const yesPrice = parseFloat(prices[0]);
+        if (isNaN(yesPrice) || yesPrice <= 0) continue;
+
+        const liq = parseFloat(m.liquidityNum ?? m.liquidity ?? '0');
+        if (liq < 200) continue;
+
+        const tokens  = JSON.parse(m.tokens ?? m.clobTokenIds ?? '[]');
+        const tokenId = tokens[0] ?? '';
+
+        // Edge: confidence vs current market price
+        const effectivePrice = rule.side === 'YES' ? yesPrice : 1 - yesPrice;
+        const edge = rule.confidence - effectivePrice;
+        if (edge < 0.05) continue;  // at least 5% edge
+
+        signals.push({
+          item, market: m, side: rule.side,
+          confidence: rule.confidence,
+          yesPrice, tokenId, tag: rule.tag, edge,
+        });
+        break; // one market match per rule per headline
+      }
+    }
+  }
+
+  return signals.sort((a, b) => b.edge - a.edge);
+}
+
+// ─── Main scan cycle ──────────────────────────────────────────────────────────
+
+async function runCycle(): Promise<void> {
+  const open = getOpenPositions().filter(p => p.strategy === 'news-signal');
+  if (open.length >= MAX_POSITIONS) {
+    console.log(`[news] At max positions (${open.length}/${MAX_POSITIONS})`);
+    return;
+  }
+
+  console.log('[news] Fetching RSS feeds...');
+  const news = await fetchAllNews();
+  const fresh = news.filter(n => !seenHeadlines.has(n.title));
+  console.log(`[news] ${news.length} recent headlines (${fresh.length} new)`);
+
+  if (fresh.length === 0) return;
+
+  const signals = await findSignals(fresh);
+  console.log(`[news] ${signals.length} signals found`);
+
+  const heldIds = open.map(p => p.conditionId);
+
+  for (const sig of signals) {
+    if (open.length + (signals.indexOf(sig)) >= MAX_POSITIONS) break;
+    if (heldIds.includes(sig.market.conditionId)) continue;
+
+    seenHeadlines.add(sig.item.title);
+
+    console.log(`\n[news] 📰 ${sig.tag}`);
+    console.log(`  Headline: "${sig.item.title.slice(0, 100)}"`);
+    console.log(`  Market:   "${sig.market.question?.slice(0, 80)}"`);
+    console.log(`  Side: ${sig.side} | Confidence: ${(sig.confidence*100).toFixed(0)}% | Market: ${(sig.yesPrice*100).toFixed(0)}¢ | Edge: ${(sig.edge*100).toFixed(1)}%`);
+
+    if (!ARMED) {
+      console.log(`  [DRY RUN] Would bet $${BET_SIZE_USD} ${sig.side}`);
+      continue;
+    }
+
+    try {
+      const clob = await getClobMarket(sig.market.conditionId);
+      if (!clob?.accepting_orders) { console.log('[news] Market not accepting orders'); continue; }
+
+      const price  = sig.side === 'YES' ? sig.yesPrice : 1 - sig.yesPrice;
+      const shares = Math.floor(BET_SIZE_USD / price);
+      if (shares < 5) { console.log('[news] Too few shares, skip'); continue; }
+
+      const orderId = await placeBuy({
+        tokenId:  sig.tokenId,
+        price,
+        size:     BET_SIZE_USD,
+        side:     sig.side,
+      });
+
+      addPosition({
+        conditionId: sig.market.conditionId,
+        question:    sig.market.question,
+        side:        sig.side,
+        entryPrice:  price,
+        shares,
+        cost:        BET_SIZE_USD,
+        strategy:    'news-signal',
+      });
+
+      const msg = `📰 News signal [${sig.tag}]: "${sig.item.title.slice(0,80)}" → ${sig.side} $${BET_SIZE_USD} on "${sig.market.question?.slice(0,60)}" | edge ${(sig.edge*100).toFixed(1)}%`;
+      await tg(msg);
+      console.log('[news] ✅', msg);
+    } catch (e: any) {
+      console.log('[news] ❌ Order error:', e.message);
+      await tg(`❌ News signal order failed: ${e.message}`);
+    }
+  }
+
+  // Trim seen set to avoid unbounded growth
+  if (seenHeadlines.size > 5000) {
+    const arr = [...seenHeadlines];
+    arr.slice(0, 2500).forEach(h => seenHeadlines.delete(h));
+  }
+}
+
+// ─── Export for runner ────────────────────────────────────────────────────────
+
+export async function runNewsSignal(): Promise<void> {
+  const monitor = process.argv.includes('--monitor');
+  console.log(`[news] Starting news signal strategy | ARMED=${ARMED} | monitor=${monitor}`);
+
+  await runCycle();
+
+  if (monitor) {
+    setInterval(runCycle, SCAN_INTERVAL);
+    console.log(`[news] Scanning every ${SCAN_INTERVAL / 60000} min`);
+    await new Promise(() => {});
+  }
+}
+
+// ─── Standalone entry ─────────────────────────────────────────────────────────
+
+if (process.argv[1]?.endsWith('news-signal.ts') || process.argv[1]?.endsWith('news-signal.js')) {
+  runNewsSignal().catch(console.error);
+}

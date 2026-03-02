@@ -77,7 +77,19 @@ async function scanMarkets(): Promise<Candidate[]> {
 
           const edgePct     = ((1.0 - yes) / yes) * 100;
           const expiredBonus = hoursLeft < 0 ? 2.0 : 1.0;
-          const score       = edgePct * Math.log(liq + 1) * expiredBonus;
+
+          // Category reliability multiplier:
+          // Sports settle fast (same day), crypto/elections can take days
+          const q = (m.question ?? '').toLowerCase();
+          const isSports = /nba|nhl|nfl|mlb|premier league|bundesliga|serie a|la liga|ligue 1|champions league|europa league|soccer|football|basketball|hockey|baseball|tennis/i.test(q);
+          const isCrypto = /bitcoin|btc|ethereum|eth|crypto|solana|binance/i.test(q);
+          const isAward  = /oscar|emmy|grammy|golden globe|award|winner/i.test(q);
+          const categoryMult = isSports ? 1.4 : isAward ? 1.3 : isCrypto ? 1.1 : 1.0;
+
+          // Volume boost: high volume24h = crowd knows it's resolving soon
+          const volBoost = vol24h > 5000 ? 1.3 : vol24h > 1000 ? 1.15 : 1.0;
+
+          const score = edgePct * Math.log(liq + 1) * expiredBonus * categoryMult * volBoost;
 
           candidates.push({
             conditionId: m.conditionId,
@@ -194,7 +206,7 @@ async function runCycle(): Promise<void> {
     // Oracle arb: TRUE probability ≈ 99.5% (event already happened / near-certain)
     // Market price is what we actually pay — Kelly calculates real edge
     const TRUE_PROB = c.hoursLeft < 0 ? 0.995 : 0.97;  // expired = near-certain, future = high confidence
-    const bet = kellyBet({ probability: TRUE_PROB, marketPrice: c.yesPrice, bankroll: usdc });
+    const bet = kellyBet({ probability: TRUE_PROB, marketPrice: c.yesPrice, bankroll: usdc, maxBet: 1.0 });
     if (bet < 0.50) continue;
 
     const shares      = bet / c.yesPrice;

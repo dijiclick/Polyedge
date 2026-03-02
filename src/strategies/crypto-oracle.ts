@@ -188,7 +188,7 @@ async function runCycle(): Promise<void> {
     }
 
     // Bet size: $2 per crypto oracle trade (near-certain, small size fine)
-    const betSize = Math.min(2.00, usdc * 0.1);
+    const betSize = Math.min(1.00, usdc * 0.1);
 
     const msg = `🪙 <b>Crypto Oracle ${ARMED ? '[LIVE]' : '[DRY-RUN]'}</b>\n` +
       `${m.question.slice(0, 80)}\n` +

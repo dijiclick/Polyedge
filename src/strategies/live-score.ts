@@ -1,9 +1,9 @@
 /**
  * Live Score Edge Strategy
  *
- * Fetches real-time ESPN scores for soccer and NHL hockey.
- * When a team is winning by 2+ goals with <20 min left, finds the matching
- * Polymarket "Will X win" market and buys YES if price is lagging.
+ * Fetches real-time ESPN scores for soccer, NHL, NBA, NFL, MLB.
+ * When a team is winning convincingly near the end, finds matching
+ * Polymarket "Will X win" markets and buys YES if price is lagging.
  *
  * Run: ARMED=true npx tsx src/strategies/live-score.ts --monitor
  */
@@ -44,11 +44,64 @@ function fuzzyMatch(teamA: string, teamB: string): boolean {
   return aWords.some(w => bWords.includes(w));
 }
 
-async function fetchESPNScores(sport: 'soccer' | 'nhl'): Promise<LiveGame[]> {
-  const url = sport === 'soccer'
-    ? 'https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard'
-    : 'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard';
+type ESPNSport = 'soccer' | 'nhl' | 'nba' | 'nfl' | 'mlb';
 
+const ESPN_URLS: Record<ESPNSport, string> = {
+  soccer: 'https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard',
+  nhl:    'https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard',
+  nba:    'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard',
+  nfl:    'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard',
+  mlb:    'https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard',
+};
+
+// Min lead to trigger edge signal, per sport
+const MIN_LEAD: Record<ESPNSport, number> = {
+  soccer: 2,   // 2+ goals
+  nhl:    2,   // 2+ goals
+  nba:    15,  // 15+ points (NBA scores are high)
+  nfl:    14,  // 14+ points (2 scores)
+  mlb:    3,   // 3+ runs
+};
+
+// Max minutes left to trigger signal, per sport
+const MAX_MIN_LEFT: Record<ESPNSport, number> = {
+  soccer: 20,
+  nhl:    10,
+  nba:    8,   // last 8 min of 4th quarter
+  nfl:    8,   // last 8 min of 4th quarter
+  mlb:    6,   // last 2 innings (rough equiv)
+};
+
+function minutesLeftForSport(sport: ESPNSport, clock: string, period: number): number {
+  const parts = clock.split(':').map(Number);
+  const mm = parts[0] ?? 0;
+  switch (sport) {
+    case 'soccer': {
+      const clockMin = parseInt(clock);
+      return isNaN(clockMin) ? 45 : Math.max(0, 90 - clockMin);
+    }
+    case 'nhl': {
+      // 3 periods × 20 min
+      return !isNaN(mm) ? mm + (3 - Math.min(period, 3)) * 20 : 30;
+    }
+    case 'nba': {
+      // 4 quarters × 12 min
+      return !isNaN(mm) ? mm + (4 - Math.min(period, 4)) * 12 : 24;
+    }
+    case 'nfl': {
+      // 4 quarters × 15 min
+      return !isNaN(mm) ? mm + (4 - Math.min(period, 4)) * 15 : 30;
+    }
+    case 'mlb': {
+      // innings: period = inning; assume ~3 min per half-inning remaining
+      return Math.max(0, (9 - period) * 6);
+    }
+    default: return 30;
+  }
+}
+
+async function fetchESPNScores(sport: ESPNSport): Promise<LiveGame[]> {
+  const url = ESPN_URLS[sport];
   const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
   if (!r.ok) throw new Error(`ESPN ${sport} ${r.status}`);
   const data = await r.json() as any;
@@ -59,9 +112,11 @@ async function fetchESPNScores(sport: 'soccer' | 'nhl'): Promise<LiveGame[]> {
     if (!comp) continue;
 
     const statusType = comp.status?.type?.name ?? '';
-    const isLive = statusType === 'STATUS_IN_PROGRESS' || statusType === 'STATUS_SECOND_PERIOD' ||
-                   statusType === 'STATUS_THIRD_PERIOD' || statusType === 'STATUS_FIRST_PERIOD' ||
-                   statusType === 'STATUS_HALFTIME' || statusType.includes('PROGRESS');
+    const isLive = statusType === 'STATUS_IN_PROGRESS'
+      || statusType.includes('PROGRESS')
+      || ['STATUS_SECOND_PERIOD','STATUS_THIRD_PERIOD','STATUS_FIRST_PERIOD',
+          'STATUS_FOURTH_PERIOD','STATUS_HALFTIME','STATUS_END_PERIOD',
+          'STATUS_MIDDLE_INNING','STATUS_END_OF_INNING'].includes(statusType);
     if (!isLive) continue;
 
     const competitors = comp.competitors ?? [];
@@ -71,19 +126,9 @@ async function fetchESPNScores(sport: 'soccer' | 'nhl'): Promise<LiveGame[]> {
 
     const homeScore = parseInt(home.score ?? '0');
     const awayScore = parseInt(away.score ?? '0');
-
-    // Parse minutes left from clock display
-    const clock = comp.status?.displayClock ?? '';
-    const period = comp.status?.period ?? 1;
-    let minutesLeft = 90; // default soccer
-    if (sport === 'soccer') {
-      const clockMin = parseInt(clock);
-      minutesLeft = isNaN(clockMin) ? 45 : Math.max(0, 90 - clockMin);
-    } else {
-      // NHL: 3 periods × 20 min
-      const [mm] = clock.split(':').map(Number);
-      minutesLeft = !isNaN(mm) ? mm + (3 - Math.min(period, 3)) * 20 : 30;
-    }
+    const clock     = comp.status?.displayClock ?? '';
+    const period    = comp.status?.period ?? 1;
+    const minutesLeft = minutesLeftForSport(sport, clock, period);
 
     games.push({
       homeTeam:  home.team?.displayName ?? home.team?.name ?? '',
@@ -105,16 +150,27 @@ async function runCycle(): Promise<void> {
     return;
   }
 
-  // Fetch live games
+  // Fetch live games from all ESPN sports
   let liveGames: LiveGame[] = [];
   try {
-    const [soccer, nhl] = await Promise.allSettled([
+    const results = await Promise.allSettled([
       fetchESPNScores('soccer'),
       fetchESPNScores('nhl'),
+      fetchESPNScores('nba'),
+      fetchESPNScores('nfl'),
+      fetchESPNScores('mlb'),
     ]);
-    if (soccer.status === 'fulfilled') liveGames.push(...soccer.value);
-    if (nhl.status === 'fulfilled') liveGames.push(...nhl.value);
-    console.log(`[live] ${liveGames.length} live games (soccer + NHL)`);
+    const labels = ['soccer','nhl','nba','nfl','mlb'];
+    for (let i = 0; i < results.length; i++) {
+      const res = results[i];
+      if (res.status === 'fulfilled') {
+        liveGames.push(...res.value);
+        if (res.value.length > 0) console.log(`[live] ${labels[i]}: ${res.value.length} live`);
+      } else {
+        console.log(`[live] ${labels[i]} fetch failed: ${(res as any).reason?.message}`);
+      }
+    }
+    console.log(`[live] Total: ${liveGames.length} live games`);
   } catch (e: any) {
     console.log('[live] Score fetch error:', e.message);
     return;
@@ -125,10 +181,11 @@ async function runCycle(): Promise<void> {
     return;
   }
 
-  // Filter for strong edges: 2+ goal lead with <20 min left
+  // Filter for strong edges: sport-specific lead + time thresholds
   const edges = liveGames.filter(g => {
-    const diff = Math.abs(g.homeScore - g.awayScore);
-    return diff >= 2 && g.minutesLeft <= 20;
+    const sport = g.sport as ESPNSport;
+    const diff  = Math.abs(g.homeScore - g.awayScore);
+    return diff >= (MIN_LEAD[sport] ?? 2) && g.minutesLeft <= (MAX_MIN_LEFT[sport] ?? 20);
   });
 
   console.log(`[live] ${edges.length} games with strong edge (2+ lead, <20min left)`);
@@ -169,7 +226,13 @@ async function runCycle(): Promise<void> {
     const leader = game.homeScore > game.awayScore ? game.homeTeam : game.awayTeam;
     const diff = Math.abs(game.homeScore - game.awayScore);
     // Implied win probability based on score+time
-    const impliedProb = Math.min(0.97, 0.80 + (diff - 2) * 0.05 + (20 - game.minutesLeft) * 0.005);
+    // Sport-aware implied probability: soccer/hockey use goal margin, basketball uses pts
+    const sport = game.sport as ESPNSport;
+    const maxLeft = MAX_MIN_LEFT[sport] ?? 20;
+    const minLead = MIN_LEAD[sport] ?? 2;
+    const normalizedLead = (diff - minLead) / minLead;          // 0 = just enough, 1 = double min
+    const timeUrgency    = (maxLeft - game.minutesLeft) / maxLeft; // 0 = just started window, 1 = no time left
+    const impliedProb = Math.min(0.97, 0.82 + normalizedLead * 0.06 + timeUrgency * 0.08);
 
     console.log(`\n[live] 🔥 Edge: ${game.awayTeam} ${game.awayScore}-${game.homeScore} ${game.homeTeam}`);
     console.log(`[live]   Leader: ${leader} | ${game.minutesLeft}min left | Implied: ${(impliedProb * 100).toFixed(0)}%`);
@@ -216,7 +279,7 @@ async function runCycle(): Promise<void> {
       continue;
     }
 
-    const betSize = Math.min(2.00, usdc * 0.1);
+    const betSize = Math.min(1.00, usdc * 0.1);
     const msg = `⚽ <b>Live Score Edge ${ARMED ? '[LIVE]' : '[DRY-RUN]'}</b>\n` +
       `${game.awayTeam} ${game.awayScore}-${game.homeScore} ${game.homeTeam}\n` +
       `${game.minutesLeft}min left | Leader: <b>${leader}</b>\n` +

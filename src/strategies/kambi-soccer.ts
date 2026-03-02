@@ -32,7 +32,7 @@ const MIN_SCORE_EDGE   = 0.08;   // bookmaker must imply 8%+ more than Polymarke
 const MIN_LEAD_GOALS   = 2;      // score signal: lead by this many goals
 const MIN_MINUTE_SCORE = 60;     // score signal: only after 60th minute
 const MIN_MINUTE_ODDS  = 45;     // odds signal: only after halftime
-const BET_SIZE_USD     = 2;      // per trade
+const BET_SIZE_USD     = 1;      // per trade
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

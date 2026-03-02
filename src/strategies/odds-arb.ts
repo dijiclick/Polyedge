@@ -23,13 +23,21 @@ const GAMMA_HOST    = 'https://gamma-api.polymarket.com';
 const MIN_EDGE      = 0.07; // minimum 7% edge vs bookmakers
 
 const SPORTS = [
-  { key: 'basketball_nba',  label: 'NBA' },
-  { key: 'icehockey_nhl',   label: 'NHL' },
-  { key: 'soccer_epl',      label: 'EPL' },
-  { key: 'soccer_spain_la_liga', label: 'La Liga' },
-  { key: 'soccer_italy_serie_a', label: 'Serie A' },
-  { key: 'soccer_germany_bundesliga', label: 'Bundesliga' },
-  { key: 'soccer_france_ligue_one', label: 'Ligue 1' },
+  { key: 'basketball_nba',           label: 'NBA' },
+  { key: 'icehockey_nhl',            label: 'NHL' },
+  { key: 'soccer_epl',               label: 'EPL' },
+  { key: 'soccer_spain_la_liga',     label: 'La Liga' },
+  { key: 'soccer_italy_serie_a',     label: 'Serie A' },
+  { key: 'soccer_germany_bundesliga',label: 'Bundesliga' },
+  { key: 'soccer_france_ligue_one',  label: 'Ligue 1' },
+  { key: 'americanfootball_nfl',     label: 'NFL' },
+  { key: 'baseball_mlb',             label: 'MLB' },
+  { key: 'tennis_atp',               label: 'ATP Tennis' },
+  { key: 'tennis_wta',               label: 'WTA Tennis' },
+  { key: 'basketball_euroleague',    label: 'Euroleague' },
+  { key: 'soccer_uefa_champs_league',label: 'Champions League' },
+  { key: 'soccer_uefa_europa_league',label: 'Europa League' },
+  { key: 'soccer_usa_mls',           label: 'MLS' },
 ];
 
 interface BookmakerOdds {
@@ -224,7 +232,7 @@ async function runCycle(): Promise<void> {
 
       // Kelly-ish bet: edge * bankroll fraction, capped at $3
       const kellyFrac = Math.min(0.15, Math.abs(edge));
-      const betSize = Math.min(3.00, usdc * kellyFrac);
+      const betSize = Math.min(1.00, usdc * kellyFrac);
 
       const msg =
         `📊 <b>Odds Arb ${ARMED ? '[LIVE]' : '[DRY]'}</b>\n` +
