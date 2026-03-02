@@ -12,6 +12,8 @@ import { tg } from '../shared/telegram.js';
 import { kellyBet } from '../shared/kelly.js';
 import { addPosition, getOpenPositions, updatePosition } from '../shared/positions.js';
 import { getUsdcBalance, placeBuy, placeSell, getClobMarket, getTokenPrice } from '../shared/clob.js';
+import { logPaperTrade } from '../shared/paper-trader.js';
+import { detectCategory } from '../shared/execute-signal.js';
 
 const ARMED           = process.env.ARMED === 'true';
 const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS   || '4');
@@ -251,6 +253,13 @@ async function runCycle(): Promise<void> {
         side: 'YES', strategy: 'oracle-arb',
         shares, entryPrice: c.yesPrice, usdcSpent: bet,
         entryTime: Date.now(), orderId: `DRY-${Date.now()}`, status: 'open', dryRun: true,
+      });
+      logPaperTrade({
+        strategy: 'oracle-arb', category: detectCategory(c.question),
+        question: c.question, conditionId: c.conditionId,
+        side: 'YES', entryPrice: c.yesPrice,
+        confidence: TRUE_PROB, edge: c.edgePct / 100,
+        signalReason: `Oracle lag ${c.hoursLeft.toFixed(0)}h | liq $${c.liquidity.toFixed(0)}`,
       });
       usdc -= bet;
     }

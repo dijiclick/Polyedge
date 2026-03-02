@@ -16,6 +16,8 @@
 import { tg } from '../shared/telegram.js';
 import { getUsdcBalance, placeBuy, getClobMarket } from '../shared/clob.js';
 import { addPosition, getOpenPositions } from '../shared/positions.js';
+import { logPaperTrade } from '../shared/paper-trader.js';
+import { detectCategory } from '../shared/execute-signal.js';
 import { spawnSync } from 'child_process';
 
 const ARMED          = process.env.ARMED === 'true';
@@ -259,7 +261,13 @@ async function runCycle(): Promise<void> {
     console.log(`  YES=${sig.market.yesPrice.toFixed(3)} | Edge: ${(sig.edge*100).toFixed(1)}% | Liq: $${sig.market.liquidity.toFixed(0)}`);
 
     if (!ARMED) {
-      console.log(`  [DRY RUN] Would buy YES @ ${sig.market.yesPrice.toFixed(3)}`);
+      logPaperTrade({
+        strategy: 'esports-oracle', category: detectCategory(sig.market.question),
+        question: sig.market.question, conditionId: sig.market.conditionId,
+        side: 'YES', entryPrice: sig.market.yesPrice,
+        confidence: sig.confidence, edge: sig.edge,
+        signalReason: sig.reason,
+      });
       continue;
     }
 

@@ -63,7 +63,16 @@ export async function ask(
       const content = d.choices?.[0]?.message?.content ?? '';
       if (content) { console.log('[llm] ✅ Perplexity proxy ask hit'); return content; }
     }
-  } catch { /* fall through to OpenRouter */ }
+  } catch {
+    // Proxy failed — auto-fix in background
+    try {
+      const { spawnSync: sp } = await import('child_process');
+      sp('bash', ['/home/ariad/.openclaw/workspace/Polyedge/scripts/fix-perplexity.sh'], {
+        detached: true, stdio: 'ignore', timeout: 8000
+      });
+    } catch { /* ignore */ }
+    /* fall through to OpenRouter */
+  }
 
   // Fallback: OpenRouter (if key is valid)
   if (OPENROUTER_API_KEY) {

@@ -15,6 +15,8 @@
 
 import { tg } from '../shared/telegram.js';
 import { getUsdcBalance, placeBuy, getClobMarket } from '../shared/clob.js';
+import { logPaperTrade } from '../shared/paper-trader.js';
+import { detectCategory } from '../shared/execute-signal.js';
 import { addPosition, getOpenPositions } from '../shared/positions.js';
 import { spawnSync } from 'child_process';
 
@@ -416,7 +418,13 @@ async function runCycle(): Promise<void> {
     console.log(`  Side: ${sig.side} | Confidence: ${(sig.confidence*100).toFixed(0)}% | Market: ${(sig.yesPrice*100).toFixed(0)}¢ | Edge: ${(sig.edge*100).toFixed(1)}%`);
 
     if (!ARMED) {
-      console.log(`  [DRY RUN] Would bet $${BET_SIZE_USD} ${sig.side}`);
+      logPaperTrade({
+        strategy: 'news-signal', category: detectCategory(sig.market.question),
+        question: sig.market.question, conditionId: sig.market.conditionId,
+        side: sig.side, entryPrice: sig.side === 'YES' ? sig.yesPrice : 1 - sig.yesPrice,
+        confidence: sig.confidence, edge: sig.edge,
+        signalReason: `[${sig.tag}] "${sig.item.title.slice(0, 80)}"`,
+      });
       continue;
     }
 
