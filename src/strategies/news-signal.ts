@@ -41,9 +41,8 @@ const FEEDS = [
   { name: 'BBC World',       url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
   { name: 'BBC Middle East', url: 'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml' },
   { name: 'BBC US/Canada',   url: 'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml' },
-  // Reuters (via Yahoo Finance proxy)
-  { name: 'Reuters Top',     url: 'https://feeds.reuters.com/reuters/topNews' },
-  { name: 'Reuters Politics', url: 'https://feeds.reuters.com/Reuters/PoliticsNews' },
+  // AP News (free, reliable)
+  { name: 'AP World',        url: 'https://rsshub.app/apnews/topics/world-news' },
 ];
 
 // ─── Signal Rules ─────────────────────────────────────────────────────────────
