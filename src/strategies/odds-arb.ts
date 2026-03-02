@@ -159,7 +159,7 @@ async function runCycle(): Promise<void> {
     allMarkets = all.filter(m => {
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
-      return hoursLeft > 0 && hoursLeft < 24;
+      return hoursLeft > 0 && hoursLeft < 48;
     });
     console.log(`[odds-arb] ${allMarkets.length} Polymarket markets closing <24h`);
   } catch (e: any) {
