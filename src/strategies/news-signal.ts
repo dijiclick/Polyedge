@@ -114,12 +114,60 @@ const SIGNAL_RULES: SignalRule[] = [
     side:       'YES', confidence: 0.90,
     tag:        'SEC approves crypto ETF',
   },
-  // AI / tech regulation
+  // AI model releases
   {
-    headline:   /openai|anthropic|google.{0,40}(releases?|released|launches?|launched).{0,40}(model|ai|gpt)/i,
-    market:     /will (openai|anthropic|google).{0,40}(release|launch).{0,40}(model|ai|gpt)/i,
-    side:       'YES', confidence: 0.85,
+    headline:   /(openai|anthropic|google|meta|mistral|deepseek|xai).{0,50}(releases?|released|launches?|launched|announces?|announced).{0,50}(model|ai|gpt|claude|gemini|llama|grok)/i,
+    market:     /will (openai|anthropic|google|meta|mistral|deepseek|xai).{0,50}(release|launch).{0,50}(model|gpt|claude|gemini|llama|grok)/i,
+    side:       'YES', confidence: 0.88,
     tag:        'AI model release',
+  },
+  // GPT-5 / Claude 4 / Gemini 2 specific
+  {
+    headline:   /(gpt-?5|gpt5|claude.?4|claude.?opus|gemini.?2|gemini.?ultra|llama.?4|grok.?3)/i,
+    market:     /(gpt-?5|gpt5|claude.?4|claude.?opus|gemini.?2|gemini.?ultra|llama.?4|grok.?3)/i,
+    side:       'YES', confidence: 0.90,
+    tag:        'Major AI model announced',
+  },
+  // AI regulation / ban
+  {
+    headline:   /(eu|europe|congress|senate).{0,60}(bans?|banned|regulates?|regulated|restricts?|restricted).{0,40}(ai|artificial intelligence)/i,
+    market:     /will.{0,60}(ban|regulate|restrict).{0,40}(ai|artificial intelligence)/i,
+    side:       'YES', confidence: 0.85,
+    tag:        'AI regulation',
+  },
+  // Elon Musk / Tesla / SpaceX
+  {
+    headline:   /elon musk.{0,60}(resigns?|resigned|fired|leaves?|left|steps? down).{0,40}(doge|government|tesla|spacex|white house)/i,
+    market:     /will elon musk.{0,60}(resign|leave|step down|be fired|be removed)/i,
+    side:       'YES', confidence: 0.87,
+    tag:        'Elon Musk leaves role',
+  },
+  {
+    headline:   /tesla.{0,60}(recalls?|recall|crash|accident|autopilot|fsd).{0,60}(investigation|probe|fine|penalty)/i,
+    market:     /will tesla.{0,60}(recall|face|pay|settle)/i,
+    side:       'YES', confidence: 0.82,
+    tag:        'Tesla recall/investigation',
+  },
+  // Crypto price milestones
+  {
+    headline:   /bitcoin.{0,30}(hits?|hit|reaches?|reached|surpasses?|surpassed|crosses?|crossed).{0,30}\$([\d,]+)/i,
+    market:     /will bitcoin.{0,30}(reach|hit|exceed|surpass).{0,30}\$([\d,]+)/i,
+    side:       'YES', confidence: 0.88,
+    tag:        'Bitcoin price milestone',
+  },
+  // Sports championships (as backup for oracle-arb)
+  {
+    headline:   /(\w[\w\s]{2,25}) (wins?|won|defeats?|defeated|claims?|claimed).{0,40}(championship|title|cup|series|super bowl|nba finals|stanley cup|world series)/i,
+    market:     /will \w[\w\s]{2,25} win.{0,40}(championship|title|cup|series|super bowl|nba finals|stanley cup|world series)/i,
+    side:       'YES', confidence: 0.92,
+    tag:        'Championship winner confirmed',
+  },
+  // Drug/FDA approvals
+  {
+    headline:   /fda.{0,60}(approves?|approved).{0,60}(drug|treatment|vaccine|therapy)/i,
+    market:     /will fda.{0,60}(approve|clear).{0,60}(drug|treatment|vaccine|therapy)/i,
+    side:       'YES', confidence: 0.88,
+    tag:        'FDA drug approval',
   },
 ];
 
