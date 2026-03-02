@@ -11,6 +11,16 @@
 import { tg } from '../shared/telegram.js';
 import { getUsdcBalance, placeBuy, getClobMarket } from '../shared/clob.js';
 import { addPosition, getOpenPositions } from '../shared/positions.js';
+import { spawnSync } from 'child_process';
+
+function winCurl(url: string): string | null {
+  const r = spawnSync(
+    '/mnt/c/Windows/System32/curl.exe',
+    ['-s', '--max-time', '15', url],
+    { encoding: 'utf8', timeout: 18000, maxBuffer: 5 * 1024 * 1024 }
+  );
+  return r.status === 0 && (r.stdout?.length ?? 0) > 10 ? r.stdout : null;
+}
 
 const ARMED         = process.env.ARMED === 'true';
 const MAX_POSITIONS = parseInt(process.env.MAX_POSITIONS || '8');
@@ -102,9 +112,10 @@ function minutesLeftForSport(sport: ESPNSport, clock: string, period: number): n
 
 async function fetchESPNScores(sport: ESPNSport): Promise<LiveGame[]> {
   const url = ESPN_URLS[sport];
-  const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-  if (!r.ok) throw new Error(`ESPN ${sport} ${r.status}`);
-  const data = await r.json() as any;
+  const raw = winCurl(url);
+  if (!raw) throw new Error(`ESPN ${sport} fetch failed`);
+  let data: any;
+  try { data = JSON.parse(raw); } catch { throw new Error(`ESPN ${sport} JSON parse failed`); }
 
   const games: LiveGame[] = [];
   for (const event of data.events ?? []) {
@@ -205,8 +216,9 @@ async function runCycle(): Promise<void> {
   let allMarkets: any[] = [];
   try {
     const now = Date.now();
-    const r = await fetch(`${GAMMA_HOST}/markets?limit=300&active=true&closed=false`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-    const all = await r.json() as any[];
+    const raw = winCurl(`${GAMMA_HOST}/markets?limit=300&active=true&closed=false`);
+    if (!raw) throw new Error('empty response');
+    const all = JSON.parse(raw) as any[];
     allMarkets = all.filter(m => {
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;

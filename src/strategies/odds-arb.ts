@@ -53,8 +53,8 @@ interface BookmakerOdds {
 function winCurl(url: string): string | null {
   const result = spawnSync(
     '/mnt/c/Windows/System32/curl.exe',
-    ['-s', '--max-time', '10', url],
-    { encoding: 'utf8', timeout: 12000 }
+    ['-s', '--max-time', '15', url],
+    { encoding: 'utf8', timeout: 18000, maxBuffer: 10 * 1024 * 1024 }
   );
   if (result.status !== 0 || !result.stdout) return null;
   return result.stdout;

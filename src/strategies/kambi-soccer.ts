@@ -58,7 +58,7 @@ function winCurl(url: string): string | null {
   const r = spawnSync(
     '/mnt/c/Windows/System32/curl.exe',
     ['-s', '--max-time', '20', url],
-    { encoding: 'utf8', timeout: 25000 }
+    { encoding: 'utf8', timeout: 25000, maxBuffer: 10 * 1024 * 1024 }
   );
   if (r.status !== 0) {
     console.log('[kambi] curl error status:', r.status, r.stderr?.slice(0, 100));
@@ -135,11 +135,9 @@ interface PolyMarket {
 async function fetchSoccerMarkets(): Promise<PolyMarket[]> {
   const markets: PolyMarket[] = [];
   try {
-    const res  = await fetch(
-      `${GAMMA_HOST}/markets?limit=500&active=true&closed=false`,
-      { headers: { 'User-Agent': 'Mozilla/5.0' } }
-    );
-    const all: any[] = await res.json();
+    const raw = winCurl(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`);
+    if (!raw) throw new Error('empty response');
+    const all: any[] = JSON.parse(raw);
     for (const m of all) {
       const q = (m.question ?? '').toLowerCase();
       // Filter to soccer/football markets
@@ -222,6 +220,14 @@ function findSignals(games: LiveGame[], markets: PolyMarket[]): Signal[] {
       const mentionsHome = teamInQuestion(game.homeName, q);
       const mentionsAway = teamInQuestion(game.awayName, q);
       if (!mentionsHome && !mentionsAway) continue;
+
+      // Women's team mismatch guard: don't match women's games to men's markets
+      const isWomensGame = /\(w\)|\bwomen\b|\bwomens\b/i.test(game.homeName) ||
+                           /\(w\)|\bwomen\b|\bwomens\b/i.test(game.awayName) ||
+                           /\bwomen\b|\bwomens\b/i.test(game.group);
+      const isWomensMarket = /\bwomen\b|\bwomens\b|\bwwc\b|\bwoman\b/i.test(q);
+      if (isWomensGame && !isWomensMarket) continue;
+      if (!isWomensGame && isWomensMarket) continue;
 
       // Determine which outcome to bet
       // "Will X win?" → YES if X is winning convincingly, NO if X is losing badly
