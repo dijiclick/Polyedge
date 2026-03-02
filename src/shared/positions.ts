@@ -7,7 +7,7 @@ export interface Position {
   tokenId:      string;
   question:     string;
   side:         'YES' | 'NO';
-  strategy:     'oracle-arb' | 'edge-ai' | 'crypto-oracle' | 'live-score';
+  strategy:     'oracle-arb' | 'edge-ai' | 'crypto-oracle' | 'live-score' | 'odds-arb';
   shares:       number;
   entryPrice:   number;
   usdcSpent:    number;

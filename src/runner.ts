@@ -61,6 +61,11 @@ async function main() {
     runners.push(runLiveScore);
   }
 
+  if (STRATEGY === 'both' || STRATEGY === 'odds') {
+    const { runOddsArb } = await import('./strategies/odds-arb.js');
+    runners.push(runOddsArb);
+  }
+
   // Run all strategies concurrently (they use setInterval + keep-alive internally)
   await Promise.all([
     ...runners.map(fn => fn().catch(e => {
