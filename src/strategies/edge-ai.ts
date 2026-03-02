@@ -179,7 +179,15 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           const liq = parseFloat(m.liquidityNum ?? m.liquidity ?? '0');
           if (liq < MIN_LIQUIDITY) continue;
           // Skip near-certain markets (no AI edge needed)
-          if (yes >= 0.90 || no >= 0.90) continue;
+          if (yes >= 0.92 || no >= 0.92) continue;
+
+          // Skip 50/50 markets closing > 2h from now — event hasn't happened yet,
+          // Perplexity will just say "no results". Focus on:
+          //   a) Skewed markets (>65¢ or <35¢) — market already has info  
+          //   b) Near-expiry (< 90 min) — event likely completed
+          const isSkewed = yes > 0.65 || yes < 0.35;
+          const isNearExpiry = minutesLeft < 90;
+          if (!isSkewed && !isNearExpiry) continue;
 
           results.push({
             conditionId: m.conditionId,

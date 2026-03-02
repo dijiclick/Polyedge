@@ -118,5 +118,20 @@
     "confidence": 0.97,
     "edge": 0.0050000000000000044,
     "signalReason": "Oracle lag: YES at 0.99, 3h left"
+  },
+  {
+    "id": "1772489551106-ru7j",
+    "betSize": 1,
+    "timestamp": "2026-03-02T22:12:31.106Z",
+    "resolved": false,
+    "strategy": "esports-oracle",
+    "category": "Esports-CS2",
+    "question": "Counter-Strike: Isurus vs Crashers - Map 1 Winner",
+    "conditionId": "0x823257b5370af380e7c818cc0a2245ca133f7a2a59600c1a5c11a33875c42d98",
+    "side": "YES",
+    "entryPrice": 0.9,
+    "confidence": 0.97,
+    "edge": 0.09999999999999998,
+    "signalReason": "Oracle lag: YES at 0.90, 5h left"
   }
 ]

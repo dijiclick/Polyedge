@@ -173,15 +173,55 @@ function normalize(s: string): string {
     .trim();
 }
 
+// Team name aliases: Kambi name → common Polymarket name variants
+const TEAM_ALIASES: Record<string, string[]> = {
+  'athletic bilbao': ['athletic club', 'bilbao', 'athletic'],
+  'atletico madrid': ['atletico', 'atletico de madrid', 'atl madrid'],
+  'real madrid': ['real madrid', 'madrid'],
+  'paris saint germain': ['psg', 'paris sg', 'paris saint-germain', 'paris'],
+  'borussia dortmund': ['dortmund', 'bvb', 'borussia'],
+  'borussia monchengladbach': ['gladbach', 'monchengladbach'],
+  'rb leipzig': ['red bull leipzig', 'rb leipzig', 'rasenball'],
+  'internazionale': ['inter milan', 'inter', 'fc inter'],
+  'ac milan': ['ac milan', 'milan'],
+  'ss lazio': ['lazio'],
+  'as roma': ['roma'],
+  'manchester united': ['man united', 'man utd', 'manchester utd'],
+  'manchester city': ['man city', 'manchester city'],
+  'tottenham hotspur': ['tottenham', 'spurs', 'hotspur'],
+  'west ham united': ['west ham'],
+  'aston villa': ['aston villa', 'villa'],
+  'newcastle united': ['newcastle'],
+  'benfica': ['sl benfica', 'sport lisboa e benfica'],
+  'sporting cp': ['sporting lisbon', 'sporting'],
+  'porto': ['fc porto'],
+  'ajax': ['ajax amsterdam', 'afc ajax'],
+  'psv': ['psv eindhoven'],
+  'celtic': ['celtic fc'],
+  'rangers': ['rangers fc', 'glasgow rangers'],
+};
+
 function teamInQuestion(teamName: string, question: string): boolean {
-  const q = normalize(question);
+  const q  = normalize(question);
   const tn = normalize(teamName);
-  // Exact team name match (most reliable)
+
+  // Exact match
   if (q.includes(tn)) return true;
-  // Match ALL words >= 5 chars from team name (must ALL appear, not just one)
+
+  // Check alias table
+  for (const [canonical, aliases] of Object.entries(TEAM_ALIASES)) {
+    const isThisTeam = tn === canonical || aliases.some(a => tn === a || tn.includes(a) || a.includes(tn));
+    if (isThisTeam) {
+      const matchesQ = q.includes(canonical) || aliases.some(a => q.includes(a));
+      if (matchesQ) return true;
+    }
+  }
+
+  // Word-based matching: ALL significant words must appear
   const words = tn.split(' ').filter(w => w.length >= 5);
   if (words.length >= 2) return words.every(w => q.includes(w));
-  // Single long word: must be word-boundary safe (not a substring of another word)
+
+  // Single significant word with word boundary
   if (words.length === 1) {
     const w = words[0];
     const idx = q.indexOf(w);

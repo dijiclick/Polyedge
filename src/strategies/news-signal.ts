@@ -29,13 +29,21 @@ const BET_SIZE_USD  = 1;
 // ─── RSS Feeds ────────────────────────────────────────────────────────────────
 
 const FEEDS = [
-  // Reuters via rss.app proxy (avoids WSL TLS issues)
-  { name: 'Reuters Politics', url: 'https://www.theguardian.com/us-news/rss' },
-  { name: 'Reuters Business', url: 'https://www.theguardian.com/business/rss' },
-  { name: 'Guardian World',   url: 'https://www.theguardian.com/world/rss' },
-  { name: 'Guardian Tech',    url: 'https://www.theguardian.com/us-news/trump-administration/rss' },
-  { name: 'Politico',         url: 'https://rss.politico.com/politics-news.xml' },
-  { name: 'BBC News',         url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+  // Guardian
+  { name: 'Guardian US',     url: 'https://www.theguardian.com/us-news/rss' },
+  { name: 'Guardian Business', url: 'https://www.theguardian.com/business/rss' },
+  { name: 'Guardian World',  url: 'https://www.theguardian.com/world/rss' },
+  { name: 'Guardian Trump',  url: 'https://www.theguardian.com/us-news/trump-administration/rss' },
+  { name: 'Guardian Middle East', url: 'https://www.theguardian.com/world/middleeast/rss' },
+  // Politico
+  { name: 'Politico',        url: 'https://rss.politico.com/politics-news.xml' },
+  // BBC
+  { name: 'BBC World',       url: 'https://feeds.bbci.co.uk/news/world/rss.xml' },
+  { name: 'BBC Middle East', url: 'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml' },
+  { name: 'BBC US/Canada',   url: 'https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml' },
+  // Reuters (via Yahoo Finance proxy)
+  { name: 'Reuters Top',     url: 'https://feeds.reuters.com/reuters/topNews' },
+  { name: 'Reuters Politics', url: 'https://feeds.reuters.com/Reuters/PoliticsNews' },
 ];
 
 // ─── Signal Rules ─────────────────────────────────────────────────────────────
@@ -255,6 +263,63 @@ const SIGNAL_RULES: SignalRule[] = [
     market:     /elon musk.{0,50}trillionaire/i,
     side:       'NO', confidence: 0.85,
     tag:        'Elon loses trillionaire status',
+  },
+  // === GEOPOLITICS / IRAN / MIDDLE EAST (2026-03-03 breaking news) ===
+  // US/Israel strikes Iran
+  {
+    headline:   /(us|united states|american|israel|israeli).{0,80}(strikes?|struck|bombs?|bombed|attacks?|attacked|missiles?).{0,60}iran/i,
+    market:     /(us|israel|trump).{0,60}(strike|attack|bomb|military action).{0,60}iran/i,
+    side:       'YES', confidence: 0.93,
+    tag:        'US/Israel strikes Iran',
+  },
+  // Iran retaliates / counter-strikes
+  {
+    headline:   /iran.{0,80}(retaliates?|retaliation|strikes?|fires?|launches?|missiles?|response).{0,60}(israel|us|saudi|uae|gulf|dubai|strait|hormuz)/i,
+    market:     /iran.{0,60}(retaliate|strike|attack|fire|launch)/i,
+    side:       'YES', confidence: 0.90,
+    tag:        'Iran retaliates / counter-strikes',
+  },
+  // Khamenei removed / killed / captured
+  {
+    headline:   /khamenei.{0,80}(killed|dead|removed|ousted|stepped down|captured|detained|fled)/i,
+    market:     /khamenei.{0,60}(out|removed|dead|killed|resign)/i,
+    side:       'YES', confidence: 0.95,
+    tag:        'Khamenei removed/killed',
+  },
+  // Strait of Hormuz closure / oil supply disruption
+  {
+    headline:   /(strait of hormuz|hormuz|oil supply|persian gulf).{0,80}(closed|blocked|disrupted|suspended|halted)/i,
+    market:     /(hormuz|oil|iran|gulf).{0,60}(close|block|disrupt|suspend)/i,
+    side:       'YES', confidence: 0.89,
+    tag:        'Strait of Hormuz disruption',
+  },
+  // Dubai / UAE attacked / safe haven shattered
+  {
+    headline:   /(dubai|uae|abu dhabi).{0,80}(attack|struck|missile|explosion|disrupted|evacuated|unsafe|shattered)/i,
+    market:     /(dubai|uae).{0,60}(attack|safe|stable|disrupted)/i,
+    side:       'YES', confidence: 0.88,
+    tag:        'Dubai/UAE attacked or destabilized',
+  },
+  // Ceasefire / peace talks Middle East
+  {
+    headline:   /(ceasefire|peace talks|truce|peace deal).{0,80}(iran|israel|gaza|lebanon|hezbollah|hamas)/i,
+    market:     /(ceasefire|truce|peace).{0,60}(iran|israel|gaza|middle east)/i,
+    side:       'YES', confidence: 0.87,
+    tag:        'Middle East ceasefire / peace talks',
+  },
+  // Oil price spike from Middle East conflict
+  {
+    headline:   /(oil|crude|brent|wti).{0,80}(surges?|spikes?|jumps?|soars?|rises? sharply).{0,40}(iran|middle east|war|conflict|hormuz)/i,
+    market:     /(oil|crude|brent).{0,50}(price|per barrel)/i,
+    side:       'YES', confidence: 0.82,
+    tag:        'Oil price spike from ME conflict',
+  },
+  // Texas primary results (happening today March 3)
+  {
+    headline:   /(paxton|cornyn|crockett|talarico).{0,80}(wins?|won|defeats?|defeated|advances?|leads?|projected)/i,
+    market:     /(paxton|cornyn|crockett|talarico).{0,60}(win|senate|primary|nominee)/i,
+    side:       'YES', confidence: 0.91,
+    tag:        'Texas Senate Primary result',
   },
 ];
 
