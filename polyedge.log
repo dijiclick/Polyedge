@@ -1,4 +1,4 @@
-[watchdog] Starting bot at Mon Mar  2 10:48:57 +03 2026
+[watchdog] Starting bot at Mon Mar  2 10:51:35 +03 2026
 🚀 Polymarket Trading Runner
    Mode: 🔴 LIVE
    Strategies: Oracle Arb + Edge AI + Crypto Oracle + Live Score
@@ -19,32 +19,32 @@ Risk: MEDIUM
 🚀 Odds Arb started | ARMED=true
 [tg] 📊 Odds Arb started | 🔴 LIVE
 
-[2026-03-02T07:49:01.094Z] ═══ Oracle Arb Cycle ═══
+[2026-03-02T07:51:39.824Z] ═══ Oracle Arb Cycle ═══
+[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.940
+[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.920
 
-[2026-03-02T07:49:01.141Z] ═══ Edge AI Cycle ═══
+[2026-03-02T07:51:40.029Z] ═══ Edge AI Cycle ═══
 
-[2026-03-02T07:49:01.142Z] ═══ Crypto Oracle Cycle ═══
-
-[2026-03-02T07:49:01.145Z] ═══ Live Score Cycle ═══
-
-[2026-03-02T07:49:01.150Z] ═══ Odds Arb Cycle ═══
+[2026-03-02T07:51:40.037Z] ═══ Odds Arb Cycle ═══
 [odds-arb] 13 upcoming games with odds
 [clob] Client init: signatureType=1 funder=0xc92fe1c5f324c58d0be12b8728be18a92375361f
-[oracle-arb] pos: Will Sinners win Best Original Screenplay at the 9 sell=0.940
+
+[2026-03-02T07:51:45.271Z] ═══ Live Score Cycle ═══
+
+[2026-03-02T07:51:45.277Z] ═══ Crypto Oracle Cycle ═══
+[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.900
 [clob] USDC.e balance (CLOB): $12.28
 [odds-arb] Gamma API unreachable
-[crypto] Live prices: BITCOIN=$65,925 | BTC=$65,925 | ETHEREUM=$1,939.77 | ETH=$1,939.77 | SOLANA=$83.12 | SOL=$83.12 | XRP=$1.35 | RIPPLE=$1.35 | BNB=$616.5 | BINANCE=$616.5
-[oracle-arb] pos: Will One Battle After Another win Best Adapted Scr sell=0.920
-[clob] USDC.e balance (CLOB): $12.28
+[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
+[crypto] Live prices: BITCOIN=$65,951 | BTC=$65,951 | ETHEREUM=$1,940.53 | ETH=$1,940.53 | SOLANA=$83.13 | SOL=$83.13 | XRP=$1.35 | RIPPLE=$1.35 | BNB=$616.72 | BINANCE=$616.72
+[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.898
 [live] 0 live games (soccer + NHL)
 [live] No live games right now
-[oracle-arb] pos: Will Frankenstein win Best Production Design at th sell=0.900
-[oracle-arb] pos: Will Paul Thomas Anderson win Best Director at the sell=0.940
-[crypto] 0 crypto markets closing in <24h
-[crypto] No crypto oracle edges this cycle
-[oracle-arb] pos: Will Frankenstein win Best Makeup and Hairstyling  sell=0.899
+[clob] USDC.e balance (CLOB): $12.28
 [oracle-arb] pos: Will Jessie Buckley win Best Actress at the 98th A sell=0.966
 [oracle-arb] pos: Will PH win the most seats in the 2026 Colombian S sell=0.970
+[crypto] 0 crypto markets closing in <24h
+[crypto] No crypto oracle edges this cycle
 [oracle-arb] pos: Will Frankenstein win Best Costume Design at the 9 sell=0.940
 [oracle-arb] At max positions (8/8)
 [tg] 🔍 Oracle Arb — max positions held (8/8), no new buys
@@ -56,5 +56,12 @@ Risk: MEDIUM (need 60%+ confidence)
 USDC: $12.28 | 🔴 LIVE
 
 [edge-ai] Analyzing: LoL: Weibo Gaming vs Top Esports - Game 1 Winner
-[edge-ai] Closes in 311min | YES=53.5%
+[edge-ai] Closes in 308min | YES=53.5%
 [llm] ✅ Perplexity proxy hit
+[llm] ✅ Perplexity proxy ask hit
+[edge-ai] AI: UNCERTAIN @ 50% confidence
+[edge-ai] Key fact: Failed to fetch content from Leaguepedia, Gol.gg, and LoL Esports schedule pages; no relevant result
+[edge-ai] Skip: confidence 50% < threshold 60% (general)
+
+[edge-ai] Analyzing: LoL: Nongshim Esports Academy vs KT Rolster Challengers - Game 1 Winne
+[edge-ai] Closes in 248min | YES=43.5%
