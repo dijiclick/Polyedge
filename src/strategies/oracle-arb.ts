@@ -73,7 +73,7 @@ async function scanMarkets(): Promise<Candidate[]> {
           // Liquidity filter
           if (liq < MIN_LIQUIDITY) continue;
           // Time filter: expired (oracle lag) OR within 14 days
-          if (!(hoursLeft < 0 || (hoursLeft > 0 && hoursLeft <= 336))) continue;
+          if (!(hoursLeft < 0 || (hoursLeft > 0 && hoursLeft <= 2160))) continue; // up to 90 days
 
           const edgePct     = ((1.0 - yes) / yes) * 100;
           const expiredBonus = hoursLeft < 0 ? 2.0 : 1.0;
