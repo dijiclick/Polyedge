@@ -104,6 +104,16 @@ function fetchLiveGames(): LiveGame[] {
     }
     if (homeOdds < 1.01 && awayOdds < 1.01) continue; // no odds available
 
+    // Skip FUT / eFootball virtual games — they have player names in parentheses
+    const isFutGame = /\([a-zA-Z0-9]{3,12}\)/.test(ev.homeName ?? '') ||
+                      /\([a-zA-Z0-9]{3,12}\)/.test(ev.awayName ?? '');
+    if (isFutGame) continue;
+
+    // Skip obscure South American / lower leagues without Polymarket coverage
+    const group = (ev.group ?? '').toLowerCase();
+    const hasPolymarketCoverage = /premier league|la liga|bundesliga|serie a|ligue 1|champions league|europa|eredivisie|primeira liga|brasileirao|mls|superliga|world cup|euro|copa/i.test(group);
+    if (!hasPolymarketCoverage) continue;
+
     // Implied probabilities (raw, no vig removal — conservative)
     const homeProb = homeOdds > 1 ? 1 / homeOdds : 0;
     const awayProb = awayOdds > 1 ? 1 / awayOdds : 0;
