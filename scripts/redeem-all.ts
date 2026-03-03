@@ -15,6 +15,11 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { placeSell, getClient, CLOB_HOST } from '../src/shared/clob.js';
 import { tg } from '../src/shared/telegram.js';
+import { RelayClient, RelayerTxType } from '@polymarket/builder-relayer-client';
+import { BuilderConfig } from '@polymarket/builder-signing-sdk';
+import { encodeFunctionData } from 'viem';
+import { Wallet } from '@ethersproject/wallet';
+import { JsonRpcProvider } from '@ethersproject/providers';
 
 // ─── Load env ────────────────────────────────────────────────────────────────
 
@@ -36,6 +41,61 @@ loadEnv('/home/ariad/.openclaw/workspace/.env');
 
 const ARMED = process.env.ARMED === 'true';
 const USER  = '0xc92fe1c5f324c58d0be12b8728be18a92375361f';
+
+// ─── CTF Redemption constants ────────────────────────────────────────────────
+
+const CTF_ADDRESS    = '0x4D97DCd97eC945f40cF65F87097ACe5EA0476045';
+const USDC_E_ADDRESS = '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174';
+const RELAYER_URL    = 'https://relayer-v2.polymarket.com/';
+const CHAIN_ID       = 137;
+const PARENT_COLLECTION_ID = ('0x' + '0'.repeat(64)) as `0x${string}`; // bytes32(0)
+const INDEX_SETS = [1n, 2n]; // both outcomes for binary markets
+
+const REDEEM_ABI = [{
+  name: 'redeemPositions' as const,
+  type: 'function' as const,
+  inputs: [
+    { name: 'collateralToken', type: 'address' as const },
+    { name: 'parentCollectionId', type: 'bytes32' as const },
+    { name: 'conditionId', type: 'bytes32' as const },
+    { name: 'indexSets', type: 'uint256[]' as const },
+  ],
+  outputs: [],
+  stateMutability: 'nonpayable' as const,
+}];
+
+let _relayClient: RelayClient | null = null;
+
+async function getRelayClient(): Promise<RelayClient> {
+  if (_relayClient) return _relayClient;
+
+  const pk = process.env.POLYMARKET_PRIVATE_KEY || process.env.PRIVATE_KEY;
+  if (!pk) throw new Error('No POLYMARKET_PRIVATE_KEY or PRIVATE_KEY env var set');
+  const provider = new JsonRpcProvider('https://polygon-bor-rpc.publicnode.com');
+  const wallet = new Wallet(pk.startsWith('0x') ? pk : '0x' + pk, provider);
+
+  // Use builder API credentials (pre-generated via createBuilderApiKey)
+  const bKey = process.env.BUILDER_API_KEY || '';
+  const bSecret = process.env.BUILDER_SECRET || '';
+  const bPassphrase = process.env.BUILDER_PASSPHRASE || '';
+
+  if (!bKey || !bSecret || !bPassphrase) {
+    // Fallback: try to create via CLOB client
+    console.log('[redeem-all] No BUILDER env vars — trying createBuilderApiKey...');
+    const clobClient = await getClient();
+    const creds = await (clobClient as any).createBuilderApiKey();
+    if (!creds?.key) throw new Error('Failed to create builder API key');
+    console.log(`[redeem-all] Builder API key: ${creds.key.slice(0, 8)}...`);
+    const config = new BuilderConfig({ localBuilderCreds: { key: creds.key, secret: creds.secret, passphrase: creds.passphrase } });
+    _relayClient = new RelayClient(RELAYER_URL, CHAIN_ID, wallet, config, RelayerTxType.PROXY);
+    return _relayClient;
+  }
+
+  console.log(`[redeem-all] Builder API key: ${bKey.slice(0, 8)}...`);
+  const builderConfig = new BuilderConfig({ localBuilderCreds: { key: bKey, secret: bSecret, passphrase: bPassphrase } });
+  _relayClient = new RelayClient(RELAYER_URL, CHAIN_ID, wallet, builderConfig, RelayerTxType.PROXY);
+  return _relayClient;
+}
 
 // ─── Windows curl (WSL2) ─────────────────────────────────────────────────────
 
@@ -140,7 +200,7 @@ async function main() {
       continue;
     }
 
-    // ── Case B: WON (curPrice=1, redeemable) — redeem ──
+    // ── Case B: WON (curPrice=1, redeemable) — redeem via CTF contract ──
     if (pos.curPrice === 1 && pos.redeemable) {
       if (!ARMED) {
         console.log(`    [DRY RUN] Would REDEEM ${shares.toFixed(4)} winning shares (conditionId=${pos.conditionId.slice(0, 16)}...)`);
@@ -149,22 +209,32 @@ async function main() {
       }
 
       try {
-        // Try SDK redeemPositions first
-        const client = await getClient();
-        if (typeof (client as any).redeemPositions === 'function') {
-          const resp = await (client as any).redeemPositions([pos.conditionId]);
-          console.log(`    ✅ Redeemed via SDK — ${JSON.stringify(resp).slice(0, 120)}`);
-          results.push({ market: label, shares, price: 1, status: 'REDEEMED (SDK)' });
+        const relay = await getRelayClient();
+
+        const data = encodeFunctionData({
+          abi: REDEEM_ABI,
+          functionName: 'redeemPositions',
+          args: [USDC_E_ADDRESS, PARENT_COLLECTION_ID, pos.conditionId as `0x${string}`, INDEX_SETS],
+        });
+
+        const tx = { to: CTF_ADDRESS, data, value: '0' };
+        console.log(`    Submitting redeem tx to relayer...`);
+        const response = await relay.execute([tx], `Redeem ${label.slice(0, 40)}`);
+        console.log(`    Relay txId: ${response.transactionID} | state: ${response.state}`);
+
+        const result = await response.wait();
+        if (result) {
+          console.log(`    Redeemed — txHash: ${result.transactionHash}`);
+          results.push({ market: label, shares, price: 1, status: `REDEEMED (${result.transactionHash?.slice(0, 16)}...)` });
         } else {
-          // Fallback: raw POST to CLOB /redeem endpoint
-          const redeemUrl = `${CLOB_HOST}/redeem`;
-          const body = JSON.stringify({ conditionId: pos.conditionId });
-          const resp = winCurlPost(redeemUrl, body);
-          console.log(`    ✅ Redeemed via POST — ${(resp || '').slice(0, 120)}`);
-          results.push({ market: label, shares, price: 1, status: 'REDEEMED (POST)' });
+          console.log(`    Redeem submitted but status unknown`);
+          results.push({ market: label, shares, price: 1, status: `REDEEMED (pending)` });
         }
+
+        // Brief delay between redemptions
+        await new Promise(r => setTimeout(r, 2000));
       } catch (e: any) {
-        console.error(`    ❌ Redeem failed: ${e.message}`);
+        console.error(`    Redeem failed: ${e.message}`);
         results.push({ market: label, shares, price: 1, status: `ERROR: ${e.message}` });
       }
 
