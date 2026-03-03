@@ -555,8 +555,22 @@ async function checkVolumeSpikes(): Promise<void> {
       if (yesPrice < 0.30 || yesPrice > 0.70) continue;
 
       spikeCount++;
+      if (spikeCount > 5) break;
       console.log(`[news] 📊 VOLUME SPIKE: ${m.question?.slice(0, 80)}`);
       console.log(`  Vol24h: $${(vol / 1000).toFixed(0)}k | YES: ${(yesPrice * 100).toFixed(0)}¢ | Liq: $${parseFloat(m.liquidityNum ?? m.liquidity ?? '0').toFixed(0)}`);
+
+      const side: 'YES' | 'NO' = /\b(win|above|yes|increase|rise)\b/i.test(m.question ?? '') ? 'YES' : 'NO';
+      logPaperTrade({
+        strategy: 'news-signal',
+        category: 'volume-spike',
+        question: m.question,
+        conditionId: m.conditionId,
+        side,
+        entryPrice: side === 'YES' ? yesPrice : 1 - yesPrice,
+        confidence: 0.65,
+        edge: 0.15,
+        signalReason: 'Volume spike >$50k with uncertain price 30-70c',
+      });
     }
     console.log(`[news] ${spikeCount} volume spike signals detected`);
   } catch (e: any) {

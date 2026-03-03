@@ -523,5 +523,35 @@
     "confidence": 0.97,
     "edge": 0.07250000000000001,
     "signalReason": "Oracle lag: YES at 0.93, 2h left"
+  },
+  {
+    "id": "1772573587180-5434",
+    "betSize": 1,
+    "timestamp": "2026-03-03T21:33:07.180Z",
+    "resolved": false,
+    "strategy": "esports-oracle",
+    "category": "Esports-LoL",
+    "question": "Valorant: G2 Esports vs XLG Gaming - Map 2 Winner",
+    "conditionId": "0xd3df7d09f2bd60821081045a276a9821da48698aa156f6ffee1c8a6ca0b6dc6e",
+    "side": "YES",
+    "entryPrice": 0.95,
+    "confidence": 0.97,
+    "edge": 0.050000000000000044,
+    "signalReason": "Oracle lag: YES at 0.95, 4h left"
+  },
+  {
+    "id": "1772573587181-9xid",
+    "betSize": 1,
+    "timestamp": "2026-03-03T21:33:07.181Z",
+    "resolved": false,
+    "strategy": "esports-oracle",
+    "category": "Esports-LoL",
+    "question": "LoL: The Otter Side vs Crusaders - Game 3 Winner",
+    "conditionId": "0x2b53042027e91936ee7fcf9ecd92efd0d1adde55623f758ae9724502d9d53db7",
+    "side": "YES",
+    "entryPrice": 0.97,
+    "confidence": 0.97,
+    "edge": 0.030000000000000027,
+    "signalReason": "Oracle lag: YES at 0.97, 3h left"
   }
 ]
