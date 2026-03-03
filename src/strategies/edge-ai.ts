@@ -226,6 +226,12 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
 
   const liveCount = urgent.length;
   console.log(`[edge-ai] ${results.length} qualifying markets in 0-6h window (${liveCount} live/ending ≤45min) → analyzing top ${top.length}`);
+  if (top.length > 0) {
+    console.log(`[edge-ai] Top markets:`);
+    for (const mk of top.slice(0, 5)) {
+      console.log(`  → [${(mk.hoursLeft * 60).toFixed(0)}min] YES=${(mk.yesPrice * 100).toFixed(0)}% liq=$${mk.liquidity.toFixed(0)} ${mk.question.slice(0, 70)}`);
+    }
+  }
   return top;
 }
 
