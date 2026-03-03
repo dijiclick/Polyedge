@@ -30,62 +30,46 @@ echo "[$(date)] Silent strategies: $SILENT | Total trades: $TOTAL" >> $LOG
 ERRORS=$(tail -200 /tmp/paper-trading.log 2>/dev/null | grep -c "error\|Error\|failed\|invalid signature" || echo 0)
 SIG_ERRORS=$(tail -200 /tmp/paper-trading.log 2>/dev/null | grep -c "invalid signature" || echo 0)
 
-# 4. Build improvement brief
+# 4. Build autonomous prompt with runtime values
 BRIEF=/tmp/improve-brief-$(date +%s).md
-cat > $BRIEF << BRIEF_EOF
-# Auto-Improve Brief — $(date)
+PROMPT="You are autonomously improving the Polyedge trading bot. DO NOT ask questions. DO NOT stop for confirmation. Just read, analyze, fix, commit.
 
-## Current State
+Working dir: /home/ariad/.openclaw/workspace/Polyedge/
+Source .env first.
+
+Current issues detected:
+- Silent strategies (0 signals): $SILENT
+- Signature errors in last 200 lines: $SIG_ERRORS
 - Total paper trades: $TOTAL
-- Silent strategies (0 signals ever): $SILENT
-- Recent errors in log: $ERRORS
-- Invalid signature errors: $SIG_ERRORS
 
-## Strategy Signal Counts
-$(echo $ANALYSIS | python3 -c "import sys,json; d=json.loads(sys.stdin.read()); [print(f'- {s}') for s in d['silent']]" 2>/dev/null | sed 's/^/SILENT: /')
-$(echo $ANALYSIS | python3 -c "import sys,json; d=json.loads(sys.stdin.read()); print(d['active'])" 2>/dev/null | tr ',' '\n' | sed 's/^/ACTIVE: /')
+Rules:
+1. Pick the top 2 issues
+2. Read the relevant source file
+3. Fix it — make your best judgment, do not ask
+4. npx tsx --check the file
+5. git add -A && git commit --no-verify -m 'auto-improve: describe what you fixed' && git push --no-verify
+6. Restart bot: pkill -f 'tsx src/runner' || true; sleep 2; cd /home/ariad/.openclaw/workspace/Polyedge && source .env && ARMED=false ORACLE_ARMED=true nohup npx tsx src/runner.ts --monitor >> /tmp/paper-trading.log 2>&1 &
 
-## What to improve
+Fix priority order:
+1. If SIG_ERRORS > 3: fix invalid signature in src/shared/clob.ts — check L2 auth header generation, nonce handling
+2. If crypto-oracle silent: fix title regex in src/strategies/crypto-oracle.ts — make it match any market with bitcoin/btc/eth/sol in title
+3. If news-signal < 5 trades: lower volume threshold from 50000 to 15000 in src/strategies/news-signal.ts
+4. If edge-ai < 2 trades: lower confidence threshold from 0.60 to 0.55 in src/strategies/edge-ai.ts
+5. If tennis-arb silent: fix player name matching in src/strategies/tennis-arb.ts — lowercase + partial match
+6. If kambi-soccer silent: expand alias table in src/strategies/kambi-soccer.ts with 20 more top teams
+7. Always: scan the last 100 lines of /tmp/paper-trading.log for any new error patterns and fix them"
 
-### If SIG_ERRORS > 5:
-Fix the invalid signature bug in src/shared/clob.ts. The CLOB client is sending orders with bad signatures. Check if the nonce or timestamp is stale. Try regenerating the L2 auth headers before each order.
-
-### If 'crypto-oracle' is SILENT:
-In src/strategies/crypto-oracle.ts, the market title matching is failing. Add console.log to show what titles are being seen. Make the regex much looser — match any market with 'Bitcoin', 'BTC', 'Ethereum', 'ETH', 'price' in the title.
-
-### If 'news-signal' is SILENT (0 RSS signals, only volume spikes):
-In src/strategies/news-signal.ts, RSS feeds may be timing out. Add fallback: fetch https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=\${NEWS_API_KEY} if available. Also lower the volume threshold from 50000 to 20000 to catch more markets.
-
-### If 'edge-ai' has < 3 signals:
-In src/strategies/edge-ai.ts, check if Perplexity calls are all returning UNCERTAIN. If > 80% of calls return UNCERTAIN, lower the confidence threshold for edge-ai from 0.60 to 0.55.
-
-### If 'kambi-soccer' is SILENT:
-In src/strategies/kambi-soccer.ts, check team name matching. Print what Kambi team names vs Polymarket team names look like. The alias table may be missing teams.
-
-### If 'tennis-arb' is SILENT and Indian Wells is active:
-In src/strategies/tennis-arb.ts, Indian Wells ATP/WTA is active. Check if player name matching works. ESPN data vs Polymarket names may differ.
-
-### Always:
-- Review recent paper trade confidence scores — if avg < 0.65, strategies are uncertain
-- Check if any strategies have high confidence (>0.80) but wrong outcome — adjust signal logic
-- Look for new high-volume Polymarket categories we are not covering
-
-## Instructions for Claude Code
-Pick the 2 most impactful fixes from above based on current state.
-Implement them. Test with npx tsx --check.
-git add -A && git commit --no-verify -m "auto-improve: [describe changes]" && git push --no-verify
-Then restart bot: send SIGTERM to tsx runner process, restart with: source .env && ARMED=false ORACLE_ARMED=true npx tsx src/runner.ts --monitor 2>&1 | tee /tmp/paper-trading.log &
-BRIEF_EOF
-
+# Log the prompt for debugging
+echo "$PROMPT" > $BRIEF
 echo "[$(date)] Brief written to $BRIEF" >> $LOG
 echo "--- BRIEF ---" >> $LOG
 cat $BRIEF >> $LOG
 
-# 5. Spawn Claude Code to implement fixes
+# 5. Spawn Claude Code to implement fixes — fully autonomous, no questions
 unset CLAUDECODE 2>/dev/null || true
 echo "[$(date)] Spawning Claude Code for improvements..." >> $LOG
 timeout 600 claude --dangerously-skip-permissions \
-  -p "$(cat $BRIEF)" \
+  -p "$PROMPT" \
   --output-format text >> $LOG 2>&1 || echo "[$(date)] Claude Code timed out" >> $LOG
 
 echo "[$(date)] Auto-improve cycle done" >> $LOG
