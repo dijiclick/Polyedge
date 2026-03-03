@@ -128,6 +128,10 @@ async function runCycle(): Promise<void> {
       return hoursLeft > 0 && hoursLeft < 24;
     });
     console.log(`[crypto] ${markets.length} crypto markets closing in <24h`);
+    if (markets.length > 0) {
+      const preview = markets.slice(0, 3).map((m: any) => m.question?.slice(0, 80) || '?');
+      console.log(`[crypto] first 3: ${preview.join(' | ')}`);
+    }
   } catch (e: any) {
     console.log('[crypto] Market fetch failed:', e.message);
     return;

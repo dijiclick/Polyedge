@@ -16,7 +16,8 @@ import { logPaperTrade } from '../shared/paper-trader.js';
 import { detectCategory } from '../shared/execute-signal.js';
 
 const ARMED           = process.env.ARMED === 'true';
-const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS   || '4');
+const ORACLE_ARMED    = process.env.ORACLE_ARMED === 'true';
+const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS   || '20');
 const MIN_YES_PRICE   = parseFloat(process.env.MIN_YES_PRICE  || '0.88');
 const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY  || '200');
 const SELL_AT         = parseFloat(process.env.SELL_AT        || '0.98');
@@ -114,6 +115,70 @@ async function scanMarkets(): Promise<Candidate[]> {
     }
   }
 
+  // Fetch recently-closed markets (ended 0-3 days ago, not yet resolved — prime oracle lag targets)
+  const seenIds = new Set(candidates.map(c => c.conditionId));
+  for (let offset = 0; offset < 500; offset += 100) {
+    try {
+      const res = await fetch(
+        `${GAMMA_HOST}/markets?closed=true&limit=100&offset=${offset}`,
+        { headers: { 'User-Agent': 'Mozilla/5.0' } }
+      );
+      const batch: any[] = await res.json();
+      if (!Array.isArray(batch) || batch.length === 0) break;
+
+      for (const m of batch) {
+        try {
+          if (seenIds.has(m.conditionId)) continue;
+          const prices = JSON.parse(m.outcomePrices ?? '[]');
+          if (prices.length < 2) continue;
+
+          const yes      = parseFloat(prices[0]);
+          const endDate  = m.endDate ? new Date(m.endDate) : null;
+          if (!endDate || isNaN(yes)) continue;
+
+          const hoursLeft = (endDate.getTime() - now) / 3_600_000;
+
+          // Only include markets that ended 0-3 days ago
+          if (!(hoursLeft < 0 && hoursLeft >= -72)) continue;
+
+          const liq    = parseFloat(m.liquidityNum ?? m.liquidity ?? '0');
+          const vol24h = parseFloat(m.volume24hr ?? '0');
+
+          if (yes < MIN_YES_PRICE || yes > 0.985) continue;
+          if (liq < MIN_LIQUIDITY) continue;
+
+          const edgePct      = ((1.0 - yes) / yes) * 100;
+          const expiredBonus = 2.0; // always expired
+          const q = (m.question ?? '').toLowerCase();
+          const isSports = /nba|nhl|nfl|mlb|premier league|bundesliga|serie a|la liga|ligue 1|champions league|europa league|soccer|football|basketball|hockey|baseball|tennis/i.test(q);
+          const isCrypto = /bitcoin|btc|ethereum|eth|crypto|solana|binance/i.test(q);
+          const isAward  = /oscar|emmy|grammy|golden globe|award|winner/i.test(q);
+          const categoryMult = isSports ? 1.4 : isAward ? 1.3 : isCrypto ? 1.1 : 1.0;
+          const volBoost = vol24h > 5000 ? 1.3 : vol24h > 1000 ? 1.15 : 1.0;
+          const score = edgePct * Math.log(liq + 1) * expiredBonus * categoryMult * volBoost;
+
+          candidates.push({
+            conditionId: m.conditionId,
+            question:    m.question ?? '',
+            yesPrice:    yes,
+            liquidity:   liq,
+            volume24h:   vol24h,
+            hoursLeft,
+            edgePct,
+            score,
+            tokenId:     '',
+          });
+          seenIds.add(m.conditionId);
+        } catch {}
+      }
+
+      if (batch.length < 100) break;
+    } catch (e) {
+      console.error(`[oracle-arb] closed-market scan error at offset ${offset}:`, (e as Error).message);
+      break;
+    }
+  }
+
   // Sort by score, take top 50
   candidates.sort((a, b) => b.score - a.score);
   const top50 = candidates.slice(0, 50);
@@ -166,7 +231,7 @@ async function runCycle(): Promise<void> {
           `Profit: +$${profit.toFixed(2)} (+${profitPct}%)`
         );
 
-        if (ARMED && !pos.dryRun) {
+        if ((ARMED || ORACLE_ARMED) && !pos.dryRun) {
           const sellId = await placeSell({ tokenId: pos.tokenId, shares: pos.shares, price: sellPrice });
           console.log(`[oracle-arb] sell order: ${sellId}`);
         }
@@ -190,14 +255,14 @@ async function runCycle(): Promise<void> {
   const heldIds    = currentOpen.map(p => p.id);
   const fresh      = candidates.filter(c => !heldIds.includes(c.conditionId));
 
-  let usdc = ARMED ? await getUsdcBalance() : 10.65;
+  let usdc = (ARMED || ORACLE_ARMED) ? await getUsdcBalance() : 10.65;
   console.log(`[oracle-arb] USDC: $${usdc.toFixed(2)} | candidates: ${fresh.length}`);
 
   await tg(
     `🔍 <b>Oracle Arb Scan</b>\n` +
     `Actionable: ${candidates.length} | Fresh: ${fresh.length}\n` +
     `Positions: ${currentOpen.length}/${MAX_POSITIONS} | USDC: $${usdc.toFixed(2)}\n` +
-    `Mode: ${ARMED ? '🔴 LIVE' : '🟡 DRY-RUN'}`
+    `Mode: ${(ARMED || ORACLE_ARMED) ? '🔴 LIVE' : '🟡 DRY-RUN'}`
   );
 
   let bought = 0;
@@ -218,7 +283,7 @@ async function runCycle(): Promise<void> {
       : `⏳ Expires in ${c.hoursLeft.toFixed(0)}h`;
 
     const msg =
-      `🟢 <b>Oracle Arb Buy ${ARMED ? '[LIVE]' : '[DRY-RUN]'}</b>\n` +
+      `🟢 <b>Oracle Arb Buy ${(ARMED || ORACLE_ARMED) ? '[LIVE]' : '[DRY-RUN]'}</b>\n` +
       `Market: ${c.question.slice(0, 80)}\n` +
       `YES: ${(c.yesPrice * 100).toFixed(1)}¢ | Edge: ${c.edgePct.toFixed(1)}%\n` +
       `${timeLabel}\n` +
@@ -229,7 +294,7 @@ async function runCycle(): Promise<void> {
     console.log(msg.replace(/<[^>]+>/g, ''));
     await tg(msg);
 
-    if (ARMED) {
+    if (ARMED || ORACLE_ARMED) {
       try {
         const { orderId, shares: filled } = await placeBuy({
           tokenId: c.tokenId, conditionId: c.conditionId, price: c.yesPrice, usdcAmount: bet,
@@ -275,8 +340,8 @@ async function runCycle(): Promise<void> {
 export async function runOracleArb(): Promise<void> {
   const mode = process.argv[2];
   if (mode === '--monitor') {
-    console.log(`🚀 Oracle Arb Monitor started | ARMED=${ARMED} | interval=${SCAN_INTERVAL / 60_000}min`);
-    await tg(`🤖 Oracle Arb started | ${ARMED ? '🔴 LIVE' : '🟡 DRY-RUN'}`);
+    console.log(`🚀 Oracle Arb Monitor started | ARMED=${ARMED} ORACLE_ARMED=${ORACLE_ARMED} | interval=${SCAN_INTERVAL / 60_000}min`);
+    await tg(`🤖 Oracle Arb started | ${(ARMED || ORACLE_ARMED) ? '🔴 LIVE' : '🟡 DRY-RUN'}`);
     await runCycle();
     setInterval(() => runCycle().catch(console.error), SCAN_INTERVAL);
     await new Promise(() => {}); // keep alive
