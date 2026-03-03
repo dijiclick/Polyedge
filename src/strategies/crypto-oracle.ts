@@ -84,26 +84,65 @@ function normalizeCoin(raw: string): string {
   return c;
 }
 
+const CRYPTO_KEYWORDS = /bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb/i;
+const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?k?)/g;
+const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least/i;
+const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
+const DIR_BETWEEN     = /between/i;
+
 function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' | 'between'; upperBound?: number } | null {
-  // 1) "between $X and $Y"
+  // 1) Strict: "between $X and $Y"
   const bm = question.match(
     /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?k?)\s+and\s+\$?([\d,]+(?:\.\d+)?k?)/i
   );
   if (bm) {
+    console.log(`[crypto-oracle] Parsed (strict-between): ${normalizeCoin(bm[1])} between $${bm[2]} and $${bm[3]} from: ${question.slice(0, 80)}`);
     return { coin: normalizeCoin(bm[1]), target: parsePrice(bm[2]), direction: 'between', upperBound: parsePrice(bm[3]) };
   }
 
-  // 2) "above/below/hit/reach $X"
+  // 2) Strict: "above/below/hit/reach $X"
   const m = question.match(
     /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?k?)/i
   );
-  if (!m) return null;
+  if (m) {
+    const dirRaw = m[2].toLowerCase();
+    const direction = (dirRaw.includes('below') || dirRaw.includes('under') || dirRaw.includes('lower'))
+      ? 'below' as const : 'above' as const;
+    console.log(`[crypto-oracle] Parsed (strict): ${normalizeCoin(m[1])} ${direction} $${m[3]} from: ${question.slice(0, 80)}`);
+    return { coin: normalizeCoin(m[1]), target: parsePrice(m[3]), direction };
+  }
 
-  const dirRaw = m[2].toLowerCase();
-  const direction = (dirRaw.includes('below') || dirRaw.includes('under') || dirRaw.includes('lower'))
-    ? 'below' : 'above';
+  // 3) FALLBACK: loose match — any crypto keyword + any dollar amount + optional direction
+  const coinMatch = question.match(CRYPTO_KEYWORDS);
+  if (!coinMatch) {
+    console.log(`[crypto-oracle] No crypto keyword found in: ${question.slice(0, 80)}`);
+    return null;
+  }
+  const coin = normalizeCoin(coinMatch[0]);
 
-  return { coin: normalizeCoin(m[1]), target: parsePrice(m[3]), direction };
+  // Extract all dollar amounts
+  const prices: number[] = [];
+  let pm;
+  while ((pm = PRICE_PATTERN.exec(question)) !== null) prices.push(parsePrice(pm[1]));
+  if (prices.length === 0) {
+    console.log(`[crypto-oracle] No price found in: ${question.slice(0, 80)}`);
+    return null;
+  }
+
+  // Check for "between" with two prices
+  if (DIR_BETWEEN.test(question) && prices.length >= 2) {
+    const sorted = [prices[0], prices[1]].sort((a, b) => a - b);
+    console.log(`[crypto-oracle] Parsed (fallback-between): ${coin} between $${sorted[0]} and $${sorted[1]} from: ${question.slice(0, 80)}`);
+    return { coin, target: sorted[0], direction: 'between', upperBound: sorted[1] };
+  }
+
+  // Determine direction from context
+  let direction: 'above' | 'below' = 'above'; // default to "above" (will price reach X?)
+  if (DIR_BELOW.test(question)) direction = 'below';
+  else if (DIR_ABOVE.test(question)) direction = 'above';
+
+  console.log(`[crypto-oracle] Parsed (fallback): ${coin} ${direction} $${prices[0]} from: ${question.slice(0, 80)}`);
+  return { coin, target: prices[0], direction };
 }
 
 function erf(x: number): number {
@@ -151,10 +190,24 @@ async function runCycle(): Promise<void> {
       const hoursLeft = (endMs - now) / 3_600_000;
       return hoursLeft > 0 && hoursLeft < 24;
     });
-    console.log(`[crypto] ${markets.length} crypto markets closing in <24h`);
+    console.log(`[crypto] ${markets.length} crypto markets closing in <24h (from ${all.length} total)`);
     if (markets.length > 0) {
-      const preview = markets.slice(0, 3).map((m: any) => m.question?.slice(0, 80) || '?');
-      console.log(`[crypto] first 3: ${preview.join(' | ')}`);
+      console.log(`[crypto-oracle] All crypto questions:`);
+      for (const mk of markets.slice(0, 10)) console.log(`  → ${mk.question}`);
+    } else {
+      // Show what was filtered out for debugging
+      const cryptoAll = all.filter((mk: any) => {
+        const q = (mk.question || '').toLowerCase();
+        return Object.values(COIN_IDS).flat().some(c => q.includes(c));
+      });
+      console.log(`[crypto-oracle] Found ${cryptoAll.length} crypto markets total but none closing in <24h`);
+      if (cryptoAll.length > 0) {
+        for (const mk of cryptoAll.slice(0, 5)) {
+          const endMs = mk.endDate ? new Date(mk.endDate).getTime() : 0;
+          const hoursLeft = (endMs - now) / 3_600_000;
+          console.log(`  → [${hoursLeft.toFixed(0)}h left] ${mk.question?.slice(0, 80)}`);
+        }
+      }
     }
   } catch (e: any) {
     console.log('[crypto] Market fetch failed:', e.message);
@@ -169,7 +222,10 @@ async function runCycle(): Promise<void> {
     if (heldIds.includes(m.conditionId)) continue;
 
     const parsed = parsePriceTarget(m.question);
-    if (!parsed) continue;
+    if (!parsed) {
+      console.log(`[crypto-oracle] ⚠ Unparseable market: ${m.question}`);
+      continue;
+    }
 
     const livePrice = prices[parsed.coin];
     if (!livePrice) continue;

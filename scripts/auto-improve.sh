@@ -27,8 +27,10 @@ TOTAL=$(echo $ANALYSIS | python3 -c "import sys,json; d=json.loads(sys.stdin.rea
 echo "[$(date)] Silent strategies: $SILENT | Total trades: $TOTAL" >> $LOG
 
 # 3. Check recent polyedge log for errors
-ERRORS=$(tail -200 /tmp/paper-trading.log 2>/dev/null | grep -c "error\|Error\|failed\|invalid signature" || echo 0)
-SIG_ERRORS=$(tail -200 /tmp/paper-trading.log 2>/dev/null | grep -c "invalid signature" || echo 0)
+ERRORS=$(tail -200 /tmp/paper-trading.log 2>/dev/null | grep -c "error\|Error\|failed\|invalid signature" || true)
+ERRORS=${ERRORS:-0}
+SIG_ERRORS=$(tail -200 /tmp/paper-trading.log 2>/dev/null | grep -c "invalid signature" || true)
+SIG_ERRORS=${SIG_ERRORS:-0}
 
 # 4. Build autonomous prompt with runtime values
 BRIEF=/tmp/improve-brief-$(date +%s).md

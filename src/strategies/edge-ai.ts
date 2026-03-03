@@ -85,19 +85,19 @@ function isKnownLeagueOrType(question: string): boolean {
 
 // Minimum AI confidence required to place a trade
 const RISK_THRESHOLDS: Record<'LOW' | 'MEDIUM' | 'HIGH', number> = {
-  LOW:    0.75,
-  MEDIUM: 0.60,  // lowered: 70% was too restrictive, never fired
-  HIGH:   0.50,
+  LOW:    0.70,
+  MEDIUM: 0.55,  // lowered: 60% was still too restrictive, 0 signals
+  HIGH:   0.48,
 };
 
 // Per-event-type confidence overrides (some events are more predictable)
 const EVENT_THRESHOLDS: Partial<Record<string, number>> = {
-  crypto_price:      0.62,
-  election:          0.65,
-  sports_award:      0.60,
-  soccer_match:      0.63,  // live score available
-  basketball_game:   0.63,
-  general:           0.60,
+  crypto_price:      0.57,
+  election:          0.60,
+  sports_award:      0.55,
+  soccer_match:      0.58,  // live score available
+  basketball_game:   0.58,
+  general:           0.55,
 };
 
 interface MarketInfo {
@@ -562,11 +562,11 @@ async function runCycle(): Promise<void> {
       const tokenId    = targetToken.token_id;
       const entryPrice = buySide === 'YES' ? market.yesPrice : market.noPrice;
 
-      // EDGE CHECK: only bet if market price is meaningfully wrong (≥8% edge)
+      // EDGE CHECK: only bet if market price is meaningfully wrong (≥5% edge)
       // If AI says YES @ 70% but market already shows 68%, edge is only 2% — not worth it
       const edge = prediction.confidence - entryPrice;
-      if (Math.abs(edge) < 0.08) {
-        console.log(`[edge-ai] Skip: insufficient edge ${(edge * 100).toFixed(1)}% (need ≥8%)`);
+      if (Math.abs(edge) < 0.05) {
+        console.log(`[edge-ai] Skip: insufficient edge ${(edge * 100).toFixed(1)}% (need ≥5%)`);
         continue;
       }
 
