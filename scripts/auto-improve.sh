@@ -82,6 +82,7 @@ echo "--- BRIEF ---" >> $LOG
 cat $BRIEF >> $LOG
 
 # 5. Spawn Claude Code to implement fixes
+unset CLAUDECODE 2>/dev/null || true
 echo "[$(date)] Spawning Claude Code for improvements..." >> $LOG
 timeout 600 claude --dangerously-skip-permissions \
   -p "$(cat $BRIEF)" \
