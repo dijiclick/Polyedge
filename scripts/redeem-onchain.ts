@@ -178,10 +178,20 @@ async function main() {
       console.log(`    Submitting to relayer...`);
       const tx = { to: CTF_ADDRESS, data: calldata, value: '0' };
       const response = await relayClient.execute([tx], `Redeem ${pos.label}`);
+      const txId = (response as any).transactionId || (response as any).transactionID || '';
+      console.log(`    Relay txId: ${txId}`);
       console.log(`    Waiting for tx confirmation...`);
-      const result = await response.wait();
-      console.log(`    ✅ Redeemed! TX: ${JSON.stringify(result).slice(0, 200)}`);
-      results.push({ label: pos.label, shares: match?.size ?? 0, status: `REDEEMED (tx: ${(result as any)?.transactionHash?.slice(0, 16) || 'pending'}...)` });
+      try {
+        const result = await response.wait();
+        const txHash = (result as any)?.transactionHash || '';
+        console.log(`    ✅ Redeemed! TX: ${txHash}`);
+        results.push({ label: pos.label, shares: match?.size ?? 0, status: `REDEEMED (${txHash.slice(0, 18)}...)` });
+      } catch (waitErr: any) {
+        // Relay may report failure even when on-chain tx succeeded — check txId
+        console.log(`    ⚠ Relay reported issue: ${waitErr.message?.slice(0, 100)}`);
+        console.log(`    Check on-chain: the relay tx may have succeeded despite the error.`);
+        results.push({ label: pos.label, shares: match?.size ?? 0, status: `RELAY_WARN (txId: ${txId})` });
+      }
 
     } catch (e: any) {
       console.error(`    ❌ Redeem failed: ${e.message?.slice(0, 300)}`);
