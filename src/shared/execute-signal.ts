@@ -9,7 +9,7 @@
  */
 
 import { logPaperTrade, type PaperTrade } from './paper-trader.js';
-import { getUsdcBalance, placeBuy, getClobMarket } from './clob.js';
+import { getUsdcBalance, placeBuy, placeSell, getClobMarket } from './clob.js';
 import { addPosition } from './positions.js';
 import { tg } from './telegram.js';
 
@@ -50,6 +50,15 @@ export interface SignalParams {
   confidence:   number;
   edge:         number;
   signalReason: string;
+}
+
+async function placeAutoLimitSell(tokenId: string, conditionId: string, shares: number): Promise<void> {
+  try {
+    const orderId = await placeSell({ tokenId, conditionId, shares, price: 0.99 });
+    console.log(`   [AUTO-SELL] Limit sell placed @ $0.99 | ${shares} shares | orderId: ${orderId}`);
+  } catch (e: any) {
+    console.log(`   [AUTO-SELL] ⚠️ Failed to place limit sell: ${e.message}`);
+  }
 }
 
 export async function executeSignal(params: SignalParams): Promise<boolean> {
@@ -109,6 +118,9 @@ export async function executeSignal(params: SignalParams): Promise<boolean> {
       cost:        BET_SIZE,
       strategy:    params.strategy,
     });
+
+    // Auto limit-sell at 99c for profit lock-in
+    await placeAutoLimitSell(params.tokenId, params.conditionId, shares);
 
     const msg = `${emoji} [${params.strategy}/${category}] ${params.side} ${params.question.slice(0,60)} @ ${params.entryPrice.toFixed(2)} | ${params.signalReason}`;
     await tg(msg);
