@@ -70,26 +70,50 @@ async function fetchLivePrices(): Promise<LivePrices> {
   return prices;
 }
 
-function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' } | null {
-  // Match: "Will Bitcoin be above $80,000" / "Will ETH exceed $3500" / "Will BTC stay below $70k"
+function parsePrice(raw: string): number {
+  let v = parseFloat(raw.replace(/,/g, ''));
+  if (raw.toLowerCase().endsWith('k')) v *= 1000;
+  return v;
+}
+
+function normalizeCoin(raw: string): string {
+  const c = raw.toLowerCase();
+  if (c === 'ethereum') return 'eth';
+  if (c === 'solana') return 'sol';
+  if (c === 'ripple') return 'xrp';
+  return c;
+}
+
+function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' | 'between'; upperBound?: number } | null {
+  // 1) "between $X and $Y"
+  const bm = question.match(
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?k?)\s+and\s+\$?([\d,]+(?:\.\d+)?k?)/i
+  );
+  if (bm) {
+    return { coin: normalizeCoin(bm[1]), target: parsePrice(bm[2]), direction: 'between', upperBound: parsePrice(bm[3]) };
+  }
+
+  // 2) "above/below/hit/reach $X"
   const m = question.match(
-    /will\s+(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+)?(above|below|exceed|under|over|higher than|lower than)\s+\$?([\d,]+(?:\.\d+)?k?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?k?)/i
   );
   if (!m) return null;
-
-  let coinRaw = m[1].toLowerCase();
-  if (coinRaw === 'ethereum') coinRaw = 'eth';
-  if (coinRaw === 'solana') coinRaw = 'sol';
-  if (coinRaw === 'ripple') coinRaw = 'xrp';
-
-  let target = parseFloat(m[3].replace(/,/g, ''));
-  if (m[3].toLowerCase().endsWith('k')) target *= 1000;
 
   const dirRaw = m[2].toLowerCase();
   const direction = (dirRaw.includes('below') || dirRaw.includes('under') || dirRaw.includes('lower'))
     ? 'below' : 'above';
 
-  return { coin: coinRaw, target, direction };
+  return { coin: normalizeCoin(m[1]), target: parsePrice(m[3]), direction };
+}
+
+function erf(x: number): number {
+  const t = 1 / (1 + 0.3275911 * Math.abs(x));
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+  return x >= 0 ? y : -y;
+}
+
+function normCDF(x: number): number {
+  return 0.5 * (1 + erf(x / Math.SQRT2));
 }
 
 async function runCycle(): Promise<void> {
@@ -150,27 +174,37 @@ async function runCycle(): Promise<void> {
     const livePrice = prices[parsed.coin];
     if (!livePrice) continue;
 
-    // Calculate edge: how far above/below is current price vs target?
-    const pctFromTarget = Math.abs(livePrice - parsed.target) / parsed.target;
+    // Calculate probability using normal distribution
+    let confidence: number;
+    let buySide: string;
 
-    // Outcome: if direction=above and livePrice > target → YES is winning
-    const outcomeIsYes = (parsed.direction === 'above' && livePrice > parsed.target) ||
-                         (parsed.direction === 'below' && livePrice < parsed.target);
-    const buySide = outcomeIsYes ? 'YES' : 'NO';
-
-    // Only bet when price is clearly past target (>2% margin = high confidence)
-    const minMargin = 0.02;
-    if (pctFromTarget < minMargin) {
-      console.log(`[crypto] Skip: ${m.question.slice(0, 60)} — too close (${(pctFromTarget * 100).toFixed(1)}% from target)`);
-      continue;
+    if (parsed.direction === 'between') {
+      const zLow = (parsed.target - livePrice) / (livePrice * 0.025);
+      const zHigh = (parsed.upperBound! - livePrice) / (livePrice * 0.025);
+      const probBetween = normCDF(zHigh) - normCDF(zLow);
+      confidence = probBetween;
+      buySide = confidence > 0.5 ? 'YES' : 'NO';
+      if (confidence > 0.40 && confidence < 0.60) {
+        console.log(`[crypto] Skip between: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}%`);
+        continue;
+      }
+    } else {
+      const z = (parsed.target - livePrice) / (livePrice * 0.025);
+      const probAbove = 1 - normCDF(z);
+      confidence = parsed.direction === 'above' ? probAbove : 1 - probAbove;
+      buySide = confidence > 0.5 ? 'YES' : 'NO';
+      if (confidence < 0.80) {
+        console.log(`[crypto] Skip: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}% (need 80%+)`);
+        continue;
+      }
     }
 
     const hoursLeft = (new Date(m.endDate).getTime() - now) / 3_600_000;
 
     console.log(`\n[crypto] 🎯 EDGE FOUND!`);
     console.log(`  Market: ${m.question}`);
-    console.log(`  Live ${parsed.coin.toUpperCase()}: $${livePrice.toLocaleString()} | Target: $${parsed.target.toLocaleString()}`);
-    console.log(`  Direction: ${parsed.direction} | Outcome: ${buySide} | Margin: ${(pctFromTarget * 100).toFixed(1)}%`);
+    console.log(`  Live ${parsed.coin.toUpperCase()}: $${livePrice.toLocaleString()} | Target: $${parsed.target.toLocaleString()}${parsed.upperBound ? ` - $${parsed.upperBound.toLocaleString()}` : ''}`);
+    console.log(`  Direction: ${parsed.direction} | Outcome: ${buySide} | Probability: ${(confidence * 100).toFixed(1)}%`);
     console.log(`  Closes in: ${hoursLeft.toFixed(1)}h`);
 
     // Get token IDs from CLOB
@@ -197,7 +231,7 @@ async function runCycle(): Promise<void> {
     const msg = `🪙 <b>Crypto Oracle ${ARMED ? '[LIVE]' : '[DRY-RUN]'}</b>\n` +
       `${m.question.slice(0, 80)}\n` +
       `Live: $${livePrice.toLocaleString()} vs Target: $${parsed.target.toLocaleString()}\n` +
-      `Margin: ${(pctFromTarget * 100).toFixed(1)}% ${parsed.direction} target\n` +
+      `Probability: ${(confidence * 100).toFixed(1)}% ${parsed.direction}\n` +
       `Bet: $${betSize.toFixed(2)} on <b>${buySide}</b> @ ${(entryPrice * 100).toFixed(1)}¢\n` +
       `Closes in: ${hoursLeft.toFixed(1)}h`;
 

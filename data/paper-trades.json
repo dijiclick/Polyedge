@@ -493,5 +493,35 @@
     "confidence": 0.97,
     "edge": 0.10499999999999998,
     "signalReason": "Oracle lag: YES at 0.90, 5h left"
+  },
+  {
+    "id": "1772573446546-3mjp",
+    "betSize": 1,
+    "timestamp": "2026-03-03T21:30:46.546Z",
+    "resolved": false,
+    "strategy": "esports-oracle",
+    "category": "Other",
+    "question": "Games Total: O/U 2.5",
+    "conditionId": "0x5fa2f13dcc4bb204c02512e685bbbcffdd1a06cc79cc7db92f6f07844699236e",
+    "side": "YES",
+    "entryPrice": 0.8965,
+    "confidence": 0.97,
+    "edge": 0.10350000000000004,
+    "signalReason": "Oracle lag: YES at 0.90, 2h left"
+  },
+  {
+    "id": "1772573446547-nrkh",
+    "betSize": 1,
+    "timestamp": "2026-03-03T21:30:46.547Z",
+    "resolved": false,
+    "strategy": "esports-oracle",
+    "category": "Esports-CS2",
+    "question": "Counter-Strike: G2 Ares vs WW Team (BO3) - Exort Meteor Playoffs",
+    "conditionId": "0x93f9f51650233dccf64cd8acb37f2097d31114e70ed8992a5abc20008e929e24",
+    "side": "YES",
+    "entryPrice": 0.9275,
+    "confidence": 0.97,
+    "edge": 0.07250000000000001,
+    "signalReason": "Oracle lag: YES at 0.93, 2h left"
   }
 ]

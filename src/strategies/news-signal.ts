@@ -468,6 +468,9 @@ async function runCycle(): Promise<void> {
   const signals = await findSignals(fresh);
   console.log(`[news] ${signals.length} signals found`);
 
+  // Check volume spikes
+  await checkVolumeSpikes();
+
   const heldIds = open.map(p => p.conditionId);
 
   for (const sig of signals) {
@@ -530,6 +533,34 @@ async function runCycle(): Promise<void> {
   if (seenHeadlines.size > 5000) {
     const arr = [...seenHeadlines];
     arr.slice(0, 2500).forEach(h => seenHeadlines.delete(h));
+  }
+}
+
+// ─── Volume Spike Detection ──────────────────────────────────────────────
+
+async function checkVolumeSpikes(): Promise<void> {
+  console.log('[news] Checking volume spikes...');
+  try {
+    const raw = winCurl('https://gamma-api.polymarket.com/markets?limit=50&active=true&closed=false&order=volume24hr&ascending=false');
+    if (!raw) { console.log('[news] Volume spike fetch failed'); return; }
+    const markets = JSON.parse(raw) as any[];
+
+    let spikeCount = 0;
+    for (const m of markets) {
+      const vol = parseFloat(m.volume24hr ?? '0');
+      if (vol <= 50000) continue;
+
+      const prices = JSON.parse(m.outcomePrices ?? '[]');
+      const yesPrice = parseFloat(prices[0] ?? '0');
+      if (yesPrice < 0.30 || yesPrice > 0.70) continue;
+
+      spikeCount++;
+      console.log(`[news] 📊 VOLUME SPIKE: ${m.question?.slice(0, 80)}`);
+      console.log(`  Vol24h: $${(vol / 1000).toFixed(0)}k | YES: ${(yesPrice * 100).toFixed(0)}¢ | Liq: $${parseFloat(m.liquidityNum ?? m.liquidity ?? '0').toFixed(0)}`);
+    }
+    console.log(`[news] ${spikeCount} volume spike signals detected`);
+  } catch (e: any) {
+    console.log('[news] Volume spike check error:', e.message);
   }
 }
 

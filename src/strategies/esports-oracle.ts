@@ -186,6 +186,15 @@ async function runCycle(): Promise<void> {
 
   if (markets.length === 0) { console.log('[esports] No markets found'); return; }
 
+  // Split by endDate: match (<7d) vs season (>30d)
+  const SEVEN_DAYS  = 7 * 24 * 3600_000;
+  const THIRTY_DAYS = 30 * 24 * 3600_000;
+  const now2 = Date.now();
+
+  const matchMarkets  = markets.filter(m => m.endDate && m.endDate.getTime() - now2 < SEVEN_DAYS && m.endDate.getTime() > now2);
+  const seasonMarkets = markets.filter(m => !m.endDate || m.endDate.getTime() - now2 > THIRTY_DAYS);
+  console.log(`[esports] Split: ${matchMarkets.length} match (<7d), ${seasonMarkets.length} season (>30d)`);
+
   if (ARMED) {
     const usdc = await getUsdcBalance();
     if (usdc < 1) { console.log('[esports] Insufficient balance'); return; }
@@ -208,52 +217,78 @@ async function runCycle(): Promise<void> {
 
   const heldIds = open.map(p => p.conditionId);
   const signals: any[] = [];
+  let matchSignalCount = 0;
+  let seasonSignalCount = 0;
 
-  // ORACLE ARB: markets at 88¢+ near expiry — winner already determined
-  const oracleTargets = markets.filter(m => m.yesPrice >= MIN_ORACLE_ARB && m.hoursLeft < 120);
-  for (const m of oracleTargets) {
+  // --- MATCH MARKETS (short-term, <7 days) ---
+
+  // Oracle arb on match markets
+  const matchOracleTargets = matchMarkets.filter(m => m.yesPrice >= MIN_ORACLE_ARB && m.hoursLeft < 120);
+  for (const m of matchOracleTargets) {
+    if (matchSignalCount >= 10) break;
     if (heldIds.includes(m.conditionId)) continue;
     const edge = 1.0 - m.yesPrice;
-    signals.push({
-      type: 'ORACLE',
-      market: m,
-      confidence: 0.97,
-      edge,
-      reason: `Oracle lag: YES at ${m.yesPrice.toFixed(2)}, ${m.hoursLeft.toFixed(0)}h left`,
-    });
+    signals.push({ type: 'ORACLE', market: m, confidence: 0.97, edge, reason: `Oracle lag: YES at ${m.yesPrice.toFixed(2)}, ${m.hoursLeft.toFixed(0)}h left` });
+    matchSignalCount++;
   }
 
-  // LIVE STANDINGS: match leading team to season winner markets
+  // Standings on match markets (confidence threshold 0.70)
   for (const standing of standings) {
+    if (matchSignalCount >= 10) break;
     const teamWinRate = standing.wins / (standing.wins + standing.losses + 0.01);
-    if (standing.wins < 4 || teamWinRate < 0.65) continue; // Only very dominant teams
+    if (standing.wins < 4 || teamWinRate < 0.65) continue;
 
-    for (const market of markets) {
+    for (const market of matchMarkets) {
+      if (matchSignalCount >= 10) break;
       if (heldIds.includes(market.conditionId)) continue;
       if (!teamMatchesQuestion(standing.name, market.question)) continue;
       if (!/will .+ win/i.test(market.question)) continue;
-
-      // Expected probability: dominant team gets +12% boost on market price.
-      // Cap at 0.45 — even 8-0 teams rarely exceed 45% in a multi-team league.
-      // Skip longshots (<5¢) — they're priced low because ~10-16 teams compete.
       if (market.yesPrice < 0.05) continue;
       const expectedProb = Math.min(market.yesPrice + 0.12, 0.45);
       const edge = expectedProb - market.yesPrice;
       if (edge < MIN_EDGE) continue;
+      if (expectedProb < 0.70) continue; // confidence threshold for match markets
 
-      signals.push({
-        type: 'STANDINGS',
-        team: standing.name,
-        market,
-        confidence: expectedProb,
-        edge,
-        reason: `${standing.league} leader: ${standing.name} ${standing.wins}W-${standing.losses}L (${(teamWinRate*100).toFixed(0)}% win rate)`,
-      });
+      signals.push({ type: 'STANDINGS', team: standing.name, market, confidence: expectedProb, edge, reason: `${standing.league} leader: ${standing.name} ${standing.wins}W-${standing.losses}L (${(teamWinRate*100).toFixed(0)}% win rate)` });
+      matchSignalCount++;
+    }
+  }
+
+  // --- SEASON MARKETS (long-term, >30 days) — max 3, only cheap ---
+
+  // Oracle arb on season markets
+  const seasonOracleTargets = seasonMarkets.filter(m => m.yesPrice >= MIN_ORACLE_ARB && m.hoursLeft < 120);
+  for (const m of seasonOracleTargets) {
+    if (seasonSignalCount >= 3) break;
+    if (heldIds.includes(m.conditionId)) continue;
+    const edge = 1.0 - m.yesPrice;
+    signals.push({ type: 'ORACLE', market: m, confidence: 0.97, edge, reason: `Oracle lag: YES at ${m.yesPrice.toFixed(2)}, ${m.hoursLeft.toFixed(0)}h left` });
+    seasonSignalCount++;
+  }
+
+  // Standings on season markets — only if yesPrice < 0.55
+  for (const standing of standings) {
+    if (seasonSignalCount >= 3) break;
+    const teamWinRate = standing.wins / (standing.wins + standing.losses + 0.01);
+    if (standing.wins < 4 || teamWinRate < 0.65) continue;
+
+    for (const market of seasonMarkets) {
+      if (seasonSignalCount >= 3) break;
+      if (heldIds.includes(market.conditionId)) continue;
+      if (!teamMatchesQuestion(standing.name, market.question)) continue;
+      if (!/will .+ win/i.test(market.question)) continue;
+      if (market.yesPrice < 0.05 || market.yesPrice >= 0.55) continue; // only cheap season futures
+      const expectedProb = Math.min(market.yesPrice + 0.12, 0.45);
+      const edge = expectedProb - market.yesPrice;
+      if (edge < MIN_EDGE) continue;
+
+      signals.push({ type: 'STANDINGS', team: standing.name, market, confidence: expectedProb, edge, reason: `${standing.league} leader (season): ${standing.name} ${standing.wins}W-${standing.losses}L (${(teamWinRate*100).toFixed(0)}% win rate)` });
+      seasonSignalCount++;
     }
   }
 
   signals.sort((a, b) => b.edge - a.edge);
-  console.log(`[esports] ${signals.length} signals (${oracleTargets.length} oracle-arb, ${signals.length - oracleTargets.length} standings)`);
+  console.log(`[esports] ${signals.length} signals (${matchSignalCount} match, ${seasonSignalCount} season)`);
 
   for (const sig of signals.slice(0, MAX_POSITIONS - open.length)) {
     console.log(`\n[esports] 🎮 ${sig.type}: ${sig.reason || sig.market.question.slice(0, 60)}`);
