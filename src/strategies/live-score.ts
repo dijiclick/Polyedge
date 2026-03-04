@@ -73,10 +73,10 @@ const MIN_LEAD: Record<ESPNSport, number> = {
   mlb:    3,   // 3+ runs
 };
 
-// Max minutes left to trigger signal, per sport
+// Max minutes left to trigger signal, per sport (base value — extended by lead size)
 const MAX_MIN_LEFT: Record<ESPNSport, number> = {
   soccer: 20,
-  nhl:    10,
+  nhl:    20,  // full 3rd period — 2-goal lead entering 3rd wins ~92%
   nba:    8,   // last 8 min of 4th quarter
   nfl:    8,   // last 8 min of 4th quarter
   mlb:    6,   // last 2 innings (rough equiv)
@@ -193,10 +193,16 @@ async function runCycle(): Promise<void> {
   }
 
   // Filter for strong edges: sport-specific lead + time thresholds
+  // Bigger leads get wider time windows (e.g. 5-goal NHL lead → 35 min window)
   const edges = liveGames.filter(g => {
     const sport = g.sport as ESPNSport;
     const diff  = Math.abs(g.homeScore - g.awayScore);
-    return diff >= (MIN_LEAD[sport] ?? 2) && g.minutesLeft <= (MAX_MIN_LEFT[sport] ?? 20);
+    const minLead = MIN_LEAD[sport] ?? 2;
+    if (diff < minLead) return false;
+    const baseMax = MAX_MIN_LEFT[sport] ?? 20;
+    const extraFactor = (diff / minLead) - 1; // 0 at min lead, 1 at 2x min, etc.
+    const adjustedMax = Math.round(baseMax * (1 + extraFactor * 0.5));
+    return g.minutesLeft <= adjustedMax;
   });
 
   console.log(`[live] ${edges.length} games with strong edge (2+ lead, <20min left)`);
