@@ -84,7 +84,7 @@ function normalizeCoin(raw: string): string {
   return c;
 }
 
-const CRYPTO_KEYWORDS = /bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb/i;
+const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b/i;
 const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?k?)/g;
 const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least/i;
 const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
@@ -182,13 +182,19 @@ async function runCycle(): Promise<void> {
   try {
     const r = await fetch(`${GAMMA_HOST}/markets?limit=200&active=true&closed=false`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
     const all = await r.json() as any[];
+    // Word-boundary regex for short keywords to avoid false positives
+    // e.g. "eth" must not match "nETHerlands", "sol" must not match "console"
+    const cryptoRegex = new RegExp(
+      Object.values(COIN_IDS).flat().map(c =>
+        c.length <= 3 ? `\\b${c}\\b` : c
+      ).join('|'), 'i'
+    );
     markets = all.filter(m => {
       const q = (m.question || '').toLowerCase();
-      const hasCrypto = Object.values(COIN_IDS).flat().some(c => q.includes(c));
-      if (!hasCrypto) return false;
+      if (!cryptoRegex.test(q)) return false;
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
-      return hoursLeft > 0 && hoursLeft < 24;
+      return hoursLeft > 0 && hoursLeft < 72;  // widened from 24h to 72h
     });
     console.log(`[crypto] ${markets.length} crypto markets closing in <24h (from ${all.length} total)`);
     if (markets.length > 0) {
@@ -198,7 +204,7 @@ async function runCycle(): Promise<void> {
       // Show what was filtered out for debugging
       const cryptoAll = all.filter((mk: any) => {
         const q = (mk.question || '').toLowerCase();
-        return Object.values(COIN_IDS).flat().some(c => q.includes(c));
+        return cryptoRegex.test(q);
       });
       console.log(`[crypto-oracle] Found ${cryptoAll.length} crypto markets total but none closing in <24h`);
       if (cryptoAll.length > 0) {

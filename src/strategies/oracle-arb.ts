@@ -232,7 +232,8 @@ async function runCycle(): Promise<void> {
         );
 
         if ((ARMED || ORACLE_ARMED) && !pos.dryRun) {
-          const sellId = await placeSell({ tokenId: pos.tokenId, shares: pos.shares, price: sellPrice });
+          const clampedPrice = Math.min(sellPrice, 0.99);  // CLOB max price is 0.99
+          const sellId = await placeSell({ tokenId: pos.tokenId, shares: pos.shares, price: clampedPrice });
           console.log(`[oracle-arb] sell order: ${sellId}`);
         }
         updatePosition(pos.id, { status: 'sold' });

@@ -27,7 +27,7 @@ import { ask, search } from '../llm.js';
 const ARMED           = process.env.ARMED === 'true';
 const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS  || '4');
 const RISK_LEVEL      = (process.env.RISK_LEVEL  || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH';
-const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '2000');  // min $2k liquidity — real markets only
+const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '500');   // lowered: $500 min — more qualifying markets
 const MIN_MINUTES     = parseInt(process.env.MIN_MINUTES     || '10');    // need time to actually place order
 const MAX_AI_CALLS    = parseInt(process.env.MAX_AI_CALLS    || '25');    // more markets per cycle
 const SCAN_INTERVAL   = parseInt(process.env.EDGE_SCAN_MIN   || '15') * 60_000;
@@ -185,8 +185,8 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           // Perplexity will just say "no results". Focus on:
           //   a) Skewed markets (>65¢ or <35¢) — market already has info  
           //   b) Near-expiry (< 90 min) — event likely completed
-          const isSkewed = yes > 0.65 || yes < 0.35;
-          const isNearExpiry = minutesLeft < 90;
+          const isSkewed = yes > 0.60 || yes < 0.40;       // relaxed from 65/35
+          const isNearExpiry = minutesLeft < 180;          // relaxed from 90min to 3h
           if (!isSkewed && !isNearExpiry) continue;
 
           results.push({
