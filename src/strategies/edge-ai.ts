@@ -91,6 +91,12 @@ const KNOWN_LEAGUES = [
   /\bmlb\b|yankees|red sox|dodgers|astros|braves|padres|phillies|mets|cubs|world series/i,
   // NCAA
   /\bncaa\b|march madness|final four|college basketball|college football/i,
+  // Cricket
+  /\bcricket\b|\bipl\b|t20|big bash|cricket world cup|ashes|test match/i,
+  // Rugby
+  /\brugby\b|six nations|rugby world cup|super rugby|nrl|premiership rugby/i,
+  // Esports
+  /\besports?\b|league of legends|\blol\b worlds|dota|valorant|counter.?strike|\bcs2?\b/i,
 ];
 
 function isKnownLeagueOrType(question: string): boolean {
@@ -200,7 +206,7 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           //   a) Skewed markets (>65¢ or <35¢) — market already has info  
           //   b) Near-expiry (< 90 min) — event likely completed
           const isSkewed = yes > 0.55 || yes < 0.45;       // relaxed: catch more markets
-          const isNearExpiry = minutesLeft < 360;          // 6h — allow wider window for upcoming events
+          const isNearExpiry = minutesLeft < 720;          // 12h — wider window catches more markets during off-peak UTC hours
           const isHighValue = isKnownLeagueOrType(q);      // crypto/elections/major sports — always worth checking
           if (!isSkewed && !isNearExpiry && !isHighValue) continue;
 

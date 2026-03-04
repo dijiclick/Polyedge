@@ -43,6 +43,12 @@ const COIN_IDS: Record<string, string[]> = {
   celestia:      ['celestia', 'tia'],
   injective:     ['injective', 'inj'],
   jupiter:       ['jupiter', 'jup'],
+  dogwifhat:     ['wif', 'dogwifhat'],
+  bonk:          ['bonk'],
+  'floki-inu':   ['floki'],
+  kaspa:         ['kaspa', 'kas'],
+  'fetch-ai':    ['fetch', 'fet'],
+  'worldcoin-wld': ['worldcoin', 'wld'],
 };
 
 interface LivePrices { [coin: string]: number }
@@ -97,6 +103,12 @@ async function fetchLivePrices(): Promise<LivePrices> {
     TIAUSDT:  ['celestia', 'tia'],
     INJUSDT:  ['injective', 'inj'],
     JUPUSDT:  ['jupiter', 'jup'],
+    WIFUSDT:  ['wif', 'dogwifhat'],
+    BONKUSDT: ['bonk'],
+    FLOKIUSDT:['floki'],
+    KASUSDT:  ['kaspa', 'kas'],
+    FETUSDT:  ['fetch', 'fet'],
+    WLDUSDT:  ['worldcoin', 'wld'],
   };
   const prices: LivePrices = {};
   await Promise.allSettled(Object.entries(pairs).map(async ([sym, aliases]) => {
@@ -142,10 +154,14 @@ function normalizeCoin(raw: string): string {
   if (c === 'celestia') return 'tia';
   if (c === 'injective') return 'inj';
   if (c === 'jupiter') return 'jup';
+  if (c === 'dogwifhat') return 'wif';
+  if (c === 'kaspa') return 'kas';
+  if (c === 'fetch' || c === 'fetch-ai') return 'fet';
+  if (c === 'worldcoin') return 'wld';
   return c;
 }
 
-const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b|dogecoin|\bdoge\b|cardano|\bada\b|avalanche|\bavax\b|chainlink|\blink\b|polkadot|\bdot\b|polygon|\bmatic\b|litecoin|\bltc\b|shiba|\bshib\b|\bsui\b|toncoin|\bton\b|\bnear\b|\bpepe\b|aptos|\bapt\b|arbitrum|\barb\b|optimism|\bop\b|uniswap|\buni\b|render|\brndr\b|celestia|\btia\b|injective|\binj\b|jupiter|\bjup\b/i;
+const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b|dogecoin|\bdoge\b|cardano|\bada\b|avalanche|\bavax\b|chainlink|\blink\b|polkadot|\bdot\b|polygon|\bmatic\b|litecoin|\bltc\b|shiba|\bshib\b|\bsui\b|toncoin|\bton\b|\bnear\b|\bpepe\b|aptos|\bapt\b|arbitrum|\barb\b|optimism|\bop\b|uniswap|\buni\b|render|\brndr\b|celestia|\btia\b|injective|\binj\b|jupiter|\bjup\b|\bwif\b|dogwifhat|\bbonk\b|\bfloki\b|\bkaspa\b|\bkas\b|\bfet\b|worldcoin|\bwld\b/i;
 const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?[kmbt]?)/g;
 const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least|more than|greater than/i;
 const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
@@ -154,7 +170,7 @@ const DIR_BETWEEN     = /between/i;
 function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' | 'between'; upperBound?: number } | null {
   // 1) Strict: "between $X and $Y"
   const bm = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe|aptos|apt|arbitrum|arb|optimism|op|uniswap|uni|render|rndr|celestia|tia|injective|inj|jupiter|jup)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe|aptos|apt|arbitrum|arb|optimism|op|uniswap|uni|render|rndr|celestia|tia|injective|inj|jupiter|jup|wif|dogwifhat|bonk|floki|kaspa|kas|fet|worldcoin|wld)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (bm) {
     console.log(`[crypto-oracle] Parsed (strict-between): ${normalizeCoin(bm[1])} between $${bm[2]} and $${bm[3]} from: ${question.slice(0, 80)}`);
@@ -163,7 +179,7 @@ function parsePriceTarget(question: string): { coin: string; target: number; dir
 
   // 2) Strict: "above/below/hit/reach $X"
   const m = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe|aptos|apt|arbitrum|arb|optimism|op|uniswap|uni|render|rndr|celestia|tia|injective|inj|jupiter|jup)\s+(?:be\s+|close\s+|stay\s+|be\s+worth\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach|more than|greater than|at least|surpass)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe|aptos|apt|arbitrum|arb|optimism|op|uniswap|uni|render|rndr|celestia|tia|injective|inj|jupiter|jup|wif|dogwifhat|bonk|floki|kaspa|kas|fet|worldcoin|wld)\s+(?:be\s+|close\s+|stay\s+|be\s+worth\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach|more than|greater than|at least|surpass)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (m) {
     const dirRaw = m[2].toLowerCase();
@@ -257,7 +273,7 @@ async function runCycle(): Promise<void> {
       if (batch.length < 200) break;
     }
     // Supplementary: search Gamma API for each major coin to catch markets beyond pagination
-    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price', 'cryptocurrency', 'token price', 'market cap', 'aptos', 'arbitrum', 'uniswap', 'celestia', 'injective', 'jupiter', 'defi', 'memecoin', 'altcoin', 'halving', 'blockchain token', 'coin price', 'stablecoin', 'bitcoin price', 'eth price', 'solana price', 'btc price', 'will bitcoin', 'will ethereum', 'crypto prediction', 'price target', 'bitcoin reach', 'ethereum reach'];
+    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price', 'cryptocurrency', 'token price', 'market cap', 'aptos', 'arbitrum', 'uniswap', 'celestia', 'injective', 'jupiter', 'defi', 'memecoin', 'altcoin', 'halving', 'blockchain token', 'coin price', 'stablecoin', 'bitcoin price', 'eth price', 'solana price', 'btc price', 'will bitcoin', 'will ethereum', 'crypto prediction', 'price target', 'bitcoin reach', 'ethereum reach', 'dogwifhat', 'bonk crypto', 'floki crypto', 'kaspa price', 'worldcoin price', 'bitcoin 100k', 'btc all time high', 'eth 10000', 'solana price prediction', 'crypto end of year', 'bitcoin end of month'];
     const seenIds = new Set(all.map((m: any) => m.conditionId));
     const searchResults = await Promise.allSettled(searchTerms.map(async (term) => {
       const r = await fetch(`${GAMMA_HOST}/markets?search=${term}&active=true&closed=false&limit=100`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
