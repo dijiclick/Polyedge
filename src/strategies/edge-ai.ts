@@ -25,7 +25,7 @@ import {
 import { ask, search } from '../llm.js';
 
 const ARMED           = process.env.ARMED === 'true';
-const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS  || '4');
+const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS  || '8');
 const RISK_LEVEL      = (process.env.RISK_LEVEL  || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH';
 const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '200');   // lowered: $200 min — more qualifying markets
 const MIN_MINUTES     = parseInt(process.env.MIN_MINUTES     || '10');    // need time to actually place order
@@ -112,12 +112,12 @@ const RISK_THRESHOLDS: Record<'LOW' | 'MEDIUM' | 'HIGH', number> = {
 
 // Per-event-type confidence overrides (some events are more predictable)
 const EVENT_THRESHOLDS: Partial<Record<string, number>> = {
-  crypto_price:      0.57,
-  election:          0.60,
-  sports_award:      0.55,
-  soccer_match:      0.58,  // live score available
-  basketball_game:   0.58,
-  general:           0.55,
+  crypto_price:      0.53,  // lowered: crypto markets have clear price data
+  election:          0.55,  // lowered: from 0.60
+  sports_award:      0.53,  // lowered: often confirmed before market closes
+  soccer_match:      0.53,  // lowered: live scores available, from 0.58
+  basketball_game:   0.53,  // lowered: live scores available, from 0.58
+  general:           0.53,  // lowered: from 0.55
 };
 
 interface MarketInfo {
@@ -593,8 +593,8 @@ async function runCycle(): Promise<void> {
       // EDGE CHECK: only bet if market price is meaningfully wrong (≥5% edge)
       // If AI says YES @ 70% but market already shows 68%, edge is only 2% — not worth it
       const edge = prediction.confidence - entryPrice;
-      if (Math.abs(edge) < 0.05) {
-        console.log(`[edge-ai] Skip: insufficient edge ${(edge * 100).toFixed(1)}% (need ≥5%)`);
+      if (Math.abs(edge) < 0.03) {
+        console.log(`[edge-ai] Skip: insufficient edge ${(edge * 100).toFixed(1)}% (need ≥3%)`);
         continue;
       }
 
