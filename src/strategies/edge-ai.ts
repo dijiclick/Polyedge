@@ -77,6 +77,20 @@ const KNOWN_LEAGUES = [
   /election|vote|president|senate|congress/i,
   /oscar|grammy|emmy|golden globe|award/i,
   /will.*win.*championship|will.*win.*title|will.*win.*cup/i,
+  // Tennis
+  /\btennis\b|atp|wta|indian wells|australian open|french open|wimbledon|us open|roland garros/i,
+  // F1/Motorsport
+  /formula\s*1|f1|grand prix|verstappen|hamilton|leclerc|norris|red bull racing/i,
+  // UFC/MMA
+  /\bufc\b|\bmma\b|ufc \d+|fight night|bellator|octagon/i,
+  // Golf
+  /\bgolf\b|\bpga\b|masters tournament|the open|ryder cup|us open golf/i,
+  // Boxing
+  /\bboxing\b|heavyweight|tyson|fury|usyk|canelo|undisputed/i,
+  // Baseball/MLB
+  /\bmlb\b|yankees|red sox|dodgers|astros|braves|padres|phillies|mets|cubs|world series/i,
+  // NCAA
+  /\bncaa\b|march madness|final four|college basketball|college football/i,
 ];
 
 function isKnownLeagueOrType(question: string): boolean {
