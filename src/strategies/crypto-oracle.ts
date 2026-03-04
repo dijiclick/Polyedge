@@ -227,7 +227,7 @@ async function runCycle(): Promise<void> {
       if (batch.length < 200) break;
     }
     // Supplementary: search Gamma API for each major coin to catch markets beyond pagination
-    const searchTerms = ['bitcoin', 'ethereum', 'solana', 'xrp', 'dogecoin', 'cardano', 'avalanche', 'chainlink'];
+    const searchTerms = ['bitcoin', 'ethereum', 'solana', 'xrp', 'dogecoin', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon'];
     const seenIds = new Set(all.map((m: any) => m.conditionId));
     const searchResults = await Promise.allSettled(searchTerms.map(async (term) => {
       const r = await fetch(`${GAMMA_HOST}/markets?search=${term}&active=true&closed=false&limit=100`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
@@ -329,7 +329,7 @@ async function runCycle(): Promise<void> {
       buySide = rawConf > 0.5 ? 'YES' : 'NO';
       confidence = Math.max(rawConf, 1 - rawConf);  // bet-side confidence (fixes NO bets showing 0%)
       // Lower threshold for longer-dated markets (more uncertainty = accept lower conf)
-      const confThreshold = daysLeft > 7 ? 0.70 : 0.80;
+      const confThreshold = daysLeft > 90 ? 0.60 : daysLeft > 7 ? 0.70 : 0.80;
       if (confidence < confThreshold) {
         console.log(`[crypto] Skip: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}% (need ${(confThreshold*100).toFixed(0)}%+, vol=${(scaledVol*100).toFixed(1)}%)`);
         continue;
