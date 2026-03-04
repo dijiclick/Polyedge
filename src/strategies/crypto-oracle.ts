@@ -217,14 +217,19 @@ async function runCycle(): Promise<void> {
   const now = Date.now();
   let markets: any[] = [];
   try {
-    const r = await fetch(`${GAMMA_HOST}/markets?limit=200&active=true&closed=false`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-    const all = await r.json() as any[];
+    // Paginate to find more crypto markets (up to 1000 total)
+    let all: any[] = [];
+    for (let offset = 0; offset < 1000; offset += 200) {
+      const r = await fetch(`${GAMMA_HOST}/markets?limit=200&active=true&closed=false&offset=${offset}`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+      const batch = await r.json() as any[];
+      if (!Array.isArray(batch) || batch.length === 0) break;
+      all.push(...batch);
+      if (batch.length < 200) break;
+    }
     // Word-boundary regex for short keywords to avoid false positives
     // e.g. "eth" must not match "nETHerlands", "sol" must not match "console"
     const cryptoRegex = new RegExp(
-      Object.values(COIN_IDS).flat().map(c =>
-        c.length <= 3 ? `\\b${c}\\b` : c
-      ).join('|'), 'i'
+      Object.values(COIN_IDS).flat().map(c => `\\b${c}\\b`).join('|'), 'i'
     );
     markets = all.filter(m => {
       const q = (m.question || '').toLowerCase();
