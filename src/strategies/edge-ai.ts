@@ -125,7 +125,7 @@ interface AIPrediction {
 // passed through all expired markets and collected the 0-3h window.
 async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   const now    = Date.now();
-  const maxMs  = 6 * 3_600_000;   // 6h window — wider net, more opportunities
+  const maxMs  = 12 * 3_600_000;  // 12h window — catch more markets across timezones
   const results: MarketInfo[] = [];
   let   foundFutureMarkets = false;
   let   passedWindow       = false;
@@ -185,8 +185,8 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           // Perplexity will just say "no results". Focus on:
           //   a) Skewed markets (>65¢ or <35¢) — market already has info  
           //   b) Near-expiry (< 90 min) — event likely completed
-          const isSkewed = yes > 0.60 || yes < 0.40;       // relaxed from 65/35
-          const isNearExpiry = minutesLeft < 180;          // relaxed from 90min to 3h
+          const isSkewed = yes > 0.55 || yes < 0.45;       // relaxed: catch more markets
+          const isNearExpiry = minutesLeft < 360;          // 6h — allow wider window for upcoming events
           if (!isSkewed && !isNearExpiry) continue;
 
           results.push({
@@ -225,7 +225,7 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   const top = [...urgent, ...normal].slice(0, MAX_AI_CALLS);
 
   const liveCount = urgent.length;
-  console.log(`[edge-ai] ${results.length} qualifying markets in 0-6h window (${liveCount} live/ending ≤45min) → analyzing top ${top.length}`);
+  console.log(`[edge-ai] ${results.length} qualifying markets in 0-12h window (${liveCount} live/ending ≤45min) → analyzing top ${top.length}`);
   if (top.length > 0) {
     console.log(`[edge-ai] Top markets:`);
     for (const mk of top.slice(0, 5)) {

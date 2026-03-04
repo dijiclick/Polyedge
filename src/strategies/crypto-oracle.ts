@@ -192,11 +192,14 @@ async function runCycle(): Promise<void> {
     markets = all.filter(m => {
       const q = (m.question || '').toLowerCase();
       if (!cryptoRegex.test(q)) return false;
+      // Filter out false positives: require actual crypto price/value context
+      const hasPriceContext = /\$|price|hit|reach|above|below|market cap|fdv/i.test(q);
+      if (!hasPriceContext) return false;
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
-      return hoursLeft > 0 && hoursLeft < 72;  // widened from 24h to 72h
+      return hoursLeft > 0 && hoursLeft < 336;  // 2 weeks — crypto markets are long-dated
     });
-    console.log(`[crypto] ${markets.length} crypto markets closing in <24h (from ${all.length} total)`);
+    console.log(`[crypto] ${markets.length} crypto markets closing in <2wk (from ${all.length} total)`);
     if (markets.length > 0) {
       console.log(`[crypto-oracle] All crypto questions:`);
       for (const mk of markets.slice(0, 10)) console.log(`  → ${mk.question}`);
@@ -236,32 +239,38 @@ async function runCycle(): Promise<void> {
     const livePrice = prices[parsed.coin];
     if (!livePrice) continue;
 
+    const hoursLeft = (new Date(m.endDate).getTime() - now) / 3_600_000;
+
     // Calculate probability using normal distribution
     let confidence: number;
     let buySide: string;
 
+    // Scale volatility by √(days): daily vol ~3% for crypto, grows with time
+    const daysLeft = Math.max(hoursLeft / 24, 0.5);
+    const scaledVol = 0.03 * Math.sqrt(daysLeft);  // σ√t model
+
     if (parsed.direction === 'between') {
-      const zLow = (parsed.target - livePrice) / (livePrice * 0.025);
-      const zHigh = (parsed.upperBound! - livePrice) / (livePrice * 0.025);
+      const zLow = (parsed.target - livePrice) / (livePrice * scaledVol);
+      const zHigh = (parsed.upperBound! - livePrice) / (livePrice * scaledVol);
       const probBetween = normCDF(zHigh) - normCDF(zLow);
       confidence = probBetween;
       buySide = confidence > 0.5 ? 'YES' : 'NO';
       if (confidence > 0.40 && confidence < 0.60) {
-        console.log(`[crypto] Skip between: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}%`);
+        console.log(`[crypto] Skip between: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}% (vol=${(scaledVol*100).toFixed(1)}%)`);
         continue;
       }
     } else {
-      const z = (parsed.target - livePrice) / (livePrice * 0.025);
+      const z = (parsed.target - livePrice) / (livePrice * scaledVol);
       const probAbove = 1 - normCDF(z);
       confidence = parsed.direction === 'above' ? probAbove : 1 - probAbove;
       buySide = confidence > 0.5 ? 'YES' : 'NO';
-      if (confidence < 0.80) {
-        console.log(`[crypto] Skip: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}% (need 80%+)`);
+      // Lower threshold for longer-dated markets (more uncertainty = accept lower conf)
+      const confThreshold = daysLeft > 7 ? 0.70 : 0.80;
+      if (confidence < confThreshold) {
+        console.log(`[crypto] Skip: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}% (need ${(confThreshold*100).toFixed(0)}%+, vol=${(scaledVol*100).toFixed(1)}%)`);
         continue;
       }
     }
-
-    const hoursLeft = (new Date(m.endDate).getTime() - now) / 3_600_000;
 
     console.log(`\n[crypto] 🎯 EDGE FOUND!`);
     console.log(`  Market: ${m.question}`);
