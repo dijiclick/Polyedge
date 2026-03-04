@@ -450,18 +450,19 @@ async function runCycle(): Promise<void> {
     try {
       const sellPrice = await getTokenPrice(pos.tokenId, 'SELL');
       if (sellPrice >= 0.97) {
-        const profit = (sellPrice - pos.entryPrice) * pos.shares;
+        const clampedSell = Math.min(sellPrice, 0.99);  // CLOB max price is 0.99
+        const profit = (clampedSell - pos.entryPrice) * pos.shares;
         const label  = pos.dryRun ? '[DRY-RUN]' : '[LIVE]';
         console.log(`[edge-ai] Closing position ${label} profit=$${profit.toFixed(2)}`);
         await tg(
           `💰 <b>Edge AI Close ${label}</b>\n` +
           `Market: ${pos.question.slice(0, 80)}\n` +
-          `Entry: ${(pos.entryPrice * 100).toFixed(1)}¢ → Sell: ${(sellPrice * 100).toFixed(1)}¢\n` +
+          `Entry: ${(pos.entryPrice * 100).toFixed(1)}¢ → Sell: ${(clampedSell * 100).toFixed(1)}¢\n` +
           `Profit: +$${profit.toFixed(2)}\n` +
           `AI confidence was: ${((pos.aiConfidence ?? 0) * 100).toFixed(0)}%`
         );
         if (ARMED && !pos.dryRun) {
-          await placeSell({ tokenId: pos.tokenId, shares: pos.shares, price: sellPrice });
+          await placeSell({ tokenId: pos.tokenId, shares: pos.shares, price: clampedSell });
         }
         updatePosition(pos.id, { status: 'sold' });
       }
@@ -515,7 +516,7 @@ async function runCycle(): Promise<void> {
 
   await tg(
     `🧠 <b>Edge AI Scan</b>\n` +
-    `Markets 0–3h: ${fresh.length} | Positions: ${currentOpen.length}/${MAX_POSITIONS}\n` +
+    `Markets 0–24h: ${fresh.length} | Positions: ${currentOpen.length}/${MAX_POSITIONS}\n` +
     `Risk: ${RISK_LEVEL} (need ${(threshold * 100).toFixed(0)}%+ confidence)\n` +
     `USDC: $${usdc.toFixed(2)} | ${ARMED ? '🔴 LIVE' : '🟡 DRY-RUN'}`
   );
@@ -668,8 +669,8 @@ async function runCycle(): Promise<void> {
   if (bought === 0 && fresh.length > 0) {
     console.log(`[edge-ai] Analyzed ${Math.min(fresh.length, 10)} markets — none met confidence threshold (${(threshold * 100).toFixed(0)}%)`);
   } else if (fresh.length === 0) {
-    console.log('[edge-ai] No markets expiring within 3h right now');
-    await tg('🧠 Edge AI — no markets expiring within 3 hours this cycle');
+    console.log('[edge-ai] No markets expiring within 24h right now');
+    await tg('🧠 Edge AI — no markets expiring within 24 hours this cycle');
   }
 
   // Pattern accuracy summary

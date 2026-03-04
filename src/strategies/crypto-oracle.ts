@@ -145,7 +145,7 @@ function normalizeCoin(raw: string): string {
   return c;
 }
 
-const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b|dogecoin|\bdoge\b|cardano|\bada\b|avalanche|\bavax\b|chainlink|\blink\b|polkadot|\bdot\b|polygon|\bmatic\b|litecoin|\bltc\b|shiba|\bshib\b|\bsui\b|toncoin|\bton\b|\bnear\b|\bpepe\b/i;
+const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b|dogecoin|\bdoge\b|cardano|\bada\b|avalanche|\bavax\b|chainlink|\blink\b|polkadot|\bdot\b|polygon|\bmatic\b|litecoin|\bltc\b|shiba|\bshib\b|\bsui\b|toncoin|\bton\b|\bnear\b|\bpepe\b|aptos|\bapt\b|arbitrum|\barb\b|optimism|\bop\b|uniswap|\buni\b|render|\brndr\b|celestia|\btia\b|injective|\binj\b|jupiter|\bjup\b/i;
 const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?[kmbt]?)/g;
 const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least|more than|greater than/i;
 const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
@@ -185,6 +185,12 @@ function parsePriceTarget(question: string): { coin: string; target: number; dir
   const prices: number[] = [];
   let pm;
   while ((pm = PRICE_PATTERN.exec(question)) !== null) prices.push(parsePrice(pm[1]));
+  // Fallback: naked numbers with k/m/b suffix near direction words (e.g., "hit 100k", "reach 1m")
+  if (prices.length === 0) {
+    const nakedPattern = /(?:above|below|exceed|hit|reach|surpass|over|under|more than|greater than|at least|less than)\s+([\d,]+(?:\.\d+)?[kmbt])\b/gi;
+    let nm;
+    while ((nm = nakedPattern.exec(question)) !== null) prices.push(parsePrice(nm[1]));
+  }
   if (prices.length === 0) {
     console.log(`[crypto-oracle] No price found in: ${question.slice(0, 80)}`);
     return null;
@@ -251,7 +257,7 @@ async function runCycle(): Promise<void> {
       if (batch.length < 200) break;
     }
     // Supplementary: search Gamma API for each major coin to catch markets beyond pagination
-    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price', 'cryptocurrency', 'token price', 'market cap', 'aptos', 'arbitrum', 'uniswap', 'celestia', 'injective', 'jupiter'];
+    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price', 'cryptocurrency', 'token price', 'market cap', 'aptos', 'arbitrum', 'uniswap', 'celestia', 'injective', 'jupiter', 'defi', 'memecoin', 'altcoin', 'halving', 'blockchain token', 'coin price', 'stablecoin'];
     const seenIds = new Set(all.map((m: any) => m.conditionId));
     const searchResults = await Promise.allSettled(searchTerms.map(async (term) => {
       const r = await fetch(`${GAMMA_HOST}/markets?search=${term}&active=true&closed=false&limit=100`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
