@@ -18,11 +18,14 @@ const SCAN_INTERVAL = 5 * 60_000; // 5 min
 const GAMMA_HOST    = 'https://gamma-api.polymarket.com';
 
 const COIN_IDS: Record<string, string[]> = {
-  bitcoin:     ['bitcoin', 'btc'],
-  ethereum:    ['ethereum', 'eth'],
-  solana:      ['solana', 'sol'],
-  ripple:      ['xrp', 'ripple'],
-  binancecoin: ['bnb', 'binance'],
+  bitcoin:       ['bitcoin', 'btc'],
+  ethereum:      ['ethereum', 'eth'],
+  solana:        ['solana', 'sol'],
+  ripple:        ['xrp', 'ripple'],
+  binancecoin:   ['bnb', 'binance'],
+  dogecoin:      ['dogecoin', 'doge'],
+  cardano:       ['cardano', 'ada'],
+  'avalanche-2': ['avalanche', 'avax'],
 };
 
 interface LivePrices { [coin: string]: number }
@@ -52,11 +55,14 @@ async function fetchLivePrices(): Promise<LivePrices> {
 
   // Fallback: Binance individual tickers
   const pairs: Record<string, string[]> = {
-    BTCUSDT: ['bitcoin', 'btc'],
-    ETHUSDT: ['ethereum', 'eth'],
-    SOLUSDT: ['solana', 'sol'],
-    BNBUSDT: ['binancecoin', 'bnb'],
-    XRPUSDT: ['ripple', 'xrp'],
+    BTCUSDT:  ['bitcoin', 'btc'],
+    ETHUSDT:  ['ethereum', 'eth'],
+    SOLUSDT:  ['solana', 'sol'],
+    BNBUSDT:  ['binancecoin', 'bnb'],
+    XRPUSDT:  ['ripple', 'xrp'],
+    DOGEUSDT: ['dogecoin', 'doge'],
+    ADAUSDT:  ['cardano', 'ada'],
+    AVAXUSDT: ['avalanche', 'avax'],
   };
   const prices: LivePrices = {};
   await Promise.allSettled(Object.entries(pairs).map(async ([sym, aliases]) => {
@@ -85,10 +91,13 @@ function normalizeCoin(raw: string): string {
   if (c === 'ethereum') return 'eth';
   if (c === 'solana') return 'sol';
   if (c === 'ripple') return 'xrp';
+  if (c === 'dogecoin') return 'doge';
+  if (c === 'cardano') return 'ada';
+  if (c === 'avalanche') return 'avax';
   return c;
 }
 
-const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b/i;
+const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b|dogecoin|\bdoge\b|cardano|\bada\b|avalanche|\bavax\b/i;
 const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?[kmbt]?)/g;
 const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least/i;
 const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
@@ -97,7 +106,7 @@ const DIR_BETWEEN     = /between/i;
 function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' | 'between'; upperBound?: number } | null {
   // 1) Strict: "between $X and $Y"
   const bm = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (bm) {
     console.log(`[crypto-oracle] Parsed (strict-between): ${normalizeCoin(bm[1])} between $${bm[2]} and $${bm[3]} from: ${question.slice(0, 80)}`);
@@ -106,7 +115,7 @@ function parsePriceTarget(question: string): { coin: string; target: number; dir
 
   // 2) Strict: "above/below/hit/reach $X"
   const m = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (m) {
     const dirRaw = m[2].toLowerCase();
@@ -197,7 +206,7 @@ async function runCycle(): Promise<void> {
       const q = (m.question || '').toLowerCase();
       if (!cryptoRegex.test(q)) return false;
       // Filter out false positives: require actual crypto price/value context
-      const hasPriceContext = /\$|price|hit|reach|above|below|market cap|fdv/i.test(q);
+      const hasPriceContext = /\$|price|hit|reach|above|below|market cap|fdv|dominan|worth|ath\b|all.time/i.test(q);
       if (!hasPriceContext) return false;
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;

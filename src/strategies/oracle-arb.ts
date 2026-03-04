@@ -222,21 +222,21 @@ async function runCycle(): Promise<void> {
         const profit    = (sellPrice - pos.entryPrice) * pos.shares;
         const profitPct = ((sellPrice - pos.entryPrice) / pos.entryPrice * 100).toFixed(1);
         const label     = pos.dryRun ? '[DRY-RUN]' : '[LIVE]';
+        const clampedPrice = Math.min(sellPrice, 0.99);  // CLOB max price is 0.99
 
         console.log(`[oracle-arb] AUTO-SELL ${label} profit=$${profit.toFixed(2)} (+${profitPct}%)`);
-        await tg(
-          `💰 <b>Oracle Arb Auto-Sell ${label}</b>\n` +
-          `Market: ${pos.question.slice(0, 80)}\n` +
-          `Bought @ ${pos.entryPrice.toFixed(3)} → Sell @ ${sellPrice.toFixed(3)}\n` +
-          `Profit: +$${profit.toFixed(2)} (+${profitPct}%)`
-        );
 
         if ((ARMED || ORACLE_ARMED) && !pos.dryRun) {
-          const clampedPrice = Math.min(sellPrice, 0.99);  // CLOB max price is 0.99
           const sellId = await placeSell({ tokenId: pos.tokenId, shares: pos.shares, price: clampedPrice });
           console.log(`[oracle-arb] sell order: ${sellId}`);
         }
         updatePosition(pos.id, { status: 'sold' });
+        await tg(
+          `💰 <b>Oracle Arb Auto-Sell ${label}</b>\n` +
+          `Market: ${pos.question.slice(0, 80)}\n` +
+          `Bought @ ${pos.entryPrice.toFixed(3)} → Sell @ ${clampedPrice.toFixed(3)}\n` +
+          `Profit: +$${profit.toFixed(2)} (+${profitPct}%)`
+        );
       }
     } catch (e) {
       console.error(`[oracle-arb] pos check error:`, (e as Error).message);
