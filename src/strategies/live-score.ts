@@ -205,12 +205,20 @@ async function runCycle(): Promise<void> {
     return g.minutesLeft <= adjustedMax;
   });
 
-  console.log(`[live] ${edges.length} games with strong edge (2+ lead, <20min left)`);
+  console.log(`[live] ${edges.length} games with strong edge`);
 
   if (edges.length === 0) {
-    // Log close games for awareness
+    // Log close games with actual thresholds for debugging
     for (const g of liveGames.slice(0, 5)) {
-      console.log(`[live]   ${g.awayTeam} ${g.awayScore}-${g.homeScore} ${g.homeTeam} (${g.minutesLeft}min left)`);
+      const sport = g.sport as ESPNSport;
+      const diff = Math.abs(g.homeScore - g.awayScore);
+      const minLead = MIN_LEAD[sport] ?? 2;
+      const baseMax = MAX_MIN_LEFT[sport] ?? 20;
+      const extraFactor = diff >= minLead ? (diff / minLead) - 1 : 0;
+      const adjustedMax = Math.round(baseMax * (1 + extraFactor * 0.5));
+      const leadOk = diff >= minLead ? '✓' : '✗';
+      const timeOk = g.minutesLeft <= adjustedMax ? '✓' : '✗';
+      console.log(`[live]   ${g.awayTeam} ${g.awayScore}-${g.homeScore} ${g.homeTeam} (${g.minutesLeft}min left) lead${leadOk} need≥${minLead} time${timeOk} need≤${adjustedMax}min`);
     }
     return;
   }
@@ -222,13 +230,13 @@ async function runCycle(): Promise<void> {
   let allMarkets: any[] = [];
   try {
     const now = Date.now();
-    const raw = winCurl(`${GAMMA_HOST}/markets?limit=300&active=true&closed=false`);
+    const raw = winCurl(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`);
     if (!raw) throw new Error('empty response');
     const all = JSON.parse(raw) as any[];
     allMarkets = all.filter(m => {
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
-      return hoursLeft > 0 && hoursLeft < 6; // only markets closing soon
+      return hoursLeft > 0 && hoursLeft < 12; // 12h window — catch game markets across timezones
     });
   } catch (e: any) {
     console.log('[live] Market fetch error:', e.message);

@@ -123,7 +123,7 @@ function normalizeCoin(raw: string): string {
 
 const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b|dogecoin|\bdoge\b|cardano|\bada\b|avalanche|\bavax\b|chainlink|\blink\b|polkadot|\bdot\b|polygon|\bmatic\b|litecoin|\bltc\b|shiba|\bshib\b|\bsui\b|toncoin|\bton\b|\bnear\b|\bpepe\b/i;
 const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?[kmbt]?)/g;
-const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least/i;
+const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least|more than|greater than/i;
 const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
 const DIR_BETWEEN     = /between/i;
 
@@ -139,7 +139,7 @@ function parsePriceTarget(question: string): { coin: string; target: number; dir
 
   // 2) Strict: "above/below/hit/reach $X"
   const m = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe)\s+(?:be\s+|close\s+|stay\s+|be\s+worth\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach|more than|greater than|at least|surpass)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (m) {
     const dirRaw = m[2].toLowerCase();
@@ -234,24 +234,27 @@ async function runCycle(): Promise<void> {
     markets = all.filter(m => {
       const q = (m.question || '').toLowerCase();
       if (!cryptoRegex.test(q)) return false;
-      // Filter out false positives: require actual crypto price/value context
-      const hasPriceContext = /\$|price|hit|reach|above|below|market cap|fdv|dominan|worth|ath\b|all.time/i.test(q);
-      if (!hasPriceContext) return false;
+      // Word boundaries in cryptoRegex prevent false positives (e.g. "Netherlands" won't match \beth\b)
+      // parsePriceTarget() handles filtering non-price markets (returns null if no price target found)
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
       return hoursLeft > 0 && hoursLeft < 8760;  // 1 year — crypto markets are very long-dated, σ√t model handles uncertainty
     });
     console.log(`[crypto] ${markets.length} crypto markets closing in <1yr (from ${all.length} total)`);
     if (markets.length > 0) {
-      console.log(`[crypto-oracle] All crypto questions:`);
-      for (const mk of markets.slice(0, 10)) console.log(`  → ${mk.question}`);
+      console.log(`[crypto-oracle] Crypto questions found:`);
+      for (const mk of markets.slice(0, 10)) {
+        const endMs = mk.endDate ? new Date(mk.endDate).getTime() : 0;
+        const hoursLeft = (endMs - now) / 3_600_000;
+        console.log(`  → [${hoursLeft.toFixed(0)}h left] ${mk.question?.slice(0, 80)}`);
+      }
     } else {
       // Show what was filtered out for debugging
       const cryptoAll = all.filter((mk: any) => {
         const q = (mk.question || '').toLowerCase();
         return cryptoRegex.test(q);
       });
-      console.log(`[crypto-oracle] Found ${cryptoAll.length} crypto markets total but none closing in <1yr`);
+      console.log(`[crypto-oracle] Found ${cryptoAll.length} crypto keyword matches but none with valid end dates in <1yr`);
       if (cryptoAll.length > 0) {
         for (const mk of cryptoAll.slice(0, 5)) {
           const endMs = mk.endDate ? new Date(mk.endDate).getTime() : 0;
