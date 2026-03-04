@@ -219,10 +219,10 @@ async function runCycle(): Promise<void> {
       console.log(`[oracle-arb] pos: ${pos.question.slice(0, 50)} sell=${sellPrice.toFixed(3)}`);
 
       if (sellPrice >= SELL_AT) {
-        const profit    = (sellPrice - pos.entryPrice) * pos.shares;
-        const profitPct = ((sellPrice - pos.entryPrice) / pos.entryPrice * 100).toFixed(1);
         const label     = pos.dryRun ? '[DRY-RUN]' : '[LIVE]';
         const clampedPrice = Math.min(sellPrice, 0.99);  // CLOB max price is 0.99
+        const profit    = (clampedPrice - pos.entryPrice) * pos.shares;
+        const profitPct = ((clampedPrice - pos.entryPrice) / pos.entryPrice * 100).toFixed(1);
 
         console.log(`[oracle-arb] AUTO-SELL ${label} profit=$${profit.toFixed(2)} (+${profitPct}%)`);
 

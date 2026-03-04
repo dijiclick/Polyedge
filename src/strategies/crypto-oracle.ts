@@ -226,6 +226,24 @@ async function runCycle(): Promise<void> {
       all.push(...batch);
       if (batch.length < 200) break;
     }
+    // Supplementary: search Gamma API for each major coin to catch markets beyond pagination
+    const searchTerms = ['bitcoin', 'ethereum', 'solana', 'xrp', 'dogecoin', 'cardano', 'avalanche', 'chainlink'];
+    const seenIds = new Set(all.map((m: any) => m.conditionId));
+    const searchResults = await Promise.allSettled(searchTerms.map(async (term) => {
+      const r = await fetch(`${GAMMA_HOST}/markets?search=${term}&active=true&closed=false&limit=100`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+      const batch = await r.json() as any[];
+      return Array.isArray(batch) ? batch : [];
+    }));
+    for (const r of searchResults) {
+      if (r.status !== 'fulfilled') continue;
+      for (const m of r.value) {
+        if (m.conditionId && !seenIds.has(m.conditionId)) {
+          all.push(m);
+          seenIds.add(m.conditionId);
+        }
+      }
+    }
+    console.log(`[crypto] Fetched ${all.length} markets (pagination + search)`);
     // Word-boundary regex for short keywords to avoid false positives
     // e.g. "eth" must not match "nETHerlands", "sol" must not match "console"
     const cryptoRegex = new RegExp(
