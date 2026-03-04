@@ -72,7 +72,11 @@ async function fetchLivePrices(): Promise<LivePrices> {
 
 function parsePrice(raw: string): number {
   let v = parseFloat(raw.replace(/,/g, ''));
-  if (raw.toLowerCase().endsWith('k')) v *= 1000;
+  const s = raw.toLowerCase();
+  if (s.endsWith('k')) v *= 1_000;
+  else if (s.endsWith('m')) v *= 1_000_000;
+  else if (s.endsWith('b')) v *= 1_000_000_000;
+  else if (s.endsWith('t')) v *= 1_000_000_000_000;
   return v;
 }
 
@@ -85,7 +89,7 @@ function normalizeCoin(raw: string): string {
 }
 
 const CRYPTO_KEYWORDS = /bitcoin|\bbtc\b|\beth(?:ereum)?\b|\bsol(?:ana)?\b|\bxrp\b|ripple|\bbnb\b/i;
-const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?k?)/g;
+const PRICE_PATTERN   = /\$\s?([\d,]+(?:\.\d+)?[kmbt]?)/g;
 const DIR_ABOVE       = /above|over|exceed|higher|hit|reach|surpass|top|at least/i;
 const DIR_BELOW       = /below|under|lower|drop|fall|less than|beneath/i;
 const DIR_BETWEEN     = /between/i;
@@ -93,7 +97,7 @@ const DIR_BETWEEN     = /between/i;
 function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' | 'between'; upperBound?: number } | null {
   // 1) Strict: "between $X and $Y"
   const bm = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?k?)\s+and\s+\$?([\d,]+(?:\.\d+)?k?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (bm) {
     console.log(`[crypto-oracle] Parsed (strict-between): ${normalizeCoin(bm[1])} between $${bm[2]} and $${bm[3]} from: ${question.slice(0, 80)}`);
@@ -102,7 +106,7 @@ function parsePriceTarget(question: string): { coin: string; target: number; dir
 
   // 2) Strict: "above/below/hit/reach $X"
   const m = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?k?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb)\s+(?:be\s+|close\s+|stay\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (m) {
     const dirRaw = m[2].toLowerCase();
