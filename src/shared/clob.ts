@@ -191,12 +191,14 @@ export async function placeSell(opts: {
     ? await getMarketMeta(opts.conditionId)
     : { tickSize: '0.01', negRisk: false };
 
-  console.log(`[clob] SELL ${opts.shares.toFixed(4)} shares @ ${opts.price}`);
+  // Clamp price to CLOB valid range (0.01 - 0.99)
+  const clampedPrice = Math.min(Math.max(opts.price, 0.01), 0.99);
+  console.log(`[clob] SELL ${opts.shares.toFixed(4)} shares @ ${clampedPrice}`);
 
   const order: any = await c.createAndPostOrder(
     {
       tokenID: opts.tokenId,
-      price:   opts.price,
+      price:   clampedPrice,
       size:    opts.shares,
       side:    Side.SELL,
     },

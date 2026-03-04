@@ -197,9 +197,9 @@ async function runCycle(): Promise<void> {
       if (!hasPriceContext) return false;
       const endMs = m.endDate ? new Date(m.endDate).getTime() : 0;
       const hoursLeft = (endMs - now) / 3_600_000;
-      return hoursLeft > 0 && hoursLeft < 336;  // 2 weeks — crypto markets are long-dated
+      return hoursLeft > 0 && hoursLeft < 8760;  // 1 year — crypto markets are very long-dated, σ√t model handles uncertainty
     });
-    console.log(`[crypto] ${markets.length} crypto markets closing in <2wk (from ${all.length} total)`);
+    console.log(`[crypto] ${markets.length} crypto markets closing in <1yr (from ${all.length} total)`);
     if (markets.length > 0) {
       console.log(`[crypto-oracle] All crypto questions:`);
       for (const mk of markets.slice(0, 10)) console.log(`  → ${mk.question}`);
@@ -209,7 +209,7 @@ async function runCycle(): Promise<void> {
         const q = (mk.question || '').toLowerCase();
         return cryptoRegex.test(q);
       });
-      console.log(`[crypto-oracle] Found ${cryptoAll.length} crypto markets total but none closing in <24h`);
+      console.log(`[crypto-oracle] Found ${cryptoAll.length} crypto markets total but none closing in <1yr`);
       if (cryptoAll.length > 0) {
         for (const mk of cryptoAll.slice(0, 5)) {
           const endMs = mk.endDate ? new Date(mk.endDate).getTime() : 0;
@@ -253,17 +253,18 @@ async function runCycle(): Promise<void> {
       const zLow = (parsed.target - livePrice) / (livePrice * scaledVol);
       const zHigh = (parsed.upperBound! - livePrice) / (livePrice * scaledVol);
       const probBetween = normCDF(zHigh) - normCDF(zLow);
-      confidence = probBetween;
-      buySide = confidence > 0.5 ? 'YES' : 'NO';
-      if (confidence > 0.40 && confidence < 0.60) {
+      buySide = probBetween > 0.5 ? 'YES' : 'NO';
+      confidence = Math.max(probBetween, 1 - probBetween);  // bet-side confidence
+      if (confidence < 0.60) {
         console.log(`[crypto] Skip between: ${m.question.slice(0, 60)} — prob ${(confidence * 100).toFixed(1)}% (vol=${(scaledVol*100).toFixed(1)}%)`);
         continue;
       }
     } else {
       const z = (parsed.target - livePrice) / (livePrice * scaledVol);
       const probAbove = 1 - normCDF(z);
-      confidence = parsed.direction === 'above' ? probAbove : 1 - probAbove;
-      buySide = confidence > 0.5 ? 'YES' : 'NO';
+      const rawConf = parsed.direction === 'above' ? probAbove : 1 - probAbove;
+      buySide = rawConf > 0.5 ? 'YES' : 'NO';
+      confidence = Math.max(rawConf, 1 - rawConf);  // bet-side confidence (fixes NO bets showing 0%)
       // Lower threshold for longer-dated markets (more uncertainty = accept lower conf)
       const confThreshold = daysLeft > 7 ? 0.70 : 0.80;
       if (confidence < confThreshold) {
