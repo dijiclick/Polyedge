@@ -144,14 +144,17 @@ interface PolyMarket {
 
 async function fetchSoccerMarkets(): Promise<PolyMarket[]> {
   const markets: PolyMarket[] = [];
-  try {
-    const raw = winCurl(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`);
-    if (!raw) throw new Error('empty response');
-    const all: any[] = JSON.parse(raw);
-    for (const m of all) {
+  const seenIds = new Set<string>();
+
+  function addMarkets(raw: string | null) {
+    if (!raw) return;
+    let batch: any[];
+    try { batch = JSON.parse(raw); } catch { return; }
+    if (!Array.isArray(batch)) return;
+    for (const m of batch) {
+      if (!m.conditionId || seenIds.has(m.conditionId)) continue;
       const q = (m.question ?? '').toLowerCase();
-      // Filter to soccer/football markets
-      if (!/win|beat|defeat|match|soccer|football|premier|bundesliga|serie|liga|ligue|cl|ucl|fa cup|copa/i.test(q)) continue;
+      if (!/soccer|football|premier league|bundesliga|serie a|la liga|ligue 1|champions league|ucl|fa cup|copa|eredivisie|europa league|carabao|world cup|fifa|relegated|relegation/i.test(q)) continue;
       const prices = JSON.parse(m.outcomePrices ?? '[]');
       if (prices.length < 2) continue;
       const yesPrice = parseFloat(prices[0]);
@@ -167,6 +170,19 @@ async function fetchSoccerMarkets(): Promise<PolyMarket[]> {
         liquidity:   liq,
         tokenId:     tokens[0] ?? '',
       });
+      seenIds.add(m.conditionId);
+    }
+  }
+
+  try {
+    // Generic pagination (first 500 markets)
+    addMarkets(winCurl(`${GAMMA_HOST}/markets?limit=500&active=true&closed=false`));
+
+    // Targeted soccer search queries to find markets beyond first 500
+    const soccerTerms = ['premier league', 'la liga', 'bundesliga', 'serie a', 'ligue 1',
+      'champions league', 'europa league', 'world cup', 'relegated', 'soccer'];
+    for (const term of soccerTerms) {
+      addMarkets(winCurl(`${GAMMA_HOST}/markets?search=${encodeURIComponent(term)}&active=true&closed=false&limit=100`));
     }
   } catch (e: any) {
     console.log('[kambi] Market fetch error:', e.message);
@@ -185,30 +201,80 @@ function normalize(s: string): string {
 
 // Team name aliases: Kambi name → common Polymarket name variants
 const TEAM_ALIASES: Record<string, string[]> = {
+  // La Liga
   'athletic bilbao': ['athletic club', 'bilbao', 'athletic'],
   'atletico madrid': ['atletico', 'atletico de madrid', 'atl madrid'],
   'real madrid': ['real madrid', 'madrid'],
-  'paris saint germain': ['psg', 'paris sg', 'paris saint-germain', 'paris'],
-  'borussia dortmund': ['dortmund', 'bvb', 'borussia'],
-  'borussia monchengladbach': ['gladbach', 'monchengladbach'],
-  'rb leipzig': ['red bull leipzig', 'rb leipzig', 'rasenball'],
-  'internazionale': ['inter milan', 'inter', 'fc inter'],
-  'ac milan': ['ac milan', 'milan'],
-  'ss lazio': ['lazio'],
-  'as roma': ['roma'],
+  'fc barcelona': ['barcelona', 'barca', 'fcb'],
+  'real sociedad': ['sociedad', 'la real'],
+  'sevilla fc': ['sevilla'],
+  'villarreal cf': ['villarreal', 'yellow submarine'],
+  'valencia cf': ['valencia'],
+  'real betis': ['betis', 'real betis'],
+  'girona fc': ['girona'],
+  'celta de vigo': ['celta vigo', 'celta'],
+  // Premier League
   'manchester united': ['man united', 'man utd', 'manchester utd'],
   'manchester city': ['man city', 'manchester city'],
   'tottenham hotspur': ['tottenham', 'spurs', 'hotspur'],
   'west ham united': ['west ham'],
   'aston villa': ['aston villa', 'villa'],
   'newcastle united': ['newcastle'],
+  'liverpool fc': ['liverpool'],
+  'arsenal fc': ['arsenal', 'gunners'],
+  'chelsea fc': ['chelsea', 'blues'],
+  'everton fc': ['everton', 'toffees'],
+  'nottingham forest': ['nott forest', 'forest'],
+  'crystal palace': ['crystal palace', 'palace'],
+  'wolverhampton': ['wolves', 'wolverhampton wanderers'],
+  'brighton': ['brighton hove albion', 'brighton and hove'],
+  'fulham fc': ['fulham'],
+  'bournemouth': ['afc bournemouth'],
+  'leicester city': ['leicester'],
+  // Bundesliga
+  'bayern munchen': ['bayern munich', 'bayern', 'fc bayern'],
+  'bayer leverkusen': ['leverkusen', 'bayer 04'],
+  'borussia dortmund': ['dortmund', 'bvb', 'borussia'],
+  'borussia monchengladbach': ['gladbach', 'monchengladbach'],
+  'rb leipzig': ['red bull leipzig', 'rb leipzig', 'rasenball'],
+  'eintracht frankfurt': ['frankfurt', 'eintracht'],
+  'vfb stuttgart': ['stuttgart'],
+  'sc freiburg': ['freiburg'],
+  'vfl wolfsburg': ['wolfsburg'],
+  // Serie A
+  'internazionale': ['inter milan', 'inter', 'fc inter'],
+  'ac milan': ['ac milan', 'milan'],
+  'ss lazio': ['lazio'],
+  'as roma': ['roma'],
+  'juventus fc': ['juventus', 'juve'],
+  'ssc napoli': ['napoli'],
+  'atalanta bc': ['atalanta'],
+  'acf fiorentina': ['fiorentina', 'viola'],
+  'bologna fc': ['bologna'],
+  // Ligue 1
+  'paris saint germain': ['psg', 'paris sg', 'paris saint-germain', 'paris'],
+  'olympique lyon': ['lyon', 'olympique lyonnais', 'ol'],
+  'olympique marseille': ['marseille', 'om'],
+  'as monaco': ['monaco'],
+  'losc lille': ['lille', 'losc'],
+  'ogc nice': ['nice'],
+  'rc lens': ['lens'],
+  'rc strasbourg': ['strasbourg'],
+  // Portugal / Netherlands / Scotland
   'benfica': ['sl benfica', 'sport lisboa e benfica'],
   'sporting cp': ['sporting lisbon', 'sporting'],
   'porto': ['fc porto'],
   'ajax': ['ajax amsterdam', 'afc ajax'],
   'psv': ['psv eindhoven'],
+  'feyenoord': ['feyenoord rotterdam'],
   'celtic': ['celtic fc'],
   'rangers': ['rangers fc', 'glasgow rangers'],
+  // Turkey / Other
+  'galatasaray': ['galatasaray sk', 'gala'],
+  'fenerbahce': ['fenerbahce sk', 'fener'],
+  'besiktas': ['besiktas jk'],
+  'club brugge': ['club bruges', 'brugge'],
+  'red bull salzburg': ['salzburg', 'rb salzburg'],
 };
 
 function teamInQuestion(teamName: string, question: string): boolean {
