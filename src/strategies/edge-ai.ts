@@ -27,7 +27,7 @@ import { ask, search } from '../llm.js';
 const ARMED           = process.env.ARMED === 'true';
 const MAX_POSITIONS   = parseInt(process.env.MAX_POSITIONS  || '4');
 const RISK_LEVEL      = (process.env.RISK_LEVEL  || 'MEDIUM') as 'LOW' | 'MEDIUM' | 'HIGH';
-const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '500');   // lowered: $500 min — more qualifying markets
+const MIN_LIQUIDITY   = parseFloat(process.env.MIN_LIQUIDITY || '200');   // lowered: $200 min — more qualifying markets
 const MIN_MINUTES     = parseInt(process.env.MIN_MINUTES     || '10');    // need time to actually place order
 const MAX_AI_CALLS    = parseInt(process.env.MAX_AI_CALLS    || '25');    // more markets per cycle
 const SCAN_INTERVAL   = parseInt(process.env.EDGE_SCAN_MIN   || '15') * 60_000;
@@ -125,7 +125,7 @@ interface AIPrediction {
 // passed through all expired markets and collected the 0-3h window.
 async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   const now    = Date.now();
-  const maxMs  = 12 * 3_600_000;  // 12h window — catch more markets across timezones
+  const maxMs  = 24 * 3_600_000;  // 24h window — catch more markets, especially during low-activity hours
   const results: MarketInfo[] = [];
   let   foundFutureMarkets = false;
   let   passedWindow       = false;

@@ -227,7 +227,7 @@ async function runCycle(): Promise<void> {
       if (batch.length < 200) break;
     }
     // Supplementary: search Gamma API for each major coin to catch markets beyond pagination
-    const searchTerms = ['bitcoin', 'ethereum', 'solana', 'xrp', 'dogecoin', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon'];
+    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price'];
     const seenIds = new Set(all.map((m: any) => m.conditionId));
     const searchResults = await Promise.allSettled(searchTerms.map(async (term) => {
       const r = await fetch(`${GAMMA_HOST}/markets?search=${term}&active=true&closed=false&limit=100`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
