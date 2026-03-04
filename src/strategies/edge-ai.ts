@@ -187,7 +187,8 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
           //   b) Near-expiry (< 90 min) — event likely completed
           const isSkewed = yes > 0.55 || yes < 0.45;       // relaxed: catch more markets
           const isNearExpiry = minutesLeft < 360;          // 6h — allow wider window for upcoming events
-          if (!isSkewed && !isNearExpiry) continue;
+          const isHighValue = isKnownLeagueOrType(q);      // crypto/elections/major sports — always worth checking
+          if (!isSkewed && !isNearExpiry && !isHighValue) continue;
 
           results.push({
             conditionId: m.conditionId,
@@ -225,7 +226,7 @@ async function fetchNearExpiryMarkets(): Promise<MarketInfo[]> {
   const top = [...urgent, ...normal].slice(0, MAX_AI_CALLS);
 
   const liveCount = urgent.length;
-  console.log(`[edge-ai] ${results.length} qualifying markets in 0-12h window (${liveCount} live/ending ≤45min) → analyzing top ${top.length}`);
+  console.log(`[edge-ai] ${results.length} qualifying markets in 0-24h window (${liveCount} live/ending ≤45min) → analyzing top ${top.length}`);
   if (top.length > 0) {
     console.log(`[edge-ai] Top markets:`);
     for (const mk of top.slice(0, 5)) {

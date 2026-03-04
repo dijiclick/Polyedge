@@ -35,6 +35,14 @@ const COIN_IDS: Record<string, string[]> = {
   toncoin:       ['toncoin', 'ton'],
   near:          ['near'],
   pepe:          ['pepe'],
+  aptos:         ['aptos', 'apt'],
+  arbitrum:      ['arbitrum', 'arb'],
+  optimism:      ['optimism', 'op'],
+  uniswap:       ['uniswap', 'uni'],
+  'render-token':['render', 'rndr'],
+  celestia:      ['celestia', 'tia'],
+  injective:     ['injective', 'inj'],
+  jupiter:       ['jupiter', 'jup'],
 };
 
 interface LivePrices { [coin: string]: number }
@@ -81,6 +89,14 @@ async function fetchLivePrices(): Promise<LivePrices> {
     TONUSDT:  ['toncoin', 'ton'],
     NEARUSDT: ['near'],
     PEPEUSDT: ['pepe'],
+    APTUSDT:  ['aptos', 'apt'],
+    ARBUSDT:  ['arbitrum', 'arb'],
+    OPUSDT:   ['optimism', 'op'],
+    UNIUSDT:  ['uniswap', 'uni'],
+    RNDRUSDT: ['render', 'rndr'],
+    TIAUSDT:  ['celestia', 'tia'],
+    INJUSDT:  ['injective', 'inj'],
+    JUPUSDT:  ['jupiter', 'jup'],
   };
   const prices: LivePrices = {};
   await Promise.allSettled(Object.entries(pairs).map(async ([sym, aliases]) => {
@@ -118,6 +134,14 @@ function normalizeCoin(raw: string): string {
   if (c === 'litecoin') return 'ltc';
   if (c === 'shiba') return 'shib';
   if (c === 'toncoin') return 'ton';
+  if (c === 'aptos') return 'apt';
+  if (c === 'arbitrum') return 'arb';
+  if (c === 'optimism') return 'op';
+  if (c === 'uniswap') return 'uni';
+  if (c === 'render') return 'rndr';
+  if (c === 'celestia') return 'tia';
+  if (c === 'injective') return 'inj';
+  if (c === 'jupiter') return 'jup';
   return c;
 }
 
@@ -130,7 +154,7 @@ const DIR_BETWEEN     = /between/i;
 function parsePriceTarget(question: string): { coin: string; target: number; direction: 'above' | 'below' | 'between'; upperBound?: number } | null {
   // 1) Strict: "between $X and $Y"
   const bm = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe|aptos|apt|arbitrum|arb|optimism|op|uniswap|uni|render|rndr|celestia|tia|injective|inj|jupiter|jup)\s+(?:be\s+|close\s+)?between\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)\s+and\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (bm) {
     console.log(`[crypto-oracle] Parsed (strict-between): ${normalizeCoin(bm[1])} between $${bm[2]} and $${bm[3]} from: ${question.slice(0, 80)}`);
@@ -139,7 +163,7 @@ function parsePriceTarget(question: string): { coin: string; target: number; dir
 
   // 2) Strict: "above/below/hit/reach $X"
   const m = question.match(
-    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe)\s+(?:be\s+|close\s+|stay\s+|be\s+worth\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach|more than|greater than|at least|surpass)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
+    /will\s+(?:the\s+price\s+of\s+)?(bitcoin|btc|eth(?:ereum)?|sol(?:ana)?|xrp|ripple|bnb|doge(?:coin)?|cardano|ada|avax|avalanche|chainlink|link|polkadot|dot|polygon|matic|litecoin|ltc|shiba|shib|sui|toncoin|ton|near|pepe|aptos|apt|arbitrum|arb|optimism|op|uniswap|uni|render|rndr|celestia|tia|injective|inj|jupiter|jup)\s+(?:be\s+|close\s+|stay\s+|be\s+worth\s+)?(above|below|exceed|under|over|higher than|lower than|hit|reach|more than|greater than|at least|surpass)\s+\$?([\d,]+(?:\.\d+)?[kmbt]?)/i
   );
   if (m) {
     const dirRaw = m[2].toLowerCase();
@@ -227,7 +251,7 @@ async function runCycle(): Promise<void> {
       if (batch.length < 200) break;
     }
     // Supplementary: search Gamma API for each major coin to catch markets beyond pagination
-    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price'];
+    const searchTerms = ['bitcoin', 'btc', 'ethereum', 'eth', 'solana', 'sol', 'xrp', 'bnb', 'dogecoin', 'doge', 'cardano', 'avalanche', 'chainlink', 'polkadot', 'litecoin', 'shiba', 'sui', 'toncoin', 'near', 'pepe', 'polygon', 'crypto', 'price', 'cryptocurrency', 'token price', 'market cap', 'aptos', 'arbitrum', 'uniswap', 'celestia', 'injective', 'jupiter'];
     const seenIds = new Set(all.map((m: any) => m.conditionId));
     const searchResults = await Promise.allSettled(searchTerms.map(async (term) => {
       const r = await fetch(`${GAMMA_HOST}/markets?search=${term}&active=true&closed=false&limit=100`, { headers: { 'User-Agent': 'Mozilla/5.0' } });
